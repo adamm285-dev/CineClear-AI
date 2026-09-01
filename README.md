@@ -65,29 +65,16 @@ CineClear AI monitors the entire camera frame, video timeline, and screenplay te
 
 CineClear AI operates as a 3-agent orchestration pipeline backed by deterministic statutory guardrails:
 
-```mermaid
-flowchart LR
-    subgraph AGENT1["Agent 1: Forensic Extractor"]
-        A1[OpenCV Keyframe Sampler & Script Parser] --> A2[Multimodal Gemini Vision]
-        A2 --> A3["Normalized 2D Bounding Boxes [ymin, xmin, ymax, xmax]"]
-    end
-
-    subgraph AGENT2["Agent 2: Senior Counsel Critic"]
-        B1[Real-Time Parallel Search Grounding] --> B2["USPTO, US Copyright Office & NANPA"]
-        B2 --> B3["4-Factor Fair Use Scorecard 17 U.S.C. § 107"]
-        B3 --> B4["Multi-Territory Jurisdictional Matrix"]
-    end
-
-    subgraph AGENT3["Agent 3: Production Dispatcher"]
-        C1["Form-4A Artwork Releases & TM Placement Agreements"]
-        C2["Timecoded VFX 2D Greeking Paint Orders"]
-        C3["1-Click CMX 3600 NLE Timeline Markers .EDL"]
-        C4["ASCAP / BMI PRO Music Cue Sheets"]
-        C5["Hollywood E&O Underwriting PDF Binder"]
-    end
-
-    AGENT1 -->|Candidate Entities| AGENT2
-    AGENT2 -->|Securitized Flags| AGENT3
+```
+┌─────────────────────────┐     ┌─────────────────────────┐     ┌─────────────────────────┐
+│        AGENT 1          │     │        AGENT 2          │     │        AGENT 3          │
+│   Forensic Extractor    │     │  Senior Counsel Critic  │     │  Production Dispatcher  │
+├─────────────────────────┤     ├─────────────────────────┤     ├─────────────────────────┤
+│ • OpenCV Keyframe Sample│────>│ • Parallel Web Search   │────>│ • Form-4A Legal Releases│
+│ • Multimodal Vision     │     │ • USPTO / WIPO Grounding│     │ • Timecoded VFX Orders  │
+│ • Normalized 2D Boxes   │     │ • 17 U.S.C. § 107 Fair  │     │ • CMX 3600 NLE Markers  │
+│ • Screenplay Text Parse │     │ • Multi-Territory Matrix│     │ • E&O ReportLab PDF     │
+└─────────────────────────┘     └─────────────────────────┘     └─────────────────────────┘
 ```
 
 ### Multi-Agent Specifications:
