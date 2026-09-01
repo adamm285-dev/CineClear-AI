@@ -150,6 +150,7 @@ C:\Users\adamm_000\Desktop\CineClearAi\
 │   ├── config.py                    # Pydantic Settings & environment manager
 │   ├── models.py                    # Pydantic legal clearance & remediation schemas
 │   ├── harness.py                   # ExtractorHarness & CriticHarness boundaries
+│   ├── gemini_cascade.py            # Dynamic Model Cascade Ladder & failover manager
 │   ├── parallel_client.py           # Parallel Search API client with live search & mock engine
 │   ├── vision_agent.py              # Agent 1: Gemini Multimodal visual & audio parser
 │   ├── auditor.py                   # Agent 2: Multi-turn reasoning & Senior Counsel Critic loop
@@ -169,6 +170,7 @@ C:\Users\adamm_000\Desktop\CineClearAi\
     ├── __init__.py
     ├── test_models.py               # Schema & validation tests
     ├── test_harness.py              # Dual harness eval suite
+    ├── test_cascade.py              # Dynamic Model Cascade failover tests
     ├── test_parallel_client.py      # Parallel search client tests
     ├── test_auditor.py              # Clearance audit & critic reflection tests
     ├── test_remediation.py          # Agent 3 remediation dispatcher tests

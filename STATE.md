@@ -11,7 +11,7 @@
 | Parameter | Current Value | Notes |
 | :--- | :--- | :--- |
 | **FastAPI Web Server** | `http://0.0.0.0:8085` (`localhost:8085`) | Dedicated port to eliminate conflict with telephony/voice services (8000/8001). |
-| **Google Gemini Model** | `gemini-3.6-flash` | Multimodal visual, audio & screenplay legal risk parser. |
+| **Google Gemini Model** | `gemini-3.5-flash-lite` | High-quota tier (1,500 requests/day, sub-400ms turnaround) with zero 20-req/day limit blocks. |
 | **Parallel Search API** | `https://api.parallel.ai/v1` | Live semantic objective web grounding (USPTO, Copyright, Public Domain). |
 | **Agent 1 (Extractor & Grounder)** | `app/vision_agent.py` | Multimodal vision & screenplay parser with `ExtractorHarness` keyframe deduplication. |
 | **Agent 2 (Senior Counsel Critic)**| `app/auditor.py` | Multi-turn reflection loop with `CriticHarness` public domain date invariant enforcement. |

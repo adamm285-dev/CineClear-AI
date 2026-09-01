@@ -6,9 +6,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     """Application settings and API credentials configuration."""
 
-    # Gemini AI
+    # Gemini AI (High Quota Tier: 1,500 requests/day)
     GEMINI_API_KEY: str = ""
-    GEMINI_MODEL: str = "gemini-3.6-flash"
+    GEMINI_MODEL: str = "gemini-3.5-flash-lite"
+    GEMINI_FALLBACK_MODELS: list[str] = ["gemini-3.5-flash-lite", "gemini-flash-latest", "gemini-3.6-flash"]
 
     # Parallel Search API
     PARALLEL_API_KEY: str = ""

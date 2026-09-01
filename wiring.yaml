@@ -9,7 +9,7 @@ system:
   runtime: "Python 3.13"
   framework: "FastAPI + Uvicorn"
   default_port: 8085
-  ai_brain: "Google Gemini 3.6 Flash (google-genai SDK)"
+  ai_brain: "Google Gemini 3.5 Flash Lite (High-Quota 1,500 req/day Tier)"
   search_engine: "Parallel Semantic Search API (v1)"
   pdf_engine: "ReportLab 5.0.1"
   script_engine: "PyMuPDF (fitz) + pdfplumber"
@@ -81,6 +81,18 @@ endpoints:
     auth_required: false
 
 agents_and_capabilities:
+  - id: "gemini_cascade_manager"
+    name: "Dynamic Model Cascade Ladder & Failover Manager"
+    module: "app.gemini_cascade"
+    class: "GeminiCascadeClient"
+    role: "Tiered AI Failover & Rate-Limit Shield"
+    ladder: ["gemini-3.6-flash", "gemini-2.5-flash", "gemini-2.5-pro", "gemini-1.5-flash"]
+    status: "live"
+    features:
+      - "Hierarchical multi-tier failover across Gemini model generations on 429 quota limits"
+      - "Seamless fallback to high-quota production tiers"
+      - "Graceful delegation to local deterministic rules on total cloud exhaustion"
+
   - id: "extractor_harness"
     name: "Extractor & Ingest Harness"
     module: "app.harness"
