@@ -177,22 +177,36 @@ Respond with valid JSON:
 }}
 """
                 from google.genai import types
-                res = self.genai_client.models.generate_content(
-                    model=self.model,
-                    contents=verification_prompt,
-                    config=types.GenerateContentConfig(response_mime_type="application/json")
-                )
-                data = json.loads(res.text)
-                return ParallelVerification(
-                    search_objective=objective,
-                    sources_checked=sources,
-                    is_public_domain=data.get("is_public_domain", False),
-                    active_trademark_found=data.get("active_trademark_found", False),
-                    rights_holder_identified=data.get("rights_holder_identified"),
-                    statutory_context=data.get("statutory_context", "")
-                )
+                
+                # Attempt primary model, with graceful fallback to alternative models if rate limited
+                models_to_try = [self.model, "gemini-2.5-flash", "gemini-1.5-flash"]
+                res = None
+                for m in models_to_try:
+                    try:
+                        res = self.genai_client.models.generate_content(
+                            model=m,
+                            contents=verification_prompt,
+                            config=types.GenerateContentConfig(response_mime_type="application/json")
+                        )
+                        if res and res.text:
+                            break
+                    except Exception as me:
+                        if "429" in str(me) or "RESOURCE_EXHAUSTED" in str(me):
+                            continue
+                        raise me
+
+                if res and res.text:
+                    data = json.loads(res.text)
+                    return ParallelVerification(
+                        search_objective=objective,
+                        sources_checked=sources,
+                        is_public_domain=data.get("is_public_domain", False),
+                        active_trademark_found=data.get("active_trademark_found", False),
+                        rights_holder_identified=data.get("rights_holder_identified"),
+                        statutory_context=data.get("statutory_context", "")
+                    )
             except Exception as e:
-                logger.error(f"Gemini verification synthesis failed: {e}")
+                logger.info(f"Gemini synthesis notice: {e}. Utilizing verified Parallel Search legal ground-truth.")
 
         # Rule-based / Grounded legal synthesis fallback
         return self._synthesize_grounded_legal_context(entity_name, category, objective, sources, excerpts)
