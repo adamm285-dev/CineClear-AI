@@ -15,6 +15,8 @@ from app.config import settings
 
 import re
 
+import asyncio
+
 logger = logging.getLogger("cineclear.cascade")
 
 
@@ -111,14 +113,21 @@ class GeminiCascadeClient:
         for model_name in execution_order:
             try:
                 logger.info(f"[Cascade] Dispatching payload to model tier: {model_name}")
-                response = self.client.models.generate_content(
-                    model=model_name,
-                    contents=contents,
-                    config=gen_config
+                response = await asyncio.wait_for(
+                    asyncio.to_thread(
+                        self.client.models.generate_content,
+                        model=model_name,
+                        contents=contents,
+                        config=gen_config
+                    ),
+                    timeout=8.0
                 )
                 if response and response.text:
                     logger.info(f"[Cascade] Execution successful on tier: {model_name}")
                     return response.text
+            except asyncio.TimeoutError:
+                logger.warning(f"[Cascade] Tier {model_name} timed out (>8s). Cascading down...")
+                continue
             except APIError as e:
                 if e.code == 429 or "RESOURCE_EXHAUSTED" in str(e):
                     logger.warning(f"[Cascade] Tier {model_name} exhausted (429 Rate Limit). Cascading down...")

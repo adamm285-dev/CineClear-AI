@@ -49,13 +49,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Sample selection
     sampleItems.forEach(item => {
-        item.addEventListener('click', () => {
-            sampleItems.forEach(s => s.classList.remove('active'));
+        item.addEventListener('click', (e) => {
+            const isButtonClick = e.target.classList.contains('btn-sample-select');
+            
+            sampleItems.forEach(s => {
+                s.classList.remove('active');
+                const b = s.querySelector('.btn-sample-select');
+                if (b) b.textContent = 'Load Asset';
+            });
             item.classList.add('active');
+            const btn = item.querySelector('.btn-sample-select');
+            if (btn) btn.textContent = '✓ Ready';
+            
             selectedSampleId = item.getAttribute('data-sample');
             selectedFile = null;
             selectedFileName.classList.add('hidden');
             selectedFileName.textContent = '';
+
+            const titles = {
+                'sample-photo': 'Hero Living Room (Production Set Still)',
+                'sample-screenplay': 'Feature Screenplay Excerpt (PDF)',
+                'sample-script-txt': 'Screenplay Scene 1-3 (Text)'
+            };
+            if (titles[selectedSampleId]) {
+                projectTitleInput.value = titles[selectedSampleId];
+            }
+
+            // If user clicked the button directly, immediately run audit
+            if (isButtonClick) {
+                btnRunAudit.click();
+            }
         });
     });
 
