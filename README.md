@@ -13,7 +13,9 @@
 
 ---
 
-## ⚡ Executive Summary: 3 Weeks $\rightarrow$ 30 Seconds
+## ⚡ 1. Executive Summary: The Threat vs. The Goal
+
+![The Threat vs The Goal: Unseen Liabilities to Instant Underwriter Sign-off](docs/images/slide1_threat_vs_goal.svg)
 
 | 🔴 THE THREAT: Unseen Statutory Liabilities | 🟢 THE GOAL: Instant Underwriter Sign-Off |
 | :--- | :--- |
@@ -21,39 +23,24 @@
 
 ---
 
-## 🎯 The Camera Lens Legal Radar
+## 🎯 2. The Camera Lens Legal Radar
 
-CineClear AI monitors the entire camera frame and screenplay text for statutory liabilities across six key domains:
+![The Camera Lens Legal Radar: Fine Art, Trademarks, Phone PII, Music & Sync](docs/images/slide2_camera_lens_radar.svg)
 
-```
-                      [ 🏛️ AWCPA ARCHITECTURE ]
-                         17 U.S.C. § 120(a)
-                         Public view vs. lighting
-                                  │
-                                  │
-    [ 🎨 FINE ART ]               │              [ 🏷️ TRADEMARKS & TRADE DRESS ]
-    17 U.S.C. § 106               │                 Lanham Act 15 U.S.C. § 1125
-    Background paintings          │                 Hero wardrobe & product placement
-    demand Form-4A releases       │                 dilution / false endorsement
-            ╲                     │                     ╱
-             ╲                    │                    ╱
-              ───────────── [ CAMERA LENS ] ────────────
-             ╱                    │                    ╲
-            ╱                     │                     ╲
-    [ 📞 REAL PHONE PII ]         │              [ 🎵 MUSIC & SYNC RIGHTS ]
-    FCC / NANPA Safe Harbor       │                 17 U.S.C. § 114 & § 106(4)
-    Strict liability on           │                 Dual master recording & sync
-    non-555 phone numbers         │                 publishing PRO cue sheets
-                                  │
-                                  │
-                      [ 🌐 TRANSATLANTIC MATRIX ]
-                         CDPA 1988 § 31 (UK)
-                         Canada Copyright Act § 30.7
-```
+CineClear AI monitors the entire camera frame, video timeline, and screenplay text for statutory liabilities across core Hollywood legal domains:
+
+- **🎨 Fine Art (17 U.S.C. § 106 & § 501):** Background paintings, framed prints, and sculptures carry strict copyright liability (*Sandoval v. New Line Cinema*, *Ringgold v. BET*). Background art requires explicit artist Form-4A release contracts.
+- **🏷️ Trademarks & Trade Dress (Lanham Act 15 U.S.C. § 1125):** Hero wardrobe apparel branding and prominent product placement risk dilution and false endorsement claims without signed clearances.
+- **📞 Real Phone PII (FCC & NANPA Safe Harbor):** Non-working or active personal phone numbers trigger immediate privacy torts and broadcast liabilities. Must be clamped to CRITICAL risk and replaced with 555-0100 to 555-0199 reserves.
+- **🎵 Music & Sync Rights (17 U.S.C. § 114 & § 106(4)):** Background radio cues and soundtrack tracks demand dual Master Recording and Sync Publishing clearances.
+- **🏛️ Architectural Works (17 U.S.C. § 120(a) AWCPA):** Street-view public architecture is protected under safe harbor; proprietary night lighting (e.g. Eiffel Tower Night) demands specific permissions.
+- **🌐 Transatlantic Jurisdictional Divergence:** Automatically models differences between US strict liability (§ 106) and UK CDPA 1988 § 31 / Canadian Copyright Act § 30.7 incidental inclusion exemptions.
 
 ---
 
-## 🤖 The Autonomous Triad: Extraction $\rightarrow$ Grounding $\rightarrow$ Remediation
+## 🤖 3. The Autonomous Triad: Extraction $\rightarrow$ Grounding $\rightarrow$ Remediation
+
+![The Autonomous Triad: Agent 1 Forensic Extractor -> Agent 2 Senior Counsel Critic -> Agent 3 Production Dispatcher](docs/images/slide3_autonomous_triad.svg)
 
 CineClear AI operates as a 3-agent orchestration pipeline backed by deterministic statutory guardrails:
 
@@ -82,7 +69,7 @@ flowchart LR
     AGENT2 -->|Securitized Flags| AGENT3
 ```
 
-### Agent Breakdown:
+### Agent Roles & Specifications:
 1. **Agent 1: Forensic Extractor (`app/vision_agent.py`)**
    - **Process:** OpenCV temporal video keyframe sampling (`0s`, `33%`, `66%`, `end`) and PyMuPDF screenplay parsing.
    - **Output:** Extracts candidate entities with normalized 2D bounding boxes scaled `[0, 1000]`.
@@ -95,7 +82,9 @@ flowchart LR
 
 ---
 
-## 🛡️ Zero-Downtime Dynamic Model Cascade & Deterministic Bedrock
+## 🛡️ 4. Zero-Downtime Dynamic Model Cascade & Deterministic Bedrock
+
+![Zero-Downtime Agentic Architecture: Dynamic Failover Ladder to Deterministic Bedrock](docs/images/slide4_zero_downtime_cascade.svg)
 
 CineClear AI utilizes a **Dynamic Model Cascade** ladder that catches `429 RESOURCE_EXHAUSTED` rate limits and fails over automatically without breaking pipeline continuity:
 
@@ -122,9 +111,11 @@ CineClear AI utilizes a **Dynamic Model Cascade** ladder that catches `429 RESOU
 
 ---
 
-## 📦 Cross-Departmental Production Deliverables
+## 📦 5. Cross-Departmental Production Deliverables
 
-CineClear AI bridges the gap between legal counsel and physical production:
+![Cross-Departmental Deliverables: Legal Counsel, Visual Effects, Post-Production](docs/images/slide5_cross_departmental.svg)
+
+CineClear AI bridges the gap between production legal counsel and physical on-set/post-production workflows:
 
 | Department | Deliverables Produced |
 | :--- | :--- |
@@ -135,7 +126,9 @@ CineClear AI bridges the gap between legal counsel and physical production:
 
 ---
 
-## 📊 Live Clearance Matrix: Hero Living Room Analysis
+## 📊 6. Live Clearance Matrix: Hero Living Room Analysis
+
+![Live Clearance Matrix: Hero Living Room Analysis Breakdown](docs/images/slide6_clearance_matrix.svg)
 
 | Entity | Category | Risk Level | Statutory Grounds & Actionable Mitigation |
 | :--- | :--- | :---: | :--- |
@@ -143,6 +136,15 @@ CineClear AI bridges the gap between legal counsel and physical production:
 | **Nike 'Swoosh' Logo** | `TRADEMARK_LOGO` | **`[HIGH RISK]`** | **15 U.S.C. § 1114 / § 1125:** Prominent hero actor apparel branding carries implied endorsement liability.<br>↳ *Mitigation:* Obtain signed wardrobe product placement release or Greek logo in VFX. |
 | **Apple MacBook Pro** | `TRADEMARK_LOGO` | **`[MEDIUM RISK]`** | **Lanham Act 15 U.S.C. § 1051:** Incidental contextual prop placement; nominative fair use review.<br>↳ *Mitigation:* Verify incidental de minimis use; obtain written release or Greek logo in VFX. |
 | **Starbucks Siren Cup** | `TRADEMARK_LOGO` | **`[MEDIUM RISK]`** | **Lanham Act 15 U.S.C. § 1125:** Recognizable trade dress; commercial placement rules apply.<br>↳ *Mitigation:* Verify incidental de minimis use; obtain placement release or turn logo away from camera. |
+
+---
+
+## 📑 7. Instant E&O Underwriter Sign-Off: 3 Weeks $\rightarrow$ 30 Seconds
+
+![Instant E&O Underwriter Sign-Off: 3 Weeks to 30 Seconds](docs/images/slide7_instant_signoff.svg)
+
+- **Multi-Territory Scope:** Evaluates territorial risk across **United States (US)**, **United Kingdom (UK)**, **European Union (EU)**, and **Canada (CA)**.
+- **Court-Ready Legal Binder:** Generates a 4-appendix Hollywood E&O Clearance Binder with executive risk summaries, Fair Use scorecards, Form-4A artwork releases, VFX paint work orders, and Underwriter Signature Certification blocks.
 
 ---
 
@@ -233,7 +235,7 @@ python -m pytest tests/ -v
 ```
 tests/test_auditor.py::test_cineclear_auditor_script PASSED              [  3%]
 tests/test_auditor.py::test_cineclear_auditor_image PASSED               [  7%]
-tests/test_auditor.py::test_critic_agent_fixes_nike_hallucination PASSED [ 11%]
+tests/test_critic_agent_fixes_nike_hallucination PASSED [ 11%]
 tests/test_auditor.py::test_pdf_binder_generation_without_music PASSED   [ 14%]
 tests/test_cascade.py::test_cascade_initialization PASSED                [ 18%]
 tests/test_cascade.py::test_cascade_execution_order PASSED               [ 22%]
@@ -277,6 +279,15 @@ CineClearAi/
 ├── generate_sample_media.py         # Utility script to generate sample test media
 ├── main.py                          # CLI and batch analysis entrypoint
 ├── server.py                        # FastAPI server (port 8085) with safe upload handling
+├── docs/
+│   └── images/                      # High-resolution vector diagram slide assets
+│       ├── slide1_threat_vs_goal.svg
+│       ├── slide2_camera_lens_radar.svg
+│       ├── slide3_autonomous_triad.svg
+│       ├── slide4_zero_downtime_cascade.svg
+│       ├── slide5_cross_departmental.svg
+│       ├── slide6_clearance_matrix.svg
+│       └── slide7_instant_signoff.svg
 ├── app/
 │   ├── __init__.py
 │   ├── config.py                    # Pydantic Settings & environment manager

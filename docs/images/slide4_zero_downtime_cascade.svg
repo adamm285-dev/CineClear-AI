@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#020617"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="tierGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="50%" stop-color="#312e81"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#bg4)"/>
+
+  <text x="60" y="65" fill="#ffffff" font-family="system-ui, sans-serif" font-size="26" font-weight="900">Zero-Downtime Agentic Architecture</text>
+  
+  <rect x="800" y="35" width="340" height="44" rx="8" fill="#052e16" stroke="#22c55e" stroke-width="1.5"/>
+  <circle cx="825" cy="57" r="6" fill="#22c55e"/>
+  <text x="840" y="52" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="bold">SYSTEM STATUS: ALL SYSTEMS OPERATIONAL</text>
+  <text x="840" y="68" fill="#86efac" font-family="'JetBrains Mono', monospace" font-size="10">27/27 Test Coverage Validated (Concurrency)</text>
+
+  <!-- Cascade Tier 1 -->
+  <g transform="translate(60, 110)">
+    <rect width="1080" height="70" rx="10" fill="url(#tierGrad)" stroke="#818cf8" stroke-width="1.5"/>
+    <text x="540" y="42" fill="#ffffff" font-family="'JetBrains Mono', monospace" font-size="16" font-weight="800" text-anchor="middle" letter-spacing="2">PRIMARY ENGINE: gemini-3.6-flash</text>
+  </g>
+
+  <!-- Down Arrow 1 -->
+  <path d="M 600 190 L 600 215 M 590 205 L 600 215 L 610 205" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Cascade Tier 2 -->
+  <g transform="translate(60, 225)">
+    <rect width="1080" height="70" rx="10" fill="url(#tierGrad)" stroke="#6366f1" stroke-width="1.5"/>
+    <text x="540" y="42" fill="#e0e7ff" font-family="'JetBrains Mono', monospace" font-size="16" font-weight="800" text-anchor="middle" letter-spacing="2">DYNAMIC FAILOVER: gemini-3.5-pro</text>
+  </g>
+
+  <!-- Down Arrow 2 -->
+  <path d="M 600 305 L 600 330 M 590 320 L 600 330 L 610 320" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Cascade Tier 3 -->
+  <g transform="translate(60, 340)">
+    <rect width="1080" height="70" rx="10" fill="url(#tierGrad)" stroke="#4f46e5" stroke-width="1.5"/>
+    <text x="540" y="42" fill="#c7d2fe" font-family="'JetBrains Mono', monospace" font-size="16" font-weight="800" text-anchor="middle" letter-spacing="2">DYNAMIC FAILOVER: gemini-3.1-pro</text>
+  </g>
+
+  <!-- Down Arrow 3 -->
+  <path d="M 600 420 L 600 445 M 590 435 L 600 445 L 610 435" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- The Bedrock: Deterministic Python Regex Harness -->
+  <g transform="translate(60, 455)">
+    <rect width="1080" height="150" rx="12" fill="#030712" stroke="#38bdf8" stroke-width="2.5"/>
+    <text x="540" y="48" fill="#38bdf8" font-family="system-ui, sans-serif" font-size="20" font-weight="900" text-anchor="middle" letter-spacing="1">THE BEDROCK: Deterministic Python Regex Harness</text>
+    <text x="540" y="85" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="15" text-anchor="middle">Enforces statutory invariants: prevents modern marks from hallucinating as public domain</text>
+    <text x="540" y="112" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="15" text-anchor="middle">and clamps non-555 PII to Critical risk regardless of LLM generation results.</text>
+  </g>
+</svg>

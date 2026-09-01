@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#020617"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#bg5)"/>
+  <text x="600" y="70" fill="#ffffff" font-family="system-ui, sans-serif" font-size="26" font-weight="900" text-anchor="middle" letter-spacing="1">Cross-Departmental Deliverables</text>
+
+  <!-- Legal Counsel Card -->
+  <g transform="translate(60, 120)">
+    <rect width="330" height="480" rx="12" fill="#0b1329" stroke="#38bdf8" stroke-width="2"/>
+    <text x="165" y="55" fill="#ffffff" font-family="system-ui, sans-serif" font-size="18" font-weight="800" text-anchor="middle">LEGAL COUNSEL</text>
+    
+    <rect x="25" y="90" width="280" height="350" rx="8" fill="#020617" stroke="#1e293b" stroke-width="1"/>
+    <text x="40" y="130" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="bold">Deliverables:</text>
+    <text x="40" y="170" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="14">• Pre-populated Form-4A</text>
+    <text x="55" y="195" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13">Artwork Release Agreements</text>
+    <text x="40" y="240" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="14">• Trademark Placement</text>
+    <text x="55" y="265" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13">Release Agreements</text>
+    <text x="40" y="310" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="14">• PRO Music Cue Sheets</text>
+    <text x="55" y="335" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13">(ASCAP / BMI / SESAC)</text>
+    <text x="40" y="380" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="14">• E&amp;O PDF Binder</text>
+  </g>
+
+  <!-- VFX Card -->
+  <g transform="translate(435, 120)">
+    <rect width="330" height="480" rx="12" fill="#0f172a" stroke="#818cf8" stroke-width="2.5"/>
+    <text x="165" y="55" fill="#ffffff" font-family="system-ui, sans-serif" font-size="18" font-weight="800" text-anchor="middle">VISUAL EFFECTS (VFX)</text>
+    
+    <rect x="25" y="90" width="280" height="350" rx="8" fill="#020617" stroke="#312e81" stroke-width="1"/>
+    <text x="40" y="130" fill="#a5b4fc" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="bold">Deliverables:</text>
+    <text x="40" y="170" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="14">• Timecoded 2D Greeking</text>
+    <text x="55" y="195" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13">normalized coordinates</text>
+    <text x="40" y="240" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="14">• Planar Tracking Export</text>
+    <text x="55" y="265" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13">sheets for paint fixes</text>
+    <text x="40" y="310" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="14">• Digital Prop Replacement</text>
+    <text x="55" y="335" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13">work orders (coffee cups)</text>
+    <text x="40" y="380" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="14">• Clean Plate Directives</text>
+  </g>
+
+  <!-- Post-Production Card -->
+  <g transform="translate(810, 120)">
+    <rect width="330" height="480" rx="12" fill="#0b1329" stroke="#38bdf8" stroke-width="2"/>
+    <text x="165" y="55" fill="#ffffff" font-family="system-ui, sans-serif" font-size="18" font-weight="800" text-anchor="middle">POST-PRODUCTION</text>
+    
+    <rect x="25" y="90" width="280" height="350" rx="8" fill="#020617" stroke="#1e293b" stroke-width="1"/>
+    <text x="40" y="130" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="bold">Deliverables:</text>
+    <text x="40" y="170" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="14">• 1-Click CMX 3600 Edit</text>
+    <text x="55" y="195" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13">Decision List (.EDL) export</text>
+    <text x="40" y="240" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="14">• Direct NLE Integration:</text>
+    <text x="55" y="265" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13">DaVinci Resolve timeline</text>
+    <text x="55" y="290" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13">Adobe Premiere Pro</text>
+    <text x="40" y="335" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="14">• Color-Coded Markers</text>
+    <text x="55" y="360" fill="#f87171" font-family="system-ui, sans-serif" font-size="13">Red = Critical, Orange = High</text>
+  </g>
+</svg>

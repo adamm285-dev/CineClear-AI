@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#020617"/>
+      <stop offset="100%" stop-color="#0b1120"/>
+    </linearGradient>
+    <pattern id="grid2" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#1e293b" stroke-width="0.5" stroke-opacity="0.4"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#bg2)"/>
+  <rect width="1200" height="675" fill="url(#grid2)"/>
+
+  <!-- Center Radar Display -->
+  <g transform="translate(600, 335)">
+    <circle r="220" fill="none" stroke="#334155" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <circle r="160" fill="none" stroke="#334155" stroke-width="1"/>
+    <circle r="100" fill="none" stroke="#0ea5e9" stroke-width="1.2" stroke-opacity="0.6"/>
+    <circle r="40" fill="#0369a1" fill-opacity="0.2" stroke="#38bdf8" stroke-width="2"/>
+    
+    <line x1="-240" y1="0" x2="240" y2="0" stroke="#334155" stroke-width="1"/>
+    <line x1="0" y1="-240" x2="0" y2="240" stroke="#334155" stroke-width="1"/>
+    
+    <circle cx="-110" cy="-90" r="14" fill="#ef4444" fill-opacity="0.3"/>
+    <circle cx="-110" cy="-90" r="5" fill="#f87171"/>
+    <circle cx="120" cy="-80" r="14" fill="#f97316" fill-opacity="0.3"/>
+    <circle cx="120" cy="-80" r="5" fill="#fb923c"/>
+    <circle cx="-100" cy="110" r="14" fill="#ef4444" fill-opacity="0.3"/>
+    <circle cx="-100" cy="110" r="5" fill="#f87171"/>
+    <circle cx="110" cy="100" r="14" fill="#f97316" fill-opacity="0.3"/>
+    <circle cx="110" cy="100" r="5" fill="#fb923c"/>
+
+    <text x="0" y="-4" fill="#ffffff" font-family="system-ui, sans-serif" font-size="13" font-weight="800" text-anchor="middle" letter-spacing="1">CAMERA</text>
+    <text x="0" y="14" fill="#38bdf8" font-family="system-ui, sans-serif" font-size="13" font-weight="800" text-anchor="middle" letter-spacing="1">LENS</text>
+  </g>
+
+  <!-- Top Left: FINE ART -->
+  <g transform="translate(60, 60)">
+    <rect width="320" height="150" rx="8" fill="#0f172a" stroke="#ef4444" stroke-width="1.5"/>
+    <text x="20" y="38" fill="#ffffff" font-family="system-ui, sans-serif" font-size="16" font-weight="800" letter-spacing="1">FINE ART</text>
+    <text x="20" y="70" fill="#f87171" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="bold">Statute: 17 U.S.C. § 106</text>
+    <text x="20" y="100" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="12">Risk: Background paintings</text>
+    <text x="20" y="120" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="12">require explicit artist Form-4A releases.</text>
+  </g>
+
+  <!-- Top Right: TRADEMARKS & TRADE DRESS -->
+  <g transform="translate(820, 60)">
+    <rect width="320" height="150" rx="8" fill="#0f172a" stroke="#f97316" stroke-width="1.5"/>
+    <text x="20" y="38" fill="#ffffff" font-family="system-ui, sans-serif" font-size="16" font-weight="800" letter-spacing="1">TRADEMARKS &amp; TRADE DRESS</text>
+    <text x="20" y="70" fill="#fb923c" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="bold">Statute: 15 U.S.C. § 1125</text>
+    <text x="20" y="100" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="12">Risk: Hero wardrobe branding risks</text>
+    <text x="20" y="120" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="12">dilution and false endorsement claims.</text>
+  </g>
+
+  <!-- Bottom Left: REAL PHONE PII -->
+  <g transform="translate(60, 460)">
+    <rect width="320" height="150" rx="8" fill="#0f172a" stroke="#ef4444" stroke-width="1.5"/>
+    <text x="20" y="38" fill="#ffffff" font-family="system-ui, sans-serif" font-size="16" font-weight="800" letter-spacing="1">REAL PHONE PII</text>
+    <text x="20" y="70" fill="#f87171" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="bold">Statute: FCC / NANPA</text>
+    <text x="20" y="100" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="12">Risk: Non-working or active personal</text>
+    <text x="20" y="120" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="12">phone numbers trigger privacy torts.</text>
+  </g>
+
+  <!-- Bottom Right: MUSIC & SYNC -->
+  <g transform="translate(820, 460)">
+    <rect width="320" height="150" rx="8" fill="#0f172a" stroke="#f97316" stroke-width="1.5"/>
+    <text x="20" y="38" fill="#ffffff" font-family="system-ui, sans-serif" font-size="16" font-weight="800" letter-spacing="1">MUSIC &amp; SYNC</text>
+    <text x="20" y="70" fill="#fb923c" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="bold">Statute: 17 U.S.C. § 114</text>
+    <text x="20" y="100" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="12">Risk: Background radio cues demand</text>
+    <text x="20" y="120" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="12">dual master and sync publishing clearances.</text>
+  </g>
+</svg>

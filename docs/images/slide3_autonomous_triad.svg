@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#020617"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#bg3)"/>
+  <text x="600" y="70" fill="#ffffff" font-family="system-ui, sans-serif" font-size="24" font-weight="900" text-anchor="middle" letter-spacing="1.5">THE AUTONOMOUS TRIAD: EXTRACTION → GROUNDING → REMEDIATION</text>
+
+  <!-- Agent 1 -->
+  <g transform="translate(60, 130)">
+    <rect width="320" height="460" rx="12" fill="#0b1329" stroke="#38bdf8" stroke-width="2"/>
+    <rect x="20" y="20" width="280" height="40" rx="6" fill="#38bdf8" fill-opacity="0.15"/>
+    <text x="160" y="45" fill="#38bdf8" font-family="system-ui, sans-serif" font-size="14" font-weight="800" text-anchor="middle">AGENT 1: FORENSIC EXTRACTOR</text>
+    
+    <text x="25" y="100" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="bold">PROCESS:</text>
+    <text x="25" y="125" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14">OpenCV temporal keyframe</text>
+    <text x="25" y="145" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14">sampling + Gemini Vision.</text>
+
+    <text x="25" y="200" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="bold">OUTPUT:</text>
+    <text x="25" y="225" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14">Extracts normalized 2D</text>
+    <text x="25" y="245" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14">bounding box coordinates</text>
+    <text x="25" y="265" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="12">[ymin, xmin, ymax, xmax]</text>
+
+    <rect x="25" y="320" width="270" height="110" rx="8" fill="#020617" stroke="#1e293b" stroke-width="1"/>
+    <text x="40" y="355" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11">✓ Multi-modal Video Ingest</text>
+    <text x="40" y="380" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11">✓ Screenplay PDF OCR</text>
+    <text x="40" y="405" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11">✓ Entity Deduplication</text>
+  </g>
+
+  <!-- Connectors -->
+  <path d="M 390 360 L 430 360" stroke="#818cf8" stroke-width="4" stroke-dasharray="6 4"/>
+  <path d="M 770 360 L 810 360" stroke="#818cf8" stroke-width="4" stroke-dasharray="6 4"/>
+
+  <!-- Agent 2 -->
+  <g transform="translate(440, 110)">
+    <rect width="320" height="500" rx="12" fill="#0f172a" stroke="#818cf8" stroke-width="2.5"/>
+    <rect x="20" y="20" width="280" height="40" rx="6" fill="#818cf8" fill-opacity="0.2"/>
+    <text x="160" y="45" fill="#a5b4fc" font-family="system-ui, sans-serif" font-size="14" font-weight="800" text-anchor="middle">AGENT 2: SENIOR COUNSEL CRITIC</text>
+    
+    <text x="25" y="95" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="bold">PROCESS:</text>
+    <text x="25" y="120" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14">Real-time semantic queries</text>
+    <text x="25" y="140" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14">to Parallel Search API.</text>
+
+    <text x="25" y="190" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="bold">OUTPUT:</text>
+    <text x="25" y="215" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14">Reconciles public domain claims</text>
+    <text x="25" y="235" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14">against USPTO/copyright DBs</text>
+    <text x="25" y="255" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14">&amp; computes a 4-Factor Fair</text>
+    <text x="25" y="275" fill="#a5b4fc" font-family="system-ui, sans-serif" font-size="14" font-weight="bold">Use Scorecard (17 U.S.C. § 107).</text>
+
+    <rect x="25" y="310" width="270" height="160" rx="8" fill="#020617" stroke="#312e81" stroke-width="1"/>
+    <text x="40" y="340" fill="#a5b4fc" font-family="'JetBrains Mono', monospace" font-size="11">✓ Statutory Grounding</text>
+    <text x="40" y="365" fill="#a5b4fc" font-family="'JetBrains Mono', monospace" font-size="11">✓ Fair Use Composite</text>
+    <text x="40" y="390" fill="#a5b4fc" font-family="'JetBrains Mono', monospace" font-size="11">✓ Multi-Territory Matrix</text>
+    <text x="40" y="415" fill="#a5b4fc" font-family="'JetBrains Mono', monospace" font-size="11">✓ AWCPA § 120(a) Rules</text>
+    <text x="40" y="440" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="11">✓ Invariant Enforcement</text>
+  </g>
+
+  <!-- Agent 3 -->
+  <g transform="translate(820, 130)">
+    <rect width="320" height="460" rx="12" fill="#0b1329" stroke="#38bdf8" stroke-width="2"/>
+    <rect x="20" y="20" width="280" height="40" rx="6" fill="#38bdf8" fill-opacity="0.15"/>
+    <text x="160" y="45" fill="#38bdf8" font-family="system-ui, sans-serif" font-size="14" font-weight="800" text-anchor="middle">AGENT 3: PRODUCTION DISPATCHER</text>
+    
+    <text x="25" y="100" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="bold">PROCESS:</text>
+    <text x="25" y="125" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14">Automated document synthesis</text>
+    <text x="25" y="145" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14">&amp; cross-dept deliverable formatting.</text>
+
+    <text x="25" y="200" fill="#94a3b8" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="bold">OUTPUT:</text>
+    <text x="25" y="225" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14">Dispatches execution-ready</text>
+    <text x="25" y="245" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14">Form-4A contracts, VFX paint</text>
+    <text x="25" y="265" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="14">orders, and NLE timeline markers.</text>
+
+    <rect x="25" y="320" width="270" height="110" rx="8" fill="#020617" stroke="#1e293b" stroke-width="1"/>
+    <text x="40" y="355" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11">✓ Form-4A Legal Releases</text>
+    <text x="40" y="380" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11">✓ VFX 2D Greeking Directives</text>
+    <text x="40" y="405" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11">✓ CMX 3600 EDL Export</text>
+  </g>
+</svg>
