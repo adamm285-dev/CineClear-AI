@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime, timezone
 from enum import Enum
 from typing import List, Optional, Dict, Any
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class RiskLevel(str, Enum):
@@ -19,6 +19,42 @@ class ClearanceCategory(str, Enum):
     MUSIC_AUDIO = "MUSIC_AUDIO"
     NAME_DEFAMATION = "NAME_DEFAMATION"
     PHONE_PII = "PHONE_PII"
+
+
+def normalize_clearance_category(v: Any) -> ClearanceCategory:
+    """Coerces fuzzy string labels from LLM extraction into canonical ClearanceCategory."""
+    if isinstance(v, ClearanceCategory):
+        return v
+    s = str(v).upper().strip().replace(" ", "_").replace("-", "_")
+    if any(k in s for k in ["TRADEMARK", "LOGO", "BRAND", "PROP"]):
+        return ClearanceCategory.TRADEMARK_LOGO
+    if any(k in s for k in ["ART", "PAINT", "SCULPT", "MURAL", "CANVAS", "GRAFFITI"]):
+        return ClearanceCategory.COPYRIGHTED_ART
+    if any(k in s for k in ["ARCHITECT", "BUILD", "FACADE", "LANDMARK", "TOWER", "STRUCTURE"]):
+        return ClearanceCategory.ARCHITECTURAL_RIGHTS
+    if any(k in s for k in ["MUSIC", "SONG", "AUDIO", "TRACK", "SOUND"]):
+        return ClearanceCategory.MUSIC_AUDIO
+    if any(k in s for k in ["PHONE", "PII", "NUMBER", "DIGIT", "ADDRESS", "SSN"]):
+        return ClearanceCategory.PHONE_PII
+    if any(k in s for k in ["NAME", "DEFAM", "PERSON", "LIBEL", "SLANDER"]):
+        return ClearanceCategory.NAME_DEFAMATION
+    return ClearanceCategory.TRADEMARK_LOGO
+
+
+def normalize_risk_level(v: Any) -> RiskLevel:
+    """Coerces fuzzy string labels from LLM extraction into canonical RiskLevel."""
+    if isinstance(v, RiskLevel):
+        return v
+    s = str(v).upper().strip()
+    if "CRIT" in s:
+        return RiskLevel.CRITICAL
+    if "HIGH" in s or "HI" == s:
+        return RiskLevel.HIGH
+    if "MED" in s:
+        return RiskLevel.MEDIUM
+    if "LOW" in s or "PD" in s or "PUBLIC" in s:
+        return RiskLevel.LOW
+    return RiskLevel.MEDIUM
 
 
 class ParallelVerification(BaseModel):
@@ -77,6 +113,16 @@ class ClearanceFlag(BaseModel):
     fair_use_scorecard: Optional[FairUseScorecard] = None
     territory_matrix: Optional[List[TerritoryAssessment]] = None
     arch_assessment: Optional[ArchitecturalLandmarkAssessment] = None
+
+    @field_validator('category', mode='before')
+    @classmethod
+    def coerce_category(cls, v):
+        return normalize_clearance_category(v)
+
+    @field_validator('risk_level', mode='before')
+    @classmethod
+    def coerce_risk_level(cls, v):
+        return normalize_risk_level(v)
 
 
 class MusicCueEntry(BaseModel):

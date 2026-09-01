@@ -42,3 +42,20 @@ def test_models_instantiation():
     assert report.flags[0].detected_entity == "Nike Swoosh"
     assert report.flags[0].risk_level == RiskLevel.HIGH
     assert report.flags[0].verification.active_trademark_found is True
+
+
+def test_fuzzy_category_and_risk_coercion():
+    from app.models import normalize_clearance_category, normalize_risk_level
+
+    assert normalize_clearance_category("TRADEMARK") == ClearanceCategory.TRADEMARK_LOGO
+    assert normalize_clearance_category("artwork") == ClearanceCategory.COPYRIGHTED_ART
+    assert normalize_clearance_category("phone-number") == ClearanceCategory.PHONE_PII
+    assert normalize_clearance_category("song_cue") == ClearanceCategory.MUSIC_AUDIO
+    assert normalize_clearance_category("building_facade") == ClearanceCategory.ARCHITECTURAL_RIGHTS
+    assert normalize_clearance_category("defamation_risk") == ClearanceCategory.NAME_DEFAMATION
+
+    assert normalize_risk_level("CRITICAL_RISK") == RiskLevel.CRITICAL
+    assert normalize_risk_level("HI") == RiskLevel.HIGH
+    assert normalize_risk_level("med") == RiskLevel.MEDIUM
+    assert normalize_risk_level("public_domain") == RiskLevel.LOW
+

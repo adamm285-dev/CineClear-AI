@@ -45,14 +45,19 @@ class ParallelSearchClient:
                         json=payload
                     )
                     if response.status_code == 200:
-                        data = response.json()
-                        # Normalize results to ensure excerpts is accessible consistently
-                        for r in data.get("results", []):
-                            if "excerpts" in r and isinstance(r["excerpts"], list):
-                                r["excerpt"] = " ".join(r["excerpts"])
-                            elif "excerpt" in r and "excerpts" not in r:
-                                r["excerpts"] = [r["excerpt"]]
-                        return data
+                        try:
+                            data = response.json()
+                        except Exception:
+                            data = {}
+                        if isinstance(data, dict):
+                            # Normalize results to ensure excerpts is accessible consistently
+                            for r in data.get("results", []):
+                                if "excerpts" in r and isinstance(r["excerpts"], list):
+                                    r["excerpt"] = " ".join(r["excerpts"])
+                                elif "excerpt" in r and "excerpts" not in r:
+                                    r["excerpts"] = [r["excerpt"]]
+                            if data.get("results"):
+                                return data
                     else:
                         logger.warning(
                             f"Parallel Search API returned status {response.status_code}: {response.text}. Using fallback legal grounding."

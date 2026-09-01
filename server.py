@@ -1,5 +1,7 @@
 import os
+import re
 import shutil
+import uuid
 import logging
 from pathlib import Path
 from typing import Dict, Any, List, Optional
@@ -121,7 +123,10 @@ async def audit_media_endpoint(
             raise HTTPException(status_code=400, detail=f"Unknown sample ID: {sample_id}")
 
     elif file:
-        file_path_to_analyze = settings.UPLOAD_DIR / file.filename
+        raw_name = Path(file.filename or "uploaded_media").name
+        clean_name = re.sub(r'[^a-zA-Z0-9_.-]', '_', raw_name) or "uploaded_media"
+        safe_filename = f"{uuid.uuid4().hex[:8]}_{clean_name}"
+        file_path_to_analyze = settings.UPLOAD_DIR / safe_filename
         with open(file_path_to_analyze, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
     else:
@@ -138,6 +143,9 @@ async def audit_media_endpoint(
         project_title=project_title,
         media_type=media_type
     )
+
+    if file:
+        report.media_filename = Path(file.filename).name
 
     # Store in memory cache
     REPORTS_DB[report.id] = report

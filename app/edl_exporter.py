@@ -27,11 +27,14 @@ def timecode_to_frames(tc: str, fps: int = 24) -> int:
 
 
 def frames_to_timecode(total_frames: int, fps: int = 24) -> str:
-    """Converts frame integer to standard SMPTE timecode (HH:MM:SS:FF)."""
-    h = total_frames // (3600 * fps)
-    m = (total_frames % (3600 * fps)) // (60 * fps)
-    s = (total_frames % (60 * fps)) // fps
+    """Converts frame integer to standard SMPTE timecode (HH:MM:SS:FF) with 24-hour wrap."""
+    total_frames = max(0, int(total_frames))
+    fps = max(1, int(fps))
+    total_seconds = total_frames // fps
     f = total_frames % fps
+    s = total_seconds % 60
+    m = (total_seconds // 60) % 60
+    h = (total_seconds // 3600) % 24
     return f"{h:02d}:{m:02d}:{s:02d}:{f:02d}"
 
 

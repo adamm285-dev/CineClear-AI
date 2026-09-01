@@ -16,6 +16,10 @@ def test_timecode_and_frame_conversions():
     assert timecode_to_frames("Page 4", fps=24) == 96
     assert frames_to_timecode(24, fps=24) == "00:00:01:00"
     assert frames_to_timecode(1440, fps=24) == "00:01:00:00"
+    # 25-hour frame wrap (25 hours = 25 * 3600 * 24 frames -> wraps to 01:00:00:00)
+    assert frames_to_timecode(25 * 3600 * 24, fps=24) == "01:00:00:00"
+    # Negative frame protection
+    assert frames_to_timecode(-50, fps=24) == "00:00:00:00"
 
 
 def test_cmx3600_edl_generation():

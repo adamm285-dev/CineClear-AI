@@ -8,13 +8,19 @@ import json
 import logging
 import os
 import re
+import uuid
 from pathlib import Path
 from typing import List, Dict, Any, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 from app.config import settings
 from app.gemini_cascade import GeminiCascadeClient, parse_json_safe
-from app.models import ClearanceCategory, RiskLevel
+from app.models import (
+    ClearanceCategory,
+    RiskLevel,
+    normalize_clearance_category,
+    normalize_risk_level
+)
 
 logger = logging.getLogger("cineclear.vision")
 
@@ -50,6 +56,16 @@ class CandidateEntity(BaseModel):
     risk_level: RiskLevel
     mitigation_action: str
     box_2d: Optional[List[int]] = None
+
+    @field_validator('category', mode='before')
+    @classmethod
+    def coerce_category(cls, v):
+        return normalize_clearance_category(v)
+
+    @field_validator('risk_level', mode='before')
+    @classmethod
+    def coerce_risk_level(cls, v):
+        return normalize_risk_level(v)
 
 
 class VisionAgent:
@@ -289,6 +305,7 @@ class VisionAgent:
                     ]
                 sample_timestamps = sorted(list(set(sample_timestamps)))
 
+                unique_vid_id = uuid.uuid4().hex[:8]
                 for ts in sample_timestamps[:4]:
                     frame_num = int(ts * fps)
                     cap.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
@@ -296,22 +313,24 @@ class VisionAgent:
                     if ret and frame is not None:
                         success, buf = cv2.imencode('.jpg', frame)
                         if success:
-                            temp_still = settings.UPLOAD_DIR / f"temp_frame_{int(ts)}.jpg"
+                            temp_still = settings.UPLOAD_DIR / f"temp_frame_{unique_vid_id}_{int(ts)}.jpg"
                             temp_still.write_bytes(buf.tobytes())
-                            candidates = await self.analyze_image(str(temp_still))
-                            
-                            h = int(ts // 3600)
-                            m = int((ts % 3600) // 60)
-                            s = int(ts % 60)
-                            tc_str = f"{h:02d}:{m:02d}:{s:02d}"
-                            
-                            for c in candidates:
-                                c.timestamp_or_page = tc_str
-                            all_candidates.extend(candidates)
                             try:
-                                temp_still.unlink(missing_ok=True)
-                            except Exception:
-                                pass
+                                candidates = await self.analyze_image(str(temp_still))
+                                
+                                h = int(ts // 3600)
+                                m = int((ts % 3600) // 60)
+                                s = int(ts % 60)
+                                tc_str = f"{h:02d}:{m:02d}:{s:02d}"
+                                
+                                for c in candidates:
+                                    c.timestamp_or_page = tc_str
+                                all_candidates.extend(candidates)
+                            finally:
+                                try:
+                                    temp_still.unlink(missing_ok=True)
+                                except Exception:
+                                    pass
                 cap.release()
                 if all_candidates:
                     return all_candidates
