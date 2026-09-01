@@ -15,7 +15,7 @@
 
 ## ⚡ 1. Executive Summary: The Threat vs. The Goal
 
-![The Threat vs The Goal: Unseen Liabilities to Instant Underwriter Sign-off](docs/images/slide1_threat_vs_goal.svg)
+![The Threat: Unseen Statutory Liabilities vs The Goal: Instant Underwriter Sign-Off](docs/images/slide_01.png)
 
 | 🔴 THE THREAT: Unseen Statutory Liabilities | 🟢 THE GOAL: Instant Underwriter Sign-Off |
 | :--- | :--- |
@@ -25,9 +25,9 @@
 
 ## 🎯 2. The Camera Lens Legal Radar
 
-![The Camera Lens Legal Radar: Fine Art, Trademarks, Phone PII, Music & Sync](docs/images/slide2_camera_lens_radar.svg)
+![The Camera Lens Legal Radar: Fine Art, Trademarks, Phone PII, Music & Sync](docs/images/slide_02.png)
 
-CineClear AI monitors the entire camera frame, video timeline, and screenplay text for statutory liabilities across core Hollywood legal domains:
+CineClear AI monitors the entire camera frame, video timeline, and screenplay text for statutory liabilities across core entertainment legal disciplines:
 
 - **🎨 Fine Art (17 U.S.C. § 106 & § 501):** Background paintings, framed prints, and sculptures carry strict copyright liability (*Sandoval v. New Line Cinema*, *Ringgold v. BET*). Background art requires explicit artist Form-4A release contracts.
 - **🏷️ Trademarks & Trade Dress (Lanham Act 15 U.S.C. § 1125):** Hero wardrobe apparel branding and prominent product placement risk dilution and false endorsement claims without signed clearances.
@@ -40,7 +40,7 @@ CineClear AI monitors the entire camera frame, video timeline, and screenplay te
 
 ## 🤖 3. The Autonomous Triad: Extraction $\rightarrow$ Grounding $\rightarrow$ Remediation
 
-![The Autonomous Triad: Agent 1 Forensic Extractor -> Agent 2 Senior Counsel Critic -> Agent 3 Production Dispatcher](docs/images/slide3_autonomous_triad.svg)
+![The Autonomous Triad: Agent 1 Forensic Extractor -> Agent 2 Senior Counsel Critic -> Agent 3 Production Dispatcher](docs/images/slide_03.png)
 
 CineClear AI operates as a 3-agent orchestration pipeline backed by deterministic statutory guardrails:
 
@@ -69,7 +69,7 @@ flowchart LR
     AGENT2 -->|Securitized Flags| AGENT3
 ```
 
-### Agent Roles & Specifications:
+### Multi-Agent Breakdown:
 1. **Agent 1: Forensic Extractor (`app/vision_agent.py`)**
    - **Process:** OpenCV temporal video keyframe sampling (`0s`, `33%`, `66%`, `end`) and PyMuPDF screenplay parsing.
    - **Output:** Extracts candidate entities with normalized 2D bounding boxes scaled `[0, 1000]`.
@@ -84,7 +84,7 @@ flowchart LR
 
 ## 🛡️ 4. Zero-Downtime Dynamic Model Cascade & Deterministic Bedrock
 
-![Zero-Downtime Agentic Architecture: Dynamic Failover Ladder to Deterministic Bedrock](docs/images/slide4_zero_downtime_cascade.svg)
+![Zero-Downtime Agentic Architecture: Dynamic Failover Ladder to Deterministic Bedrock](docs/images/slide_04.png)
 
 CineClear AI utilizes a **Dynamic Model Cascade** ladder that catches `429 RESOURCE_EXHAUSTED` rate limits and fails over automatically without breaking pipeline continuity:
 
@@ -113,7 +113,7 @@ CineClear AI utilizes a **Dynamic Model Cascade** ladder that catches `429 RESOU
 
 ## 📦 5. Cross-Departmental Production Deliverables
 
-![Cross-Departmental Deliverables: Legal Counsel, Visual Effects, Post-Production](docs/images/slide5_cross_departmental.svg)
+![Cross-Departmental Deliverables: Legal Counsel, Visual Effects, Post-Production](docs/images/slide_05.png)
 
 CineClear AI bridges the gap between production legal counsel and physical on-set/post-production workflows:
 
@@ -128,7 +128,7 @@ CineClear AI bridges the gap between production legal counsel and physical on-se
 
 ## 📊 6. Live Clearance Matrix: Hero Living Room Analysis
 
-![Live Clearance Matrix: Hero Living Room Analysis Breakdown](docs/images/slide6_clearance_matrix.svg)
+![Live Clearance Matrix: Hero Living Room Analysis Breakdown](docs/images/slide_06.png)
 
 | Entity | Category | Risk Level | Statutory Grounds & Actionable Mitigation |
 | :--- | :--- | :---: | :--- |
@@ -141,7 +141,7 @@ CineClear AI bridges the gap between production legal counsel and physical on-se
 
 ## 📑 7. Instant E&O Underwriter Sign-Off: 3 Weeks $\rightarrow$ 30 Seconds
 
-![Instant E&O Underwriter Sign-Off: 3 Weeks to 30 Seconds](docs/images/slide7_instant_signoff.svg)
+![Instant E&O Underwriter Sign-Off: 3 Weeks to 30 Seconds](docs/images/slide_07.png)
 
 - **Multi-Territory Scope:** Evaluates territorial risk across **United States (US)**, **United Kingdom (UK)**, **European Union (EU)**, and **Canada (CA)**.
 - **Court-Ready Legal Binder:** Generates a 4-appendix Hollywood E&O Clearance Binder with executive risk summaries, Fair Use scorecards, Form-4A artwork releases, VFX paint work orders, and Underwriter Signature Certification blocks.
@@ -280,14 +280,14 @@ CineClearAi/
 ├── main.py                          # CLI and batch analysis entrypoint
 ├── server.py                        # FastAPI server (port 8085) with safe upload handling
 ├── docs/
-│   └── images/                      # High-resolution vector diagram slide assets
-│       ├── slide1_threat_vs_goal.svg
-│       ├── slide2_camera_lens_radar.svg
-│       ├── slide3_autonomous_triad.svg
-│       ├── slide4_zero_downtime_cascade.svg
-│       ├── slide5_cross_departmental.svg
-│       ├── slide6_clearance_matrix.svg
-│       └── slide7_instant_signoff.svg
+│   └── images/                      # High-resolution original presentation slide assets
+│       ├── slide_01.png             # The Threat vs The Goal
+│       ├── slide_02.png             # Camera Lens Legal Radar
+│       ├── slide_03.png             # The Autonomous Triad
+│       ├── slide_04.png             # Zero-Downtime Agentic Architecture
+│       ├── slide_05.png             # Cross-Departmental Deliverables
+│       ├── slide_06.png             # Live Clearance Matrix: Hero Living Room
+│       └── slide_07.png             # Instant E&O Underwriter Sign-Off
 ├── app/
 │   ├── __init__.py
 │   ├── config.py                    # Pydantic Settings & environment manager
