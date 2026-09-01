@@ -2,7 +2,7 @@ import pytest
 from pathlib import Path
 from app.auditor import CineClearAuditor
 from app.report_generator import generate_eo_clearance_binder
-from app.models import RiskLevel
+from app.models import ClearanceFlag, ClearanceCategory, RiskLevel, ParallelVerification
 
 
 @pytest.mark.asyncio
@@ -37,4 +37,34 @@ async def test_cineclear_auditor_image():
     )
 
     assert report.total_flags >= 2
-    assert any(f.detected_entity == "Nike 'Swoosh' Logo" or "Nike" in f.detected_entity for f in report.flags)
+    assert any("Nike" in f.detected_entity for f in report.flags)
+
+
+@pytest.mark.asyncio
+async def test_critic_agent_fixes_nike_hallucination():
+    auditor = CineClearAuditor()
+    
+    # Simulate the hallucinated flag from single-pass extraction
+    hallucinated_flag = ClearanceFlag(
+        timestamp_or_page="00:00:01",
+        category=ClearanceCategory.TRADEMARK_LOGO,
+        detected_entity="NIKE 'SWOOSH' Logo",
+        visual_description="Hero wardrobe hoodie with chest logo",
+        risk_level=RiskLevel.LOW,
+        verification=ParallelVerification(
+            search_objective="Verify Nike Swoosh",
+            sources_checked=["https://www.nike.com"],
+            is_public_domain=True,  # Hallucinated bug
+            active_trademark_found=True,
+            rights_holder_identified="Nike, Inc.",
+            statutory_context="Lanham Act 15 U.S.C. § 1114"
+        ),
+        mitigation_action="CLEARANCE CONFIRMED: Asset is in worldwide public domain (pre-1929)."
+    )
+    
+    sanitized = await auditor.review_and_securitize_flags([hallucinated_flag])
+    
+    # Invariant assertions
+    assert sanitized[0].verification.is_public_domain is False
+    assert sanitized[0].risk_level != RiskLevel.LOW
+    assert "public domain" not in sanitized[0].mitigation_action.lower()
