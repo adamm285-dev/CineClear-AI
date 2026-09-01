@@ -178,7 +178,7 @@ async def serve_dashboard():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(
-        "server.py:app",
+        "server:app",
         host=settings.HOST,
         port=settings.PORT,
         reload=settings.DEBUG
