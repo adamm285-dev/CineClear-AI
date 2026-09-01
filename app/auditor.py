@@ -241,6 +241,16 @@ class CineClearAuditor:
                 risk_level=risk
             )
 
+            # Evaluate Rogers v. Grimaldi for Trademark uses
+            rogers_assessment = None
+            if cat in [ClearanceCategory.TRADEMARK_LOGO, "TRADEMARK_LOGO"]:
+                rogers_assessment = FairUseAnalyzer.evaluate_rogers_test(
+                    entity_name=entity,
+                    scene_context=vis_desc,
+                    category=cat,
+                    risk_level=risk
+                )
+
             # Evaluate AWCPA § 120(a) for Architectural Works
             arch_assessment = None
             if cat in [ClearanceCategory.ARCHITECTURAL_RIGHTS, "ARCHITECTURAL_WORK", "ARCHITECTURAL_RIGHTS"]:
@@ -266,7 +276,8 @@ class CineClearAuditor:
                     box_2d=box_2d,
                     fair_use_scorecard=scorecard,
                     territory_matrix=territories,
-                    arch_assessment=arch_assessment
+                    arch_assessment=arch_assessment,
+                    rogers_assessment=rogers_assessment
                 )
             )
 
@@ -286,6 +297,13 @@ class CineClearAuditor:
                 entity_name=flag.detected_entity,
                 risk_level=flag.risk_level
             )
+            if flag.category == ClearanceCategory.TRADEMARK_LOGO:
+                flag.rogers_assessment = FairUseAnalyzer.evaluate_rogers_test(
+                    entity_name=flag.detected_entity,
+                    scene_context=flag.visual_description,
+                    category=flag.category,
+                    risk_level=flag.risk_level
+                )
 
         # 5. Remediation Dispatcher (Agent 3)
         remediation_pkg = self.remediation_agent.generate_remediation_package(

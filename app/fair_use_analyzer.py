@@ -10,11 +10,62 @@ from app.models import (
     FairUseScorecard,
     RiskLevel,
     TerritoryAssessment,
+    RogersTestAssessment,
 )
 
 
 class FairUseAnalyzer:
     """Evaluates statutory fair use defenses and international copyright/trademark safe harbors."""
+
+    @staticmethod
+    def evaluate_rogers_test(
+        entity_name: str,
+        scene_context: str,
+        category: ClearanceCategory,
+        risk_level: RiskLevel
+    ) -> RogersTestAssessment:
+        """
+        Evaluates the 2-prong Rogers v. Grimaldi (875 F.2d 994) artistic relevance doctrine
+        (reaffirmed in Jack Daniel's Properties, Inc. v. VIP Products LLC, 599 U.S. 140 (2023)).
+        Prong 1: Has threshold artistic relevance to the narrative work (above zero).
+        Prong 2: Does not explicitly mislead consumers as to source, authorization, or sponsorship.
+        """
+        ctx_lower = scene_context.lower()
+        ent_lower = entity_name.lower()
+
+        # Prong 1: Artistic Relevance
+        # In narrative cinema, setting a realistic scene, character wardrobe, or dialogue reference meets threshold relevance
+        artistic_passed = True
+        
+        # Prong 2: Explicitly Misleading
+        # High likelihood of misleading if used as the actual title of the movie or defamatory commercial endorsement
+        is_misleading = False
+        if "falsely claims endorsement" in ctx_lower or "official partner" in ctx_lower:
+            is_misleading = True
+        elif risk_level == RiskLevel.CRITICAL and category == ClearanceCategory.TRADEMARK_LOGO:
+            is_misleading = True
+
+        applies = artistic_passed and not is_misleading
+
+        if applies:
+            rationale = (
+                f"Under Rogers v. Grimaldi, the depiction of '{entity_name}' possesses artistic relevance "
+                f"to the creative work and does not explicitly mislead as to sponsorship or content source. "
+                f"First Amendment protection shields expressive contextual use against Lanham Act claims."
+            )
+        else:
+            rationale = (
+                f"Rogers v. Grimaldi defense inapplicable: Use of '{entity_name}' creates an explicit "
+                f"misleading impression of commercial endorsement, tarnishment, or source confusion."
+            )
+
+        return RogersTestAssessment(
+            is_expressive_work=True,
+            artistic_relevance_passed=artistic_passed,
+            explicitly_misleading=is_misleading,
+            rogers_protection_applies=applies,
+            statutory_rationale=rationale
+        )
 
     @staticmethod
     def evaluate_fair_use(

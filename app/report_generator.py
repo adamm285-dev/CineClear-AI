@@ -18,7 +18,13 @@ from reportlab.platypus import (
 )
 
 from app.config import settings
-from app.models import ClearanceAuditReport, RiskLevel, ClearanceCategory
+from app.models import (
+    ClearanceAuditReport,
+    RiskLevel,
+    ClearanceCategory,
+    UPL_LEGAL_DISCLAIMER,
+    RogersTestAssessment
+)
 
 
 def get_risk_color(risk: RiskLevel) -> colors.Color:
@@ -142,7 +148,23 @@ def generate_eo_clearance_binder(report: ClearanceAuditReport, output_path: Opti
         ('RIGHTPADDING', (0, 0), (-1, -1), 8),
     ]))
     story.append(meta_table)
-    story.append(Spacer(1, 12))
+    story.append(Spacer(1, 6))
+
+    # UPL Statutory Decision-Support Notice
+    upl_text = getattr(report, "legal_disclaimer", None) or UPL_LEGAL_DISCLAIMER
+    upl_table = Table([[
+        Paragraph(f"<b>UPL STATUTORY NOTICE:</b> {upl_text}", ParagraphStyle('UPLNotice', parent=body_style, fontSize=7.5, leading=10, textColor=colors.HexColor("#475569")))
+    ]], colWidths=[540])
+    upl_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#f1f5f9")),
+        ('BOX', (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
+        ('TOPPADDING', (0, 0), (-1, -1), 4),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+        ('LEFTPADDING', (0, 0), (-1, -1), 6),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+    ]))
+    story.append(upl_table)
+    story.append(Spacer(1, 10))
 
     # 3. Executive Risk Matrix
     story.append(Paragraph("1. Executive Risk Summary & Flag Breakdown", section_heading))
@@ -278,6 +300,15 @@ def generate_eo_clearance_binder(report: ClearanceAuditReport, output_path: Opti
             dossier_content.append([
                 Paragraph(f"<b>AWCPA Architectural Status:</b> <font color='{arch_status_color}'><b>{aa.jurisdiction_status}</b></font><br/><i>{aa.governing_statute}:</i> {aa.commercial_filing_restrictions}", ParagraphStyle('AAS', parent=body_style, fontSize=7.5, leading=10)),
                 Paragraph(f"<b>Safe Harbor:</b> {'YES' if aa.is_public_view_safe_harbor else 'RESTRICTED'}", ParagraphStyle('AAJ', parent=body_style, fontSize=7.5, alignment=1))
+            ])
+
+        # Rogers v. Grimaldi Artistic Relevance Assessment (Lanham Act § 1125)
+        if flag.rogers_assessment:
+            ra = flag.rogers_assessment
+            rogers_color = "#16a34a" if ra.rogers_protection_applies else "#dc2626"
+            dossier_content.append([
+                Paragraph(f"<b>Rogers v. Grimaldi Test:</b> <font color='{rogers_color}'><b>{'PROTECTION APPLIES' if ra.rogers_protection_applies else 'HIGH LITIGATION RISK'}</b></font><br/><i>Artistic Relevance:</i> {'PASSED' if ra.artistic_relevance_passed else 'FAILED'} | <i>Explicitly Misleading:</i> {'YES' if ra.explicitly_misleading else 'NO'}", ParagraphStyle('RAS', parent=body_style, fontSize=7.5, leading=10)),
+                Paragraph(f"<b>Expressive Shield:</b> {'YES' if ra.rogers_protection_applies else 'NO'}", ParagraphStyle('RAJ', parent=body_style, fontSize=7.5, alignment=1))
             ])
 
         dossier_table = Table(dossier_content, colWidths=[360, 180])

@@ -14,7 +14,8 @@ from app.models import (
     VFXWorkOrder,
     LegalReleaseAgreement,
     ScriptFixDirective,
-    RemediationPackage
+    RemediationPackage,
+    UPL_LEGAL_DISCLAIMER,
 )
 
 logger = logging.getLogger("cineclear.remediation")
@@ -43,6 +44,8 @@ DATE: {date_str}
 AGREED & ACCEPTED:
 Licensor Signature: _______________________ Date: ______________
 Producer Representative: __________________ Date: ______________
+
+NOTICE: Decision-support analysis compiled for production counsel review. Does not constitute formal legal counsel or create an attorney-client relationship pursuant to State Bar regulations.
 """
 
 TRADEMARK_PLACEMENT_TEMPLATE = """TRADEMARK PRODUCT PLACEMENT & RELEASE AGREEMENT
@@ -61,6 +64,8 @@ DATE: {date_str}
 AGREED & ACCEPTED:
 Brand Representative: _____________________ Date: ______________
 Producer Representative: __________________ Date: ______________
+
+NOTICE: Decision-support analysis compiled for production counsel review. Does not constitute formal legal counsel or create an attorney-client relationship pursuant to State Bar regulations.
 """
 
 

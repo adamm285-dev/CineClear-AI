@@ -97,6 +97,21 @@ class ArchitecturalLandmarkAssessment(BaseModel):
     clearance_recommendation: str
 
 
+UPL_LEGAL_DISCLAIMER: str = (
+    "NOTICE: Decision-support analysis compiled for production counsel review. "
+    "Does not constitute formal legal counsel or create an attorney-client relationship "
+    "pursuant to State Bar regulations."
+)
+
+
+class RogersTestAssessment(BaseModel):
+    is_expressive_work: bool = True
+    artistic_relevance_passed: bool = Field(..., description="Whether trademark depiction meets threshold artistic relevance to narrative")
+    explicitly_misleading: bool = Field(..., description="Whether mark explicitly misleads as to source, sponsorship, or endorsement")
+    rogers_protection_applies: bool = Field(..., description="Whether Rogers v. Grimaldi defense shields expressive trademark use")
+    statutory_rationale: str
+
+
 class ClearanceFlag(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4())[:8], description="Unique identifier for the flag")
     timestamp_or_page: str = Field(..., description="Timecode (00:01:24) or script page number (Page 4)")
@@ -113,6 +128,7 @@ class ClearanceFlag(BaseModel):
     fair_use_scorecard: Optional[FairUseScorecard] = None
     territory_matrix: Optional[List[TerritoryAssessment]] = None
     arch_assessment: Optional[ArchitecturalLandmarkAssessment] = None
+    rogers_assessment: Optional[RogersTestAssessment] = None
 
     @field_validator('category', mode='before')
     @classmethod
@@ -158,6 +174,7 @@ class LegalReleaseAgreement(BaseModel):
     property_description: str = Field(..., description="Description of protected artwork or trademark")
     governing_statute: str = Field(..., description="Applicable statutory code (e.g., 17 U.S.C. § 106, Lanham Act)")
     agreement_text: str = Field(..., description="Complete pre-filled legal agreement text ready for execution")
+    legal_disclaimer: str = Field(default=UPL_LEGAL_DISCLAIMER)
 
 
 class ScriptFixDirective(BaseModel):
@@ -188,6 +205,7 @@ class ClearanceAuditReport(BaseModel):
     generated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"))
     remediation_package: Optional[RemediationPackage] = Field(default=None, description="Departmental remediation deliverables")
     pdf_report_path: Optional[str] = Field(default=None, description="Path to generated ReportLab PDF binder")
+    legal_disclaimer: str = Field(default=UPL_LEGAL_DISCLAIMER, description="Statutory UPL decision-support notice")
 
 
 class AuditRequest(BaseModel):

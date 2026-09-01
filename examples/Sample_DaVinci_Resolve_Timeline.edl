@@ -4,19 +4,19 @@ FCM: NON-DROP FRAME
 001  AX       V     C        00:00:00:00 00:00:02:00 00:00:01:00 00:00:03:00
 * FROM CLIP NAME: sample_set_photo.jpg
 * LOC: 00:00:01:00 Orange CINECLEAR: [HIGH] Modern Abstract Oil Canvas
-* COMMENT: Action: Obtain artist release or digitally blur/replace artwork.
+* COMMENT: Action: Obtain signed Form-4A Artwork Release from the artist or replace with cleared stock art.
 
 002  AX       V     C        00:00:00:00 00:00:02:00 00:00:01:00 00:00:03:00
 * FROM CLIP NAME: sample_set_photo.jpg
 * LOC: 00:00:01:00 Yellow CINECLEAR: [MEDIUM] Apple MacBook Pro
-* COMMENT: Action: Apply cover decal or clear trademark if featured prominently.
+* COMMENT: Action: Verify incidental de minimis use; obtain written release or Greek logo in VFX.
 
 003  AX       V     C        00:00:00:00 00:00:02:00 00:00:01:00 00:00:03:00
 * FROM CLIP NAME: sample_set_photo.jpg
 * LOC: 00:00:01:00 Yellow CINECLEAR: [MEDIUM] Starbucks Siren Cup
-* COMMENT: Action: Turn cup around to face away from camera or obtain clearance.
+* COMMENT: Action: Verify incidental de minimis use; obtain placement release or turn logo away from camera.
 
 004  AX       V     C        00:00:00:00 00:00:02:00 00:00:01:00 00:00:03:00
 * FROM CLIP NAME: sample_set_photo.jpg
-* LOC: 00:00:01:00 Orange CINECLEAR: [HIGH] NIKE SWOOSH Logo
-* COMMENT: Action: Secure wardrobe clearance or digitally remove/replace logo.
+* LOC: 00:00:01:00 Orange CINECLEAR: [HIGH] Nike 'Swoosh' Logo
+* COMMENT: Action: Obtain signed wardrobe product placement release or Greek logo in VFX.

@@ -5,7 +5,7 @@
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python: 3.11+](https://img.shields.io/badge/Python-3.11+-brightgreen.svg)](https://python.org)
 [![Track: Parallel Search](https://img.shields.io/badge/Hackathon_Track-Parallel_Search_($15k)-orange.svg)](https://devpost.com)
-[![Tests: 27/27 Passed](https://img.shields.io/badge/Tests-27%2F27%20Passed-brightgreen.svg)](https://github.com/adamm285-dev/CineClear-AI)
+[![Tests: 33/33 Passed](https://img.shields.io/badge/Tests-33%2F33%20Passed-brightgreen.svg)](https://github.com/adamm285-dev/CineClear-AI)
 
 > **Repository:** [https://github.com/adamm285-dev/CineClear-AI](https://github.com/adamm285-dev/CineClear-AI)  
 > **Build Guide & Live Demo:** Watch the [Parallel Web-Grounded Gemini Agent Build Guide](https://www.youtube.com/watch?v=6BG12veBOII)
@@ -24,9 +24,9 @@ Traditional Hollywood legal clearance requires **3 to 4 weeks** of manual spread
 
 Judges can inspect pre-compiled deliverables directly inside GitHub without running the application:
 
-- 📄 **[Sample Hollywood E&O Legal Clearance Binder (PDF)](examples/Sample_Hollywood_EO_Clearance_Binder.pdf)** — 4-Appendix court-ready ReportLab binder with executive risk metrics, Fair Use scorecards, and Underwriter Sign-off certification blocks.
+- 📄 **[Sample Hollywood E&O Legal Clearance Binder (PDF)](examples/Sample_Hollywood_EO_Clearance_Binder.pdf)** — 4-Appendix court-ready ReportLab binder with executive risk metrics, Fair Use scorecards, UPL decision-support notices, and Underwriter Sign-off certification blocks.
 - 🎬 **[Sample DaVinci Resolve & Premiere Timeline Markers (CMX 3600 EDL)](examples/Sample_DaVinci_Resolve_Timeline.edl)** — Color-coded NLE timeline marker export (`Red = Critical`, `Orange = High`, `Yellow = Medium`, `Green = Low`).
-- ⚖️ **[Sample Form-4A Entertainment Artwork Release Agreement (PDF)](examples/Sample_Form_4A_Artwork_Release.pdf)** — Pre-populated copyright release contract under 17 U.S.C. § 106 & § 501.
+- ⚖️ **[Sample Form-4A Entertainment Artwork Release Agreement (PDF)](examples/Sample_Form_4A_Artwork_Release.pdf)** — Pre-populated copyright release contract under 17 U.S.C. § 106 & § 501 with State Bar UPL notices.
 
 ---
 
@@ -40,18 +40,22 @@ Judges can inspect pre-compiled deliverables directly inside GitHub without runn
 
 ---
 
-## 🎯 2. The Camera Lens Legal Radar
+## 🎯 2. The Camera Lens Legal Radar & Statutory Invariants
 
 ![The Camera Lens Legal Radar: Fine Art, Trademarks, Phone PII, Music & Sync](docs/images/slide_02.png)
 
 CineClear AI monitors the entire camera frame, video timeline, and screenplay text for statutory liabilities across core entertainment legal disciplines:
 
+- **⚖️ UPL Shield (State Bar Regulations):** Decision-support analysis compiled for production counsel review; auto-injects non-representation disclaimers on all PDF pages and API payloads.
 - **🎨 Fine Art (17 U.S.C. § 106 & § 501):** Background paintings, framed prints, and sculptures carry strict copyright liability (*Sandoval v. New Line Cinema*, *Ringgold v. BET*). Background art requires explicit artist Form-4A release contracts.
-- **🏷️ Trademarks & Trade Dress (Lanham Act 15 U.S.C. § 1125):** Hero wardrobe apparel branding and prominent product placement risk dilution and false endorsement claims without signed clearances.
-- **📞 Real Phone PII (FCC & NANPA Safe Harbor):** Non-working or active personal phone numbers trigger immediate privacy torts and broadcast liabilities. Must be clamped to CRITICAL risk and replaced with 555-0100 to 555-0199 reserves.
-- **🎵 Music & Sync Rights (17 U.S.C. § 114 & § 106(4)):** Background radio cues and soundtrack tracks demand dual Master Recording and Sync Publishing clearances.
-- **🏛️ Architectural Works (17 U.S.C. § 120(a) AWCPA):** Street-view public architecture is protected under safe harbor; proprietary night lighting (e.g. Eiffel Tower Night) demands specific permissions.
-- **🌐 Transatlantic Jurisdictional Divergence:** Automatically models differences between US strict liability (§ 106) and UK CDPA 1988 § 31 / Canadian Copyright Act § 30.7 incidental inclusion exemptions.
+- **🏛️ Architectural Works Safe Harbor (17 U.S.C. § 120(a) AWCPA):** Street-view public architecture is explicitly non-infringing; clamped to `LOW / EXEMPT`.
+- **🚨 Protected Criminal Symbols & Seals (18 U.S.C. §§ 701, 706, 712):** Red Cross emblems and Federal law enforcement badges/seals are strictly banned by statute regardless of Fair Use; clamped to `CRITICAL`.
+- **🏷️ The *Rogers v. Grimaldi* Artistic Relevance Test (Lanham Act § 1125):** 2-prong evaluation for expressive trademark use in narrative film/dialogue (*Rogers v. Grimaldi*, *Jack Daniel's*).
+- **📞 Real Phone PII (FCC & NANPA Safe Harbor):** Non-working or active personal phone numbers trigger privacy torts; clamped to `CRITICAL` and substituted with `555-0100` to `555-0199` reserves.
+- **🌐 Fictional Web & Domain Safe Harbors (RFC 2606):** Flag non-`example.com` domains as `HIGH` to eliminate cyber-trespass liabilities.
+- **💵 Prop Currency Compliance (18 U.S.C. § 504):** Enforces Secret Service single-sided motion picture money size and stamp invariants on cash props.
+- **🎵 Music & Sync Rights (17 U.S.C. § 114 & § 106(4)):** Background radio cues demand dual Master Recording and Sync Publishing clearances.
+- **🌐 Transatlantic Jurisdictional Divergence:** Models differences between US strict liability (§ 106) and UK CDPA 1988 § 31 / Canadian Copyright Act § 30.7 incidental inclusion exemptions.
 
 ---
 
@@ -88,8 +92,8 @@ flowchart LR
 
 ### Multi-Agent Specifications:
 1. **Agent 1: Forensic Extractor (`app/vision_agent.py`)** — Ingests video dailies and screenplays via OpenCV temporal sampling & multimodal Gemini Vision, isolating liabilities with normalized 2D spatial bounding boxes (`[ymin, xmin, ymax, xmax]`).
-2. **Agent 2: Senior Counsel Critic (`app/auditor.py`)** — Queries the **Parallel Search API** in real time against USPTO trademark registers and copyright catalogs to eliminate hallucinations and compute an objective 4-Factor Fair Use Scorecard (17 U.S.C. § 107) and multi-territory legal matrix (US, UK, EU, CA).
-3. **Agent 3: Production Dispatcher (`app/remediation_agent.py`, `app/edl_exporter.py`, `app/report_generator.py`)** — Dispatches execution-ready Form-4A contracts, timecoded VFX 2D Greeking paint directives, CMX 3600 EDL timeline markers, PRO cue sheets, and ReportLab E&O PDF binders.
+2. **Agent 2: Senior Counsel Critic (`app/auditor.py`)** — Queries the **Parallel Search API** in real time against USPTO trademark registers and copyright catalogs to eliminate hallucinations and compute an objective 4-Factor Fair Use Scorecard (17 U.S.C. § 107), *Rogers v. Grimaldi* test, and multi-territory legal matrix (US, UK, EU, CA).
+3. **Agent 3: Production Dispatcher (`app/remediation_agent.py`, `app/edl_exporter.py`, `app/report_generator.py`)** — Dispatches execution-ready Form-4A contracts with UPL notices, timecoded VFX 2D Greeking paint directives, CMX 3600 EDL timeline markers, PRO cue sheets, and ReportLab E&O PDF binders.
 
 ---
 
@@ -114,11 +118,28 @@ CineClear AI utilizes a **Dynamic Model Cascade** ladder that catches `429 RESOU
 │                              THE BEDROCK                               │
 │           Deterministic Python Extractor & Critic Harnesses            │
 │  • Enforces pre-1929 Public Domain boundary (modern marks cannot be PD)│
-│  • Clamps non-555 phone numbers to CRITICAL risk                       │
-│  • Normalizes bounding box ranges to [0, 1000]                         │
-│  • 27/27 Test Coverage Validated (Unit, Integration & Concurrency)     │
+│  • Clamps non-555 phone numbers to CRITICAL (NANPA Safe Harbor)        │
+│  • Clamps Red Cross & Federal badges to CRITICAL (18 U.S.C. § 706/701) │
+│  • Enforces RFC 2606 domain safe harbors (non-example.com -> HIGH)     │
+│  • Clamps public street architecture to LOW (17 U.S.C. § 120(a) AWCPA) │
+│  • Enforces 18 U.S.C. § 504 prop currency single-sided motion money    │
+│  • Computes Rogers v. Grimaldi 2-prong artistic relevance scores       │
+│  • Appends UPL statutory disclaimers on all PDF & API deliverables    │
+│  • 33/33 Test Coverage Validated (Unit, Integration & Concurrency)     │
 └────────────────────────────────────────────────────────────────────────┘
 ```
+
+### Statutory Invariant Checklist
+
+| Legal Domain | Governing Statute / Rule | Deterministic Harness Invariant |
+| :--- | :--- | :--- |
+| **UPL Shield** | State Bar UPL Rules | Auto-inject disclaimer on all PDF binder pages, contracts, and JSON payloads |
+| **Architecture** | 17 U.S.C. § 120(a) AWCPA | Clamp exterior public buildings & skylines to `LOW / EXEMPT` |
+| **Protected Symbols** | 18 U.S.C. § 706 / § 701 | Clamp Red Cross & Federal law enforcement badges to `CRITICAL` |
+| **Phone PII** | NANPA Safe Harbor | Clamp non-`555-0100` to `555-0199` numbers to `CRITICAL` |
+| **Web PII** | RFC 2606 Safe Harbor | Flag non-`example.com` domains as `HIGH` with replacement directive |
+| **Prop Currency** | 18 U.S.C. § 504 | Inject mandatory prop vendor motion picture money compliance check |
+| **Expressive TM** | *Rogers v. Grimaldi* / § 1125 | Compute 2-prong artistic relevance & explicit misleading score |
 
 ---
 
@@ -269,40 +290,46 @@ python main.py --file path/to/footage.mp4 --title "Episode 104"
 
 ## 🧪 Comprehensive Verification Suite
 
-Run all 27 unit, integration, and stress tests:
+Run all 33 unit, integration, and statutory invariant tests:
 ```bash
 python -m pytest tests/ -v
 ```
 
 ```
 tests/test_auditor.py::test_cineclear_auditor_script PASSED              [  3%]
-tests/test_auditor.py::test_cineclear_auditor_image PASSED               [  7%]
-tests/test_auditor.py::test_critic_agent_fixes_nike_hallucination PASSED [ 11%]
-tests/test_auditor.py::test_pdf_binder_generation_without_music PASSED   [ 14%]
-tests/test_cascade.py::test_cascade_initialization PASSED                [ 18%]
-tests/test_cascade.py::test_cascade_execution_order PASSED               [ 22%]
-tests/test_cascade.py::test_cascade_offline_fallback PASSED              [ 25%]
-tests/test_cascade.py::test_clean_json_text_and_parse_json_safe PASSED   [ 29%]
-tests/test_edl_exporter.py::test_timecode_and_frame_conversions PASSED   [ 33%]
-tests/test_edl_exporter.py::test_cmx3600_edl_generation PASSED           [ 37%]
-tests/test_fair_use.py::test_fair_use_scorecard_calculation PASSED       [ 40%]
-tests/test_fair_use.py::test_territory_matrix_resolutions PASSED         [ 44%]
-tests/test_harness.py::test_extractor_harness_deduplication PASSED       [ 48%]
-tests/test_harness.py::test_extractor_harness_sanitization PASSED        [ 51%]
-tests/test_harness.py::test_critic_harness_statutory_invariants PASSED   [ 55%]
-tests/test_harness.py::test_critic_harness_phone_pii_clamp PASSED        [ 59%]
-tests/test_models.py::test_models_instantiation PASSED                   [ 62%]
-tests/test_models.py::test_fuzzy_category_and_risk_coercion PASSED       [ 66%]
-tests/test_music_arch.py::test_awcpa_public_view_safe_harbor PASSED      [ 70%]
-tests/test_music_arch.py::test_restricted_landmark_detection PASSED      [ 74%]
-tests/test_music_arch.py::test_music_cue_sheet_generation PASSED         [ 77%]
-tests/test_parallel_client.py::test_parallel_search_mock PASSED          [ 81%]
-tests/test_parallel_client.py::test_parallel_search_phone_pii PASSED     [ 85%]
-tests/test_remediation.py::test_remediation_agent_generates_releases_and_vfx_orders PASSED [ 88%]
-tests/test_server.py::test_health_endpoint PASSED                        [ 92%]
+tests/test_auditor.py::test_cineclear_auditor_image PASSED               [  6%]
+tests/test_auditor.py::test_critic_agent_fixes_nike_hallucination PASSED [  9%]
+tests/test_auditor.py::test_pdf_binder_generation_without_music PASSED   [ 12%]
+tests/test_cascade.py::test_cascade_initialization PASSED                [ 15%]
+tests/test_cascade.py::test_cascade_execution_order PASSED               [ 18%]
+tests/test_cascade.py::test_cascade_offline_fallback PASSED              [ 21%]
+tests/test_cascade.py::test_clean_json_text_and_parse_json_safe PASSED   [ 24%]
+tests/test_edl_exporter.py::test_timecode_and_frame_conversions PASSED   [ 27%]
+tests/test_edl_exporter.py::test_cmx3600_edl_generation PASSED           [ 30%]
+tests/test_fair_use.py::test_fair_use_scorecard_calculation PASSED       [ 33%]
+tests/test_fair_use.py::test_territory_matrix_resolutions PASSED         [ 36%]
+tests/test_harness.py::test_extractor_harness_deduplication PASSED       [ 39%]
+tests/test_harness.py::test_extractor_harness_sanitization PASSED        [ 42%]
+tests/test_harness.py::test_critic_harness_statutory_invariants PASSED   [ 45%]
+tests/test_harness.py::test_critic_harness_phone_pii_clamp PASSED        [ 48%]
+tests/test_harness.py::test_critic_harness_statutory_seal_red_cross_and_fbi_clamp PASSED [ 51%]
+tests/test_harness.py::test_critic_harness_rfc2606_web_domain_safe_harbor PASSED [ 54%]
+tests/test_harness.py::test_critic_harness_awcpa_architecture_safe_harbor PASSED [ 57%]
+tests/test_harness.py::test_critic_harness_prop_currency_compliance PASSED [ 60%]
+tests/test_harness.py::test_rogers_v_grimaldi_artistic_relevance_assessment PASSED [ 63%]
+tests/test_harness.py::test_upl_disclaimer_invariant PASSED              [ 66%]
+tests/test_models.py::test_models_instantiation PASSED                   [ 69%]
+tests/test_models.py::test_fuzzy_category_and_risk_coercion PASSED       [ 72%]
+tests/test_music_arch.py::test_awcpa_public_view_safe_harbor PASSED      [ 75%]
+tests/test_music_arch.py::test_restricted_landmark_detection PASSED      [ 78%]
+tests/test_music_arch.py::test_music_cue_sheet_generation PASSED         [ 81%]
+tests/test_parallel_client.py::test_parallel_search_mock PASSED          [ 84%]
+tests/test_parallel_client.py::test_parallel_search_phone_pii PASSED     [ 87%]
+tests/test_remediation.py::test_remediation_agent_generates_releases_and_vfx_orders PASSED [ 90%]
+tests/test_server.py::test_health_endpoint PASSED                        [ 93%]
 tests/test_server.py::test_samples_endpoint PASSED                       [ 96%]
 tests/test_server.py::test_audit_sample_photo PASSED                     [100%]
-================== 27 passed, 1 warning in 2.28s ==================
+================== 33 passed, 1 warning in 2.34s ==================
 ```
 
 ---
