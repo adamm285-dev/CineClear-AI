@@ -3,7 +3,7 @@ import shutil
 import logging
 from pathlib import Path
 from typing import Dict, Any, List, Optional
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTasks
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTasks, Response
 from fastapi.responses import FileResponse, JSONResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.models import ClearanceAuditReport, SampleMediaItem, AuditRequest
 from app.auditor import CineClearAuditor
+from app.edl_exporter import EDLExporter
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
@@ -39,6 +40,10 @@ auditor = CineClearAuditor()
 STATIC_DIR = settings.BASE_DIR / "static"
 STATIC_DIR.mkdir(parents=True, exist_ok=True)
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+
+# Mount sample media directory for image previews
+settings.SAMPLE_MEDIA_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/sample_media", StaticFiles(directory=str(settings.SAMPLE_MEDIA_DIR)), name="sample_media")
 
 
 @app.get("/health")
@@ -163,6 +168,24 @@ async def download_report_pdf(report_id: str):
         path=report.pdf_report_path,
         media_type="application/pdf",
         filename=filename
+    )
+
+
+@app.get("/api/reports/{report_id}/edl")
+async def download_edl_markers(report_id: str):
+    """Exports timecoded clearance flags as an importable CMX 3600 EDL for video editors."""
+    if report_id not in REPORTS_DB:
+        raise HTTPException(status_code=404, detail="Audit report not found.")
+    
+    report = REPORTS_DB[report_id]
+    edl_content = EDLExporter.generate_cmx3600_edl(report)
+    safe_title = report.project_title.replace(" ", "_").replace("/", "_")
+    filename = f"CineClear_Markers_{safe_title}_{report_id[:8]}.edl"
+    
+    return Response(
+        content=edl_content,
+        media_type="text/plain",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
     )
 
 

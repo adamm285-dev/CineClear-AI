@@ -17,9 +17,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const reportProjectTitle = document.getElementById('report-project-title');
     const reportMetaInfo = document.getElementById('report-meta-info');
     const btnDownloadPdf = document.getElementById('btn-download-pdf');
+    const btnExportEdl = document.getElementById('btn-export-edl');
     const btnNewAudit = document.getElementById('btn-new-audit');
     const flagsContainer = document.getElementById('flags-container');
     const filterTabs = document.querySelectorAll('.filter-tab');
+
+    // Visual Viewport & BBox elements
+    const mediaViewportBox = document.getElementById('media-viewport-box');
+    const previewImage = document.getElementById('preview-image');
+    const bboxOverlay = document.getElementById('bbox-overlay');
 
     // Metrics
     const metricTotal = document.getElementById('metric-total');
@@ -39,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedSampleId = 'sample-photo';
     let currentReport = null;
     let activeFilter = 'ALL';
+    let currentImageSrc = null;
 
     // Sample selection
     sampleItems.forEach(item => {
@@ -96,6 +103,15 @@ document.addEventListener('DOMContentLoaded', () => {
     btnRunAudit.addEventListener('click', async () => {
         const projectTitle = projectTitleInput.value.trim() || 'Untitled Production';
         
+        // Setup image preview source for visualization
+        if (selectedFile && selectedFile.type.startsWith('image/')) {
+            currentImageSrc = URL.createObjectURL(selectedFile);
+        } else if (selectedSampleId === 'sample-photo') {
+            currentImageSrc = '/sample_media/sample_set_photo.jpg';
+        } else {
+            currentImageSrc = null;
+        }
+
         // Show Processing View
         processingView.classList.remove('hidden');
         resultsView.classList.add('hidden');
@@ -150,8 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const steps = [
             { id: 'step-1', label: 'Extracting visual keyframes & parsing script dialog...' },
             { id: 'step-2', label: 'Grounded Parallel Search: querying USPTO & legal databases...' },
-            { id: 'step-3', label: 'Synthesizing statutory risk rationale & Hollywood mitigations...' },
-            { id: 'step-4', label: 'Compiling ReportLab E&O Clearance Binder PDF...' }
+            { id: 'step-3', label: 'Senior Counsel Critic Agent: enforcing statutory invariants...' },
+            { id: 'step-4', label: 'Generating VFX work orders, releases & E&O PDF binder...' }
         ];
 
         let currentStep = 0;
@@ -191,8 +207,95 @@ document.addEventListener('DOMContentLoaded', () => {
         countMedium.textContent = report.medium_count || 0;
         countLow.textContent = report.low_count || 0;
 
+        // Render Media Viewport with Bounding Boxes
+        if (currentImageSrc && report.flags && report.flags.some(f => f.box_2d && f.box_2d.length === 4)) {
+            mediaViewportBox.classList.remove('hidden');
+            previewImage.src = currentImageSrc;
+            previewImage.classList.remove('hidden');
+            previewImage.onload = () => {
+                renderBoundingBoxes(report.flags, previewImage, bboxOverlay);
+            };
+            renderBoundingBoxes(report.flags, previewImage, bboxOverlay);
+        } else {
+            mediaViewportBox.classList.add('hidden');
+            previewImage.classList.add('hidden');
+            bboxOverlay.innerHTML = '';
+        }
+
         renderFlagsList(report.flags);
         renderRemediationPackage(report.remediation_package);
+        setupBoxInteractivity();
+    }
+
+    // Render interactive Bounding Boxes over image
+    function renderBoundingBoxes(flags, imgElement, svgOverlay) {
+        svgOverlay.innerHTML = '';
+        if (!flags || !imgElement || imgElement.classList.contains('hidden')) return;
+
+        const riskColors = {
+            'CRITICAL': '#dc2626',
+            'HIGH': '#ea580c',
+            'MEDIUM': '#d97706',
+            'LOW': '#16a34a'
+        };
+
+        flags.forEach((flag, index) => {
+            if (!flag.box_2d || flag.box_2d.length !== 4) return;
+            const [ymin, xmin, ymax, xmax] = flag.box_2d;
+            
+            // Scale normalized 0-1000 coordinates to percentage
+            const top = (ymin / 10).toFixed(2);
+            const left = (xmin / 10).toFixed(2);
+            const width = ((xmax - xmin) / 10).toFixed(2);
+            const height = ((ymax - ymin) / 10).toFixed(2);
+            const color = riskColors[flag.risk_level] || '#2563eb';
+
+            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            rect.setAttribute('x', `${left}%`);
+            rect.setAttribute('y', `${top}%`);
+            rect.setAttribute('width', `${width}%`);
+            rect.setAttribute('height', `${height}%`);
+            rect.setAttribute('fill', `${color}22`);
+            rect.setAttribute('stroke', color);
+            rect.setAttribute('stroke-width', '2.5');
+            rect.setAttribute('stroke-dasharray', '6 3');
+            rect.setAttribute('id', `bbox-flag-${index}`);
+            rect.setAttribute('class', 'transition-all duration-200');
+
+            // Label tag
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', `${left}%`);
+            text.setAttribute('y', `${Math.max(ymin / 10 - 1.5, 4)}%`);
+            text.setAttribute('fill', color);
+            text.setAttribute('font-size', '11px');
+            text.setAttribute('font-weight', 'bold');
+            text.textContent = `[${flag.risk_level}] ${flag.detected_entity}`;
+
+            svgOverlay.appendChild(rect);
+            svgOverlay.appendChild(text);
+        });
+    }
+
+    // Hook up Flag Card Hover -> Bounding Box Pulse
+    function setupBoxInteractivity() {
+        document.querySelectorAll('.flag-card').forEach((card, idx) => {
+            card.addEventListener('mouseenter', () => {
+                const box = document.getElementById(`bbox-flag-${idx}`);
+                if (box) {
+                    box.setAttribute('stroke-width', '5');
+                    box.setAttribute('stroke-dasharray', 'none');
+                    box.setAttribute('fill-opacity', '0.45');
+                }
+            });
+            card.addEventListener('mouseleave', () => {
+                const box = document.getElementById(`bbox-flag-${idx}`);
+                if (box) {
+                    box.setAttribute('stroke-width', '2.5');
+                    box.setAttribute('stroke-dasharray', '6 3');
+                    box.setAttribute('fill-opacity', '0.15');
+                }
+            });
+        });
     }
 
     // Render Remediation Package
@@ -284,16 +387,20 @@ document.addEventListener('DOMContentLoaded', () => {
         filtered.forEach((flag, idx) => {
             const card = document.createElement('div');
             card.className = `flag-card risk-${flag.risk_level}`;
+            card.setAttribute('data-index', idx);
 
             const sourcesHtml = flag.verification.sources_checked && flag.verification.sources_checked.length > 0
                 ? flag.verification.sources_checked.map(s => `<a href="${s}" target="_blank" class="source-link">${s.replace('https://', '').split('/')[0]}</a>`).join(', ')
                 : 'USPTO / Copyright Database';
+
+            const bboxTag = flag.box_2d ? `<span style="background:rgba(59,130,246,0.2);color:#93c5fd;font-size:0.7rem;padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;">[BOX: ${flag.box_2d.join(', ')}]</span>` : '';
 
             card.innerHTML = `
                 <div class="flag-header">
                     <div class="flag-title-area">
                         <span class="flag-timecode">${flag.timestamp_or_page}</span>
                         <span class="flag-category">${flag.category.replace('_', ' ')}</span>
+                        ${bboxTag}
                     </div>
                     <span class="flag-risk-badge ${flag.risk_level}">${flag.risk_level} RISK</span>
                 </div>
@@ -337,6 +444,7 @@ document.addEventListener('DOMContentLoaded', () => {
             activeFilter = tab.getAttribute('data-filter');
             if (currentReport) {
                 renderFlagsList(currentReport.flags);
+                setupBoxInteractivity();
             }
         });
     });
@@ -347,9 +455,18 @@ document.addEventListener('DOMContentLoaded', () => {
         window.open(`/api/reports/${currentReport.id}/pdf`, '_blank');
     });
 
+    // Export EDL Timeline Markers
+    if (btnExportEdl) {
+        btnExportEdl.addEventListener('click', () => {
+            if (!currentReport || !currentReport.id) return;
+            window.open(`/api/reports/${currentReport.id}/edl`, '_blank');
+        });
+    }
+
     // New Audit button
     btnNewAudit.addEventListener('click', () => {
         resultsView.classList.add('hidden');
+        mediaViewportBox.classList.add('hidden');
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 });

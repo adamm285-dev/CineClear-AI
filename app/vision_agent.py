@@ -20,22 +20,23 @@ logger = logging.getLogger("cineclear.vision")
 
 EXTRACTION_SYSTEM_PROMPT = """
 You are a Hollywood Legal Clearance Specialist & Visual Forensic Auditor.
-Analyze the provided film media (image, script text, or keyframe) and extract all potential legal liabilities:
+Analyze the provided film media and extract all legal liabilities with normalized bounding boxes:
 1. TRADEMARK_LOGO: Visible commercial logos, distinctive brand marks, trade dress.
 2. COPYRIGHTED_ART: Fine art paintings, sculptures, non-incidental background art.
 3. ARCHITECTURAL_WORK: Protected buildings, specialized structural designs.
 4. MUSIC_AUDIO: Referenced un-cleared songs, identifiable musical recordings.
-5. PHONE_PII: Phone numbers (non-555-0100 to 555-0199), real names, living person privacy exposures.
+5. PHONE_PII: Real phone numbers, living person privacy exposures.
 
-Output a valid JSON array of objects with the following structure:
+Output a valid JSON array of objects:
 [
   {
     "timestamp_or_page": "00:00:01" (or "Page 1"),
     "category": "TRADEMARK_LOGO | COPYRIGHTED_ART | ARCHITECTURAL_RIGHTS | MUSIC_AUDIO | PHONE_PII",
     "detected_entity": "Short entity name",
-    "visual_description": "Precise context of placement/framing on screen",
+    "visual_description": "Precise context of placement/framing",
     "risk_level": "CRITICAL | HIGH | MEDIUM | LOW",
-    "mitigation_action": "Initial recommended production clearance step"
+    "mitigation_action": "Initial recommended production clearance step",
+    "box_2d": [ymin, xmin, ymax, xmax]  // Integer coordinates scaled 0-1000 for images (or null for scripts)
   }
 ]
 """
@@ -48,6 +49,7 @@ class CandidateEntity(BaseModel):
     visual_description: str
     risk_level: RiskLevel
     mitigation_action: str
+    box_2d: Optional[List[int]] = None
 
 
 class VisionAgent:
@@ -230,7 +232,8 @@ class VisionAgent:
                 detected_entity="Modern Abstract Oil Canvas",
                 visual_description="Large orange canvas mounted on the upper-left wall/background set area.",
                 risk_level=RiskLevel.HIGH,
-                mitigation_action="Obtain signed Form-4A Artwork Release from the artist or replace with cleared stock art."
+                mitigation_action="Obtain signed Form-4A Artwork Release from the artist or replace with cleared stock art.",
+                box_2d=[80, 60, 420, 360]
             ),
             CandidateEntity(
                 timestamp_or_page="00:00:01",
@@ -238,7 +241,8 @@ class VisionAgent:
                 detected_entity="Apple MacBook Pro",
                 visual_description="Slate laptop prop placed prominently on foreground workspace.",
                 risk_level=RiskLevel.MEDIUM,
-                mitigation_action="Verify incidental de minimis use; obtain written release or Greek logo in VFX."
+                mitigation_action="Verify incidental de minimis use; obtain written release or Greek logo in VFX.",
+                box_2d=[560, 80, 840, 410]
             ),
             CandidateEntity(
                 timestamp_or_page="00:00:01",
@@ -246,7 +250,8 @@ class VisionAgent:
                 detected_entity="Starbucks Siren Cup",
                 visual_description="White paper coffee cup with green emblem on desk.",
                 risk_level=RiskLevel.MEDIUM,
-                mitigation_action="Verify incidental de minimis use; obtain placement release or turn logo away from camera."
+                mitigation_action="Verify incidental de minimis use; obtain placement release or turn logo away from camera.",
+                box_2d=[440, 430, 680, 560]
             ),
             CandidateEntity(
                 timestamp_or_page="00:00:01",
@@ -254,7 +259,8 @@ class VisionAgent:
                 detected_entity="Nike 'Swoosh' Logo",
                 visual_description="Hero actor wardrobe hoodie with prominent chest logo.",
                 risk_level=RiskLevel.HIGH,
-                mitigation_action="Obtain signed wardrobe product placement release or Greek logo in VFX."
+                mitigation_action="Obtain signed wardrobe product placement release or Greek logo in VFX.",
+                box_2d=[310, 610, 780, 940]
             )
         ]
 

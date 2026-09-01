@@ -52,3 +52,10 @@ async def test_audit_sample_photo():
         pdf_res = await client.get(f"/api/reports/{report_id}/pdf")
         assert pdf_res.status_code == 200
         assert pdf_res.headers["content-type"] == "application/pdf"
+
+        # Test downloading CMX 3600 EDL markers
+        edl_res = await client.get(f"/api/reports/{report_id}/edl")
+        assert edl_res.status_code == 200
+        assert "text/plain" in edl_res.headers["content-type"]
+        assert "TITLE: CINECLEAR_" in edl_res.text
+        assert "FCM: NON-DROP FRAME" in edl_res.text

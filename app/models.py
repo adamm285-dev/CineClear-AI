@@ -39,6 +39,10 @@ class ClearanceFlag(BaseModel):
     risk_level: RiskLevel = Field(..., description="E&O Insurance risk tier")
     verification: ParallelVerification = Field(..., description="Parallel Search ground truth legal verification")
     mitigation_action: str = Field(..., description="Actionable fix (e.g., 'Obtain location release', 'Blur in VFX', 'Replace with 555-number')")
+    box_2d: Optional[List[int]] = Field(
+        default=None,
+        description="Normalized 2D bounding box [ymin, xmin, ymax, xmax] scaled 0 to 1000"
+    )
 
 
 class VFXWorkOrder(BaseModel):

@@ -582,9 +582,74 @@ body {
     color: var(--text-muted);
 }
 
-.action-buttons {
+.btn-edl {
+    background: rgba(30, 41, 59, 0.9);
+    border: 1px solid #475569;
+    color: #f1f5f9;
+    padding: 10px 16px;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
     display: flex;
-    gap: 12px;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.btn-edl:hover {
+    background: rgba(51, 65, 85, 1);
+    border-color: #94a3b8;
+    transform: translateY(-1px);
+}
+
+/* Media Viewport with SVG Bounding Box Overlay */
+.media-viewport-container {
+    background: #020617;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    margin-bottom: 28px;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.viewport-wrapper {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    line-height: 0;
+}
+
+.preview-img {
+    max-height: 480px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+    display: block;
+}
+
+.bbox-svg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.bbox-svg-overlay rect {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bbox-svg-overlay text {
+    font-family: 'Inter', system-ui, sans-serif;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
 }
 
 /* Risk Metrics Grid */

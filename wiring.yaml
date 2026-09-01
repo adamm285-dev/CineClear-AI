@@ -74,6 +74,12 @@ endpoints:
     description: "Generates and streams Hollywood-grade ReportLab E&O Clearance Binder PDF."
     auth_required: false
 
+  - path: "/api/reports/{report_id}/edl"
+    method: "GET"
+    handler: "server.download_edl_markers"
+    description: "Exports timecoded clearance flags as CMX 3600 EDL for DaVinci Resolve and Adobe Premiere Pro."
+    auth_required: false
+
   - path: "/static/*"
     method: "GET"
     handler: "StaticFiles Mount"
@@ -177,6 +183,17 @@ agents_and_capabilities:
       - "Parallel Search chain-of-custody audit logs"
       - "Underwriting endorsement and attorney sign-off blocks"
 
+  - id: "edl_marker_exporter"
+    name: "NLE Timeline Marker & CMX 3600 EDL Exporter"
+    module: "app.edl_exporter"
+    class: "EDLExporter"
+    role: "Editorial Post-Production Integration"
+    status: "live"
+    features:
+      - "Generates industry-standard CMX 3600 Edit Decision Lists (EDL)"
+      - "Converts timecodes to 24fps frames with 2-second locator windows"
+      - "Color-coded DaVinci Resolve & Adobe Premiere Pro timeline marker comments"
+
   - id: "cli_batch_engine"
     name: "Batch Media Scanner & Terminal CLI"
     module: "main"
@@ -197,7 +214,7 @@ models_and_schemas:
   - model: "ParallelVerification"
     fields: ["search_objective", "sources_checked", "is_public_domain", "active_trademark_found", "rights_holder_identified", "statutory_context"]
   - model: "ClearanceFlag"
-    fields: ["id", "timestamp_or_page", "category", "detected_entity", "visual_description", "risk_level", "verification", "mitigation_action"]
+    fields: ["id", "timestamp_or_page", "category", "detected_entity", "visual_description", "risk_level", "verification", "mitigation_action", "box_2d"]
   - model: "VFXWorkOrder"
     fields: ["timestamp_or_page", "target_entity", "action_type", "tracking_notes", "priority"]
   - model: "LegalReleaseAgreement"

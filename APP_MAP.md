@@ -151,13 +151,14 @@ C:\Users\adamm_000\Desktop\CineClearAi\
 │   ├── models.py                    # Pydantic legal clearance & remediation schemas
 │   ├── harness.py                   # ExtractorHarness & CriticHarness boundaries
 │   ├── gemini_cascade.py            # Dynamic Model Cascade Ladder & failover manager
+│   ├── edl_exporter.py              # CMX 3600 NLE Timeline Marker & EDL Exporter
 │   ├── parallel_client.py           # Parallel Search API client with live search & mock engine
 │   ├── vision_agent.py              # Agent 1: Gemini Multimodal visual & audio parser
 │   ├── auditor.py                   # Agent 2: Multi-turn reasoning & Senior Counsel Critic loop
 │   ├── remediation_agent.py         # Agent 3: Departmental Remediation & Dispatcher
 │   └── report_generator.py          # ReportLab PDF E&O Clearance Binder generator
 ├── static/
-│   ├── index.html                   # Cinematic dark-mode studio dashboard
+│   ├── index.html                   # Cinematic dark-mode studio dashboard with SVG BBox overlay
 │   ├── style.css                    # Production styling & risk color variables
 │   └── app.js                       # Interactive UI controller & remediation package renderer
 ├── sample_media/
@@ -171,6 +172,7 @@ C:\Users\adamm_000\Desktop\CineClearAi\
     ├── test_models.py               # Schema & validation tests
     ├── test_harness.py              # Dual harness eval suite
     ├── test_cascade.py              # Dynamic Model Cascade failover tests
+    ├── test_edl_exporter.py         # CMX 3600 NLE timeline marker export tests
     ├── test_parallel_client.py      # Parallel search client tests
     ├── test_auditor.py              # Clearance audit & critic reflection tests
     ├── test_remediation.py          # Agent 3 remediation dispatcher tests

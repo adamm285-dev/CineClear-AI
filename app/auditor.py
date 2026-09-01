@@ -190,6 +190,7 @@ class CineClearAuditor:
             vis_desc = candidate.get("visual_description") if isinstance(candidate, dict) else candidate.visual_description
             risk = candidate.get("risk_level") if isinstance(candidate, dict) else candidate.risk_level
             mitigation = candidate.get("mitigation_action") if isinstance(candidate, dict) else candidate.mitigation_action
+            box_2d = candidate.get("box_2d") if isinstance(candidate, dict) else getattr(candidate, "box_2d", None)
 
             verification = await self.verify_flag_with_parallel(
                 entity_name=entity,
@@ -205,7 +206,8 @@ class CineClearAuditor:
                     visual_description=vis_desc,
                     risk_level=risk,
                     verification=verification,
-                    mitigation_action=mitigation
+                    mitigation_action=mitigation,
+                    box_2d=box_2d
                 )
             )
 
