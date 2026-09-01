@@ -1,10 +1,74 @@
+# ==============================================================================
+# CINECLEAR AI - INTELLECTUAL PROPERTY, SECRETS & BUILD SHIELD
+# ==============================================================================
+
+# 1. API Keys, Environment Variables & Cloud Credentials
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+credentials.json
+client_secret*.json
+service-account*.json
+token.json
+secrets/
+private/
+
+# 2. Proprietary Model Weights, Checkpoints & Custom Datasets
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.onnx
+*.gguf
+weights/
+checkpoints/
+models_cache/
+training_data/
+fine_tunes/
+data_cache/
+
+# 3. Generated Production Deliverables & Uploaded Media
+uploads/
+reports/
+*.pdf
+*.edl
+temp_frame_*
+temp_*
+*.log
+logs/
+*.sqlite
+*.sqlite3
+*.db
+
+# 4. Python Bytecode, Caches & Testing Artifacts
 __pycache__/
 *.py[cod]
 *$py.class
 .pytest_cache/
-.env
-uploads/
-reports/*.pdf
+.coverage
+.coverage.*
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# 5. Virtual Environments
 venv/
 .venv/
+env/
+.env/
+
+# 6. IDEs & Operating System Artifacts
+.vscode/
+.idea/
+*.swp
+*.swo
 .DS_Store
+Thumbs.db
+desktop.ini
+
