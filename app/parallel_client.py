@@ -1,4 +1,5 @@
 import logging
+import re
 import httpx
 from typing import Dict, Any, List, Optional
 from app.config import settings
@@ -160,7 +161,7 @@ class ParallelSearchClient:
             }
 
         # 6. Phone Numbers / PII / 555-Numbers
-        if any(w in obj_lower for w in ["phone", "number", "pii", "address", "ssn", "contact", "digits"]):
+        if any(w in obj_lower for w in ["phone", "number", "pii", "address", "ssn", "contact", "digits", "555-", "(212)", "(310)", "(800)"]) or bool(re.search(r'\d{3}[-.\s]\d{3}[-.\s]\d{4}', objective)):
             return {
                 "objective": objective,
                 "results": [

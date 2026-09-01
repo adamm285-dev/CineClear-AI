@@ -104,7 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const projectTitle = projectTitleInput.value.trim() || 'Untitled Production';
         
         // Setup image preview source for visualization
-        if (selectedFile && selectedFile.type.startsWith('image/')) {
+        const isImg = selectedFile && (selectedFile.type.startsWith('image/') || /\.(jpe?g|png|webp|bmp|gif)$/i.test(selectedFile.name));
+        if (isImg) {
             currentImageSrc = URL.createObjectURL(selectedFile);
         } else if (selectedSampleId === 'sample-photo') {
             currentImageSrc = '/sample_media/sample_set_photo.jpg';

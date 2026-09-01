@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from typing import List, Optional, Union
 
 from app.config import settings
-from app.gemini_cascade import GeminiCascadeClient
+from app.gemini_cascade import GeminiCascadeClient, parse_json_safe
 from app.harness import CriticHarness, ExtractorHarness
 from app.models import (
     ClearanceAuditReport,
@@ -111,15 +111,16 @@ class CineClearAuditor:
 
         if raw_response:
             try:
-                data = json.loads(raw_response)
-                return ParallelVerification(
-                    search_objective=objective,
-                    sources_checked=sources,
-                    is_public_domain=data.get("is_public_domain", False),
-                    active_trademark_found=data.get("active_trademark_found", True),
-                    rights_holder_identified=data.get("rights_holder_identified"),
-                    statutory_context=data.get("statutory_context", "Clearance audit completed.")
-                )
+                data = parse_json_safe(raw_response)
+                if data and isinstance(data, dict):
+                    return ParallelVerification(
+                        search_objective=objective,
+                        sources_checked=sources,
+                        is_public_domain=data.get("is_public_domain", False),
+                        active_trademark_found=data.get("active_trademark_found", True),
+                        rights_holder_identified=data.get("rights_holder_identified"),
+                        statutory_context=data.get("statutory_context", "Clearance audit completed.")
+                    )
             except Exception as e:
                 logger.error(f"[Auditor] Synthesis JSON parse failed: {e}")
 
@@ -158,10 +159,11 @@ class CineClearAuditor:
 
         if raw_response:
             try:
-                parsed = json.loads(raw_response)
-                flag_items = parsed if isinstance(parsed, list) else parsed.get("flags", [])
-                sanitized_flags = [ClearanceFlag.model_validate(item) for item in flag_items]
-                return CriticHarness.enforce_invariants(sanitized_flags)
+                parsed = parse_json_safe(raw_response)
+                if parsed:
+                    flag_items = parsed if isinstance(parsed, list) else parsed.get("flags", [])
+                    sanitized_flags = [ClearanceFlag.model_validate(item) for item in flag_items]
+                    return CriticHarness.enforce_invariants(sanitized_flags)
             except Exception as e:
                 logger.warning(f"[Auditor] Critic JSON parsing fallback: {e}")
 
@@ -246,7 +248,21 @@ class CineClearAuditor:
         # 3. Critic Agent Reflection (Agent 2)
         securitized_flags = await self.review_and_securitize_flags(grounded_flags)
 
-        # 4. Remediation Dispatcher (Agent 3)
+        # 4. Re-sync Fair Use Scorecard and Territory Matrix if risk was adjusted
+        for flag in securitized_flags:
+            flag.fair_use_scorecard = FairUseAnalyzer.evaluate_fair_use(
+                category=flag.category,
+                entity_name=flag.detected_entity,
+                scene_context=flag.visual_description,
+                risk_level=flag.risk_level
+            )
+            flag.territory_matrix = FairUseAnalyzer.evaluate_territories(
+                category=flag.category,
+                entity_name=flag.detected_entity,
+                risk_level=flag.risk_level
+            )
+
+        # 5. Remediation Dispatcher (Agent 3)
         remediation_pkg = self.remediation_agent.generate_remediation_package(
             flags=securitized_flags,
             project_title=project_title

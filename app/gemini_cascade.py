@@ -13,7 +13,45 @@ from google.genai.errors import APIError
 
 from app.config import settings
 
+import re
+
 logger = logging.getLogger("cineclear.cascade")
+
+
+def clean_json_text(text: Optional[str]) -> str:
+    """Strips markdown code blocks, backticks, and whitespace from LLM output."""
+    if not text:
+        return ""
+    cleaned = text.strip()
+    # Strip ```json ... ``` or ``` ... ```
+    if cleaned.startswith("```"):
+        lines = cleaned.splitlines()
+        if lines and lines[0].startswith("```"):
+            lines = lines[1:]
+        if lines and lines[-1].startswith("```"):
+            lines = lines[:-1]
+        cleaned = "\n".join(lines).strip()
+    return cleaned
+
+
+def parse_json_safe(text: Optional[str]) -> Optional[Any]:
+    """Parses JSON safely from LLM output, stripping markdown formatting."""
+    if not text:
+        return None
+    cleaned = clean_json_text(text)
+    try:
+        return json.loads(cleaned)
+    except Exception as e:
+        # Attempt regex search for JSON array or object
+        match = re.search(r'(\[.*\]|\{.*\})', cleaned, re.DOTALL)
+        if match:
+            try:
+                return json.loads(match.group(1))
+            except Exception:
+                pass
+        logger.warning(f"[Cascade] Failed to parse JSON from response: {e}")
+        return None
+
 
 # Hierarchical Fallback Ladder: High-Acuity -> High-Quota Production -> Standard Tier
 DEFAULT_MODEL_LADDER = [

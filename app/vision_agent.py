@@ -13,7 +13,7 @@ from typing import List, Dict, Any, Optional
 from pydantic import BaseModel
 
 from app.config import settings
-from app.gemini_cascade import GeminiCascadeClient
+from app.gemini_cascade import GeminiCascadeClient, parse_json_safe
 from app.models import ClearanceCategory, RiskLevel
 
 logger = logging.getLogger("cineclear.vision")
@@ -211,16 +211,17 @@ class VisionAgent:
             )
 
             if raw_response:
-                data = json.loads(raw_response)
-                items = data if isinstance(data, list) else data.get("flags", [])
-                parsed_candidates = []
-                for item in items:
-                    cat_str = item.get("category", "TRADEMARK_LOGO")
-                    if cat_str == "ARCHITECTURAL_WORK":
-                        item["category"] = "ARCHITECTURAL_RIGHTS"
-                    parsed_candidates.append(CandidateEntity.model_validate(item))
-                if parsed_candidates:
-                    return parsed_candidates
+                data = parse_json_safe(raw_response)
+                if data:
+                    items = data if isinstance(data, list) else data.get("flags", [])
+                    parsed_candidates = []
+                    for item in items:
+                        cat_str = item.get("category", "TRADEMARK_LOGO")
+                        if cat_str == "ARCHITECTURAL_WORK":
+                            item["category"] = "ARCHITECTURAL_RIGHTS"
+                        parsed_candidates.append(CandidateEntity.model_validate(item))
+                    if parsed_candidates:
+                        return parsed_candidates
         except Exception as e:
             logger.warning(f"Live image analysis encountered exception: {e}")
 
@@ -265,7 +266,59 @@ class VisionAgent:
         ]
 
     async def analyze_video(self, file_path: str) -> List[CandidateEntity]:
-        """Analyzes video dailies by delegating to sampled image frames."""
+        """Analyzes video footage by sampling keyframes with OpenCV and extracting spatial liabilities."""
+        if not os.path.exists(file_path):
+            return []
+
+        all_candidates: List[CandidateEntity] = []
+        try:
+            import cv2
+            cap = cv2.VideoCapture(file_path)
+            if cap.isOpened():
+                total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+                fps = cap.get(cv2.CAP_PROP_FPS) or 24.0
+                duration_sec = total_frames / fps if total_frames > 0 else 0
+
+                sample_timestamps = [0.0]
+                if duration_sec > 2.0:
+                    sample_timestamps = [
+                        0.0,
+                        min(duration_sec * 0.33, duration_sec - 1.0),
+                        min(duration_sec * 0.66, duration_sec - 0.5),
+                        max(0.0, duration_sec - 0.5)
+                    ]
+                sample_timestamps = sorted(list(set(sample_timestamps)))
+
+                for ts in sample_timestamps[:4]:
+                    frame_num = int(ts * fps)
+                    cap.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
+                    ret, frame = cap.read()
+                    if ret and frame is not None:
+                        success, buf = cv2.imencode('.jpg', frame)
+                        if success:
+                            temp_still = settings.UPLOAD_DIR / f"temp_frame_{int(ts)}.jpg"
+                            temp_still.write_bytes(buf.tobytes())
+                            candidates = await self.analyze_image(str(temp_still))
+                            
+                            h = int(ts // 3600)
+                            m = int((ts % 3600) // 60)
+                            s = int(ts % 60)
+                            tc_str = f"{h:02d}:{m:02d}:{s:02d}"
+                            
+                            for c in candidates:
+                                c.timestamp_or_page = tc_str
+                            all_candidates.extend(candidates)
+                            try:
+                                temp_still.unlink(missing_ok=True)
+                            except Exception:
+                                pass
+                cap.release()
+                if all_candidates:
+                    return all_candidates
+        except Exception as e:
+            logger.warning(f"OpenCV video keyframe extraction fallback: {e}")
+
+        # Fallback to analyzing the file directly
         return await self.analyze_image(file_path)
 
     async def analyze_script(self, file_path: str) -> List[CandidateEntity]:
@@ -296,16 +349,17 @@ class VisionAgent:
             )
 
             if raw_response:
-                data = json.loads(raw_response)
-                items = data if isinstance(data, list) else data.get("flags", [])
-                parsed_candidates = []
-                for item in items:
-                    cat_str = item.get("category", "TRADEMARK_LOGO")
-                    if cat_str == "ARCHITECTURAL_WORK":
-                        item["category"] = "ARCHITECTURAL_RIGHTS"
-                    parsed_candidates.append(CandidateEntity.model_validate(item))
-                if parsed_candidates:
-                    return parsed_candidates
+                data = parse_json_safe(raw_response)
+                if data:
+                    items = data if isinstance(data, list) else data.get("flags", [])
+                    parsed_candidates = []
+                    for item in items:
+                        cat_str = item.get("category", "TRADEMARK_LOGO")
+                        if cat_str == "ARCHITECTURAL_WORK":
+                            item["category"] = "ARCHITECTURAL_RIGHTS"
+                        parsed_candidates.append(CandidateEntity.model_validate(item))
+                    if parsed_candidates:
+                        return parsed_candidates
         except Exception as e:
             logger.warning(f"Live script analysis encountered exception: {e}")
 

@@ -298,7 +298,13 @@ def generate_eo_clearance_binder(report: ClearanceAuditReport, output_path: Opti
         ]))
 
     # 6. Music Cue Sheet Appendix (if present)
-    if report.remediation_package and report.remediation_package.music_cue_sheet and report.remediation_package.music_cue_sheet.cue_entries:
+    has_music_cues = (
+        report.remediation_package is not None
+        and report.remediation_package.music_cue_sheet is not None
+        and bool(report.remediation_package.music_cue_sheet.cue_entries)
+    )
+
+    if has_music_cues:
         story.append(Spacer(1, 10))
         story.append(KeepTogether([
             Paragraph("4. Standard Entertainment Music Cue Sheet (ASCAP / BMI / SESAC)", section_heading),
@@ -340,9 +346,10 @@ def generate_eo_clearance_binder(report: ClearanceAuditReport, output_path: Opti
         story.append(Spacer(1, 12))
 
     # 7. E&O Insurance Legal Counsel Sign-Off Block
+    cert_section_num = 5 if has_music_cues else 4
     story.append(Spacer(1, 10))
     story.append(KeepTogether([
-        Paragraph("5. Legal Counsel & E&O Underwriting Certification", section_heading),
+        Paragraph(f"{cert_section_num}. Legal Counsel & E&O Underwriting Certification", section_heading),
         HRFlowable(width="100%", thickness=1, color=colors.HexColor("#cbd5e1"), spaceAfter=8),
         Paragraph(
             "This E&O Clearance Binder has been compiled pursuant to standard entertainment industry legal guidelines. "

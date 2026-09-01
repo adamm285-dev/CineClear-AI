@@ -68,3 +68,35 @@ async def test_critic_agent_fixes_nike_hallucination():
     assert sanitized[0].verification.is_public_domain is False
     assert sanitized[0].risk_level != RiskLevel.LOW
     assert "public domain" not in sanitized[0].mitigation_action.lower()
+
+
+def test_pdf_binder_generation_without_music():
+    from app.models import ClearanceAuditReport
+    flag = ClearanceFlag(
+        timestamp_or_page="00:00:01",
+        category=ClearanceCategory.TRADEMARK_LOGO,
+        detected_entity="Test Brand",
+        visual_description="Logo on billboard",
+        risk_level=RiskLevel.MEDIUM,
+        verification=ParallelVerification(
+            search_objective="Test Brand Search",
+            sources_checked=["https://www.uspto.gov"],
+            is_public_domain=False,
+            active_trademark_found=True,
+            rights_holder_identified="Brand LLC",
+            statutory_context="Lanham Act"
+        ),
+        mitigation_action="VFX blur logo."
+    )
+    report = ClearanceAuditReport(
+        project_title="No Music Production",
+        media_filename="scene_no_music.jpg",
+        media_type="image",
+        total_flags=1,
+        medium_count=1,
+        flags=[flag]
+    )
+    pdf_path = generate_eo_clearance_binder(report)
+    assert Path(pdf_path).exists()
+    assert Path(pdf_path).stat().st_size > 1000
+
