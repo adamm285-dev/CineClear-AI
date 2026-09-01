@@ -205,6 +205,7 @@ class VisionAgent:
 
     async def analyze_image(self, file_path: str) -> List[CandidateEntity]:
         """Analyzes set photos and stills using tiered multimodal Gemini models."""
+        file_path = str(file_path)
         if not os.path.exists(file_path):
             logger.error(f"Media file not found: {file_path}")
             return []

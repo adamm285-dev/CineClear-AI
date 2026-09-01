@@ -45,6 +45,11 @@ logs/
 *.sqlite3
 *.db
 
+# Allow pre-compiled sample deliverables for judge inspection
+!examples/
+!examples/*.pdf
+!examples/*.edl
+
 # 4. Python Bytecode, Caches & Testing Artifacts
 __pycache__/
 *.py[cod]

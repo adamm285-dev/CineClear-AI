@@ -84,6 +84,12 @@ def install_dependencies():
     except Exception as e:
         print(f"    [!] Pip check failed ({e}). Continuing with existing environment...")
 
+def run_doctor_if_requested():
+    if "--doctor" in sys.argv or "--health" in sys.argv:
+        from doctor import run_doctor
+        run_doctor()
+        sys.exit(0)
+
 def run_tests_if_requested():
     if "--test" in sys.argv or "--pytest" in sys.argv:
         print("\n[*] Running CineClear AI 27-test validation suite...")
@@ -121,6 +127,7 @@ def main():
     setup_directories()
     setup_env()
     install_dependencies()
+    run_doctor_if_requested()
     run_tests_if_requested()
     run_demo_if_requested()
     launch_server()

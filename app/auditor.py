@@ -9,6 +9,7 @@ import logging
 import re
 import uuid
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import List, Optional, Union
 
 from app.config import settings
@@ -306,7 +307,7 @@ class CineClearAuditor:
         report = ClearanceAuditReport(
             id=str(uuid.uuid4()),
             project_title=project_title,
-            media_filename=file_path.split("/")[-1].split("\\")[-1],
+            media_filename=Path(file_path).name,
             media_type=media_type,
             total_flags=len(securitized_flags),
             critical_count=critical_count,

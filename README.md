@@ -1,15 +1,32 @@
 # 🎬 CineClear AI
 ### Multimodal Vision + Parallel Web-Grounded Legal & E&O Clearance System for Film, TV & Commercials
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688.svg)](https://fastapi.tiangolo.com)
-[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-3.6%20Flash%20%7C%20Cascade-8E75B2.svg)](https://deepmind.google/technologies/gemini/)
-[![Parallel Search](https://img.shields.io/badge/Parallel%20Search-API%20v1-6366F1.svg)](https://api.parallel.ai)
+[![CineClear AI CI Suite](https://github.com/adamm285-dev/CineClear-AI/actions/workflows/ci.yml/badge.svg)](https://github.com/adamm285-dev/CineClear-AI/actions)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Python: 3.11+](https://img.shields.io/badge/Python-3.11+-brightgreen.svg)](https://python.org)
+[![Track: Parallel Search](https://img.shields.io/badge/Hackathon_Track-Parallel_Search_($15k)-orange.svg)](https://devpost.com)
 [![Tests: 27/27 Passed](https://img.shields.io/badge/Tests-27%2F27%20Passed-brightgreen.svg)](https://github.com/adamm285-dev/CineClear-AI)
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 > **Repository:** [https://github.com/adamm285-dev/CineClear-AI](https://github.com/adamm285-dev/CineClear-AI)  
 > **Build Guide & Live Demo:** Watch the [Parallel Web-Grounded Gemini Agent Build Guide](https://www.youtube.com/watch?v=6BG12veBOII)
+
+---
+
+## 💡 The Inspiration & $2.4B Problem
+
+Streaming networks (Netflix, Apple TV+, Prime Video, Disney+) legally mandate **Errors & Omissions (E&O) insurance** prior to worldwide distribution. A single missed background canvas, active telephone number, or hero wardrobe logo risks statutory copyright suits (**17 U.S.C. § 106**), trademark dilution (**15 U.S.C. § 1125**), privacy torts, or emergency $40k+ VFX paint-out reshoots.
+
+Traditional Hollywood legal clearance requires **3 to 4 weeks** of manual spreadsheet cross-referencing across thousands of frames. **CineClear AI** transforms this into an autonomous **30-second workflow**, delivering underwriter-ready PDF binders and actionable cross-departmental deliverables.
+
+---
+
+## 📁 Pre-Compiled Deliverables (Direct Judge Inspection)
+
+Judges can inspect pre-compiled deliverables directly inside GitHub without running the application:
+
+- 📄 **[Sample Hollywood E&O Legal Clearance Binder (PDF)](examples/Sample_Hollywood_EO_Clearance_Binder.pdf)** — 4-Appendix court-ready ReportLab binder with executive risk metrics, Fair Use scorecards, and Underwriter Sign-off certification blocks.
+- 🎬 **[Sample DaVinci Resolve & Premiere Timeline Markers (CMX 3600 EDL)](examples/Sample_DaVinci_Resolve_Timeline.edl)** — Color-coded NLE timeline marker export (`Red = Critical`, `Orange = High`, `Yellow = Medium`, `Green = Low`).
+- ⚖️ **[Sample Form-4A Entertainment Artwork Release Agreement (PDF)](examples/Sample_Form_4A_Artwork_Release.pdf)** — Pre-populated copyright release contract under 17 U.S.C. § 106 & § 501.
 
 ---
 
@@ -19,7 +36,7 @@
 
 | 🔴 THE THREAT: Unseen Statutory Liabilities | 🟢 THE GOAL: Instant Underwriter Sign-Off |
 | :--- | :--- |
-| **A single missed background painting, hero wardrobe mark, or real phone number halts distribution immediately or triggers multi-million dollar statutory lawsuits.** Streaming platforms (Netflix, Apple TV+, Amazon Prime, Disney+) legally mandate Errors & Omissions (E&O) insurance before delivery. Human clearance coordinators spend **3+ weeks** manually cross-referencing background props, artwork, and dialogue across thousands of frames. | **CineClear AI compresses a 3-week legal review into a 30-second autonomous clearance audit.** It delivers an underwriter-certified, court-ready **ReportLab E&O PDF Clearance Binder** paired with departmental deliverables: execution-ready Form-4A contracts, timecoded VFX 2D Greeking paint orders, and 1-Click CMX 3600 NLE timeline markers. |
+| **A single missed background painting, hero wardrobe mark, or real phone number halts distribution immediately or triggers statutory copyright lawsuits.** Streaming platforms legally mandate Errors & Omissions insurance. Human clearance coordinators spend **3+ weeks** manually cross-referencing background props, artwork, and dialogue across thousands of footage frames. | **CineClear AI compresses a 3-week legal review into a 30-second autonomous clearance audit.** It delivers an underwriter-certified, court-ready **ReportLab E&O PDF Clearance Binder** paired with departmental deliverables: execution-ready Form-4A contracts, timecoded VFX 2D Greeking paint orders, and 1-Click CMX 3600 NLE timeline markers. |
 
 ---
 
@@ -38,7 +55,7 @@ CineClear AI monitors the entire camera frame, video timeline, and screenplay te
 
 ---
 
-## 🤖 3. The Autonomous Triad: Extraction $\rightarrow$ Grounding $\rightarrow$ Remediation
+## 🏗️ 3. The Autonomous Triad Architecture
 
 ![The Autonomous Triad: Agent 1 Forensic Extractor -> Agent 2 Senior Counsel Critic -> Agent 3 Production Dispatcher](docs/images/slide_03.png)
 
@@ -69,16 +86,10 @@ flowchart LR
     AGENT2 -->|Securitized Flags| AGENT3
 ```
 
-### Multi-Agent Breakdown:
-1. **Agent 1: Forensic Extractor (`app/vision_agent.py`)**
-   - **Process:** OpenCV temporal video keyframe sampling (`0s`, `33%`, `66%`, `end`) and PyMuPDF screenplay parsing.
-   - **Output:** Extracts candidate entities with normalized 2D bounding boxes scaled `[0, 1000]`.
-2. **Agent 2: Senior Counsel Critic (`app/auditor.py`)**
-   - **Process:** Live queries to **Parallel Search API** (`https://api.parallel.ai/v1/search`) cross-referencing USPTO trademark registers, Copyright Office catalog entries, and statutory precedents.
-   - **Output:** Synthesizes a statutory **4-Factor Fair Use Scorecard** (17 U.S.C. § 107) and a **Multi-Territory Compliance Matrix** (US, UK, EU, Canada).
-3. **Agent 3: Production Dispatcher (`app/remediation_agent.py`, `app/edl_exporter.py`, `app/report_generator.py`)**
-   - **Process:** Automated cross-departmental deliverable generation.
-   - **Output:** Dispatches execution-ready legal agreements, VFX tracking work orders, NLE timeline markers, PRO cue sheets, and ReportLab PDF binders.
+### Multi-Agent Specifications:
+1. **Agent 1: Forensic Extractor (`app/vision_agent.py`)** — Ingests video dailies and screenplays via OpenCV temporal sampling & multimodal Gemini Vision, isolating liabilities with normalized 2D spatial bounding boxes (`[ymin, xmin, ymax, xmax]`).
+2. **Agent 2: Senior Counsel Critic (`app/auditor.py`)** — Queries the **Parallel Search API** in real time against USPTO trademark registers and copyright catalogs to eliminate hallucinations and compute an objective 4-Factor Fair Use Scorecard (17 U.S.C. § 107) and multi-territory legal matrix (US, UK, EU, CA).
+3. **Agent 3: Production Dispatcher (`app/remediation_agent.py`, `app/edl_exporter.py`, `app/report_generator.py`)** — Dispatches execution-ready Form-4A contracts, timecoded VFX 2D Greeking paint directives, CMX 3600 EDL timeline markers, PRO cue sheets, and ReportLab E&O PDF binders.
 
 ---
 
@@ -159,17 +170,21 @@ For hackathon judges and evaluators, CineClear AI includes **1-click zero-config
 | **🪟 Windows** | Double-click `run.bat`<br>*(or run `.\run.bat` in PowerShell/CMD)* | 1. Auto-creates isolated virtual environment (`.venv`).<br>2. Verifies & silently installs `requirements.txt`.<br>3. Auto-initializes `.env` from `.env.example`.<br>4. Starts FastAPI server on `http://localhost:8085`.<br>5. **Opens default browser directly to the dashboard.** |
 | **🍎 macOS / 🐧 Linux** | `chmod +x run.sh && ./run.sh`<br>*(or `bash run.sh`)* | Same automated pipeline: provisions `.venv`, installs packages, initializes `.env`, launches server, and opens browser. |
 | **⚡ Python (Any OS)** | `python deploy.py` | Cross-platform Python orchestrator for all environments. |
+| **🐳 Docker (Any OS)** | `docker-compose up` | Single-command containerized deployment with volumes. |
 
-### 🕹️ Evaluator Command Flags
-Judges can pass flags to `deploy.py` or `run.sh` for instant headless evaluation:
+### 🩺 System Diagnostic Doctor & CLI Flags
 ```bash
-# 1. Standard 1-Click Studio Launch (starts server & opens browser)
+# 1. Run 1-Command System Diagnostic Doctor
+python doctor.py
+# (or python deploy.py --doctor)
+
+# 2. Standard 1-Click Studio Launch (starts server & opens browser)
 python deploy.py
 
-# 2. Instant End-to-End Demo Audit (audits bundled production set photo & generates PDF binder)
+# 3. Instant End-to-End Demo Audit (audits bundled production set photo & generates PDF binder)
 python deploy.py --demo
 
-# 3. Full 27-Test Validation Suite (runs complete pytest suite)
+# 4. Full 27-Test Validation Suite (runs complete pytest suite)
 python deploy.py --test
 ```
 
@@ -262,7 +277,7 @@ python -m pytest tests/ -v
 ```
 tests/test_auditor.py::test_cineclear_auditor_script PASSED              [  3%]
 tests/test_auditor.py::test_cineclear_auditor_image PASSED               [  7%]
-tests/test_critic_agent_fixes_nike_hallucination PASSED [ 11%]
+tests/test_auditor.py::test_critic_agent_fixes_nike_hallucination PASSED [ 11%]
 tests/test_auditor.py::test_pdf_binder_generation_without_music PASSED   [ 14%]
 tests/test_cascade.py::test_cascade_initialization PASSED                [ 18%]
 tests/test_cascade.py::test_cascade_execution_order PASSED               [ 22%]
@@ -299,6 +314,9 @@ CineClearAi/
 ├── LICENSE                          # Official Apache-2.0 Open Source License
 ├── requirements.txt                 # Dependencies (FastAPI, PyMuPDF, ReportLab, OpenCV, Pydantic)
 ├── README.md                        # Documentation & architecture guide
+├── Dockerfile                       # Containerized build file
+├── docker-compose.yml               # Multi-container orchestration
+├── doctor.py                        # System diagnostic and health doctor
 ├── deploy.py                        # Cross-platform 1-click auto-deploy & evaluation orchestrator
 ├── run.bat                          # Windows 1-click automated batch launcher
 ├── run.sh                           # Linux / macOS 1-click automated shell launcher
@@ -309,6 +327,13 @@ CineClearAi/
 ├── generate_sample_media.py         # Utility script to generate sample test media
 ├── main.py                          # CLI and batch analysis entrypoint
 ├── server.py                        # FastAPI server (port 8085) with safe upload handling
+├── .github/
+│   └── workflows/
+│       └── ci.yml                   # Automated GitHub Actions test workflow
+├── examples/                        # Pre-compiled deliverables for judge inspection
+│   ├── Sample_Hollywood_EO_Clearance_Binder.pdf
+│   ├── Sample_DaVinci_Resolve_Timeline.edl
+│   └── Sample_Form_4A_Artwork_Release.pdf
 ├── docs/
 │   └── images/                      # High-resolution original presentation slide assets
 │       ├── slide_01.png             # The Threat vs The Goal

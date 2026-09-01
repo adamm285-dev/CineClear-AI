@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  cineclear-ai:
+    build: .
+    container_name: cineclear-ai
+    ports:
+      - "8085:8085"
+    env_file:
+      - .env
+    environment:
+      - PORT=8085
+      - HOST=0.0.0.0
+    volumes:
+      - ./reports:/app/reports
+      - ./uploads:/app/uploads
+    restart: unless-stopped
