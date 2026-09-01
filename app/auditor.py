@@ -24,6 +24,7 @@ from app.models import (
 )
 from app.parallel_client import ParallelSearchClient
 from app.vision_agent import VisionAgent
+from app.harness import ExtractorHarness, CriticHarness
 
 logger = logging.getLogger("cineclear.auditor")
 
@@ -291,31 +292,8 @@ class CineClearAuditor:
         if not flags:
             return []
 
-        # Offline / deterministic rule-based sanitizer fallback
-        def _apply_deterministic_invariants(flag_list: List[ClearanceFlag]) -> List[ClearanceFlag]:
-            sanitized = []
-            modern_marks = ["nike", "apple", "starbucks", "coca-cola", "pepsi", "disney", "macbook", "swoosh"]
-            for flag in flag_list:
-                entity_lower = flag.detected_entity.lower()
-                # Check for modern mark hallucination
-                if any(m in entity_lower for m in modern_marks):
-                    flag.verification.is_public_domain = False
-                    flag.verification.active_trademark_found = True
-                    if flag.risk_level == RiskLevel.LOW:
-                        flag.risk_level = RiskLevel.MEDIUM
-                    if "public domain" in flag.mitigation_action.lower():
-                        flag.mitigation_action = (
-                            "RECOMMENDED ACTION: Verify incidental de minimis use; if featured prominently "
-                            "as hero wardrobe/prop, obtain signed Product Placement Release or Greek logo in VFX."
-                        )
-                # Reconcile contradiction
-                if flag.verification.active_trademark_found and flag.verification.is_public_domain:
-                    flag.verification.is_public_domain = False
-                sanitized.append(flag)
-            return sanitized
-
         if not self.client:
-            return _apply_deterministic_invariants(flags)
+            return CriticHarness.enforce_invariants(flags)
 
         critic_prompt = f"""
         Audit and sanitize these preliminary clearance flags:
@@ -340,10 +318,10 @@ class CineClearAuditor:
             parsed = json.loads(raw_text)
             flag_items = parsed if isinstance(parsed, list) else parsed.get("flags", [])
             sanitized_flags = [ClearanceFlag.model_validate(item) for item in flag_items]
-            return _apply_deterministic_invariants(sanitized_flags)
+            return CriticHarness.enforce_invariants(sanitized_flags)
         except Exception as e:
             logger.warning(f"Critic agent LLM pass fell back to deterministic sanitization: {e}")
-            return _apply_deterministic_invariants(flags)
+            return CriticHarness.enforce_invariants(flags)
 
     async def audit_media(
         self,
@@ -352,9 +330,10 @@ class CineClearAuditor:
         media_type: str = "auto",
         is_video: bool = False
     ) -> ClearanceAuditReport:
-        """Full autonomous audit pipeline: Extract -> Ground via Parallel -> Securitize via Critic -> Generate Binder."""
-        # 1. Visual/Script extraction
-        candidate_items = await self.vision_agent.analyze_media(file_path, media_type=media_type)
+        """Full autonomous audit pipeline: Extract -> Harness Dedup -> Ground via Parallel -> Securitize via Critic -> Generate Binder."""
+        # 1. Visual/Script extraction & Extractor Harness Deduplication
+        raw_candidates = await self.vision_agent.analyze_media(file_path, media_type=media_type)
+        candidate_items = ExtractorHarness.deduplicate_entities(raw_candidates)
 
         # 2. Parallel Search grounding loop
         grounded_flags: List[ClearanceFlag] = []
