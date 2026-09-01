@@ -1,0 +1,215 @@
+# CineClear AI - Capability Wiring Index (wiring.yaml)
+# Machine-readable specification of system components, agents, endpoints, and ledgers.
+
+version: 1.0.0
+updated: "2026-09-01"
+system:
+  name: "CineClear AI - Legal & E&O Clearance System"
+  host_os: "Windows 10 / 11"
+  runtime: "Python 3.13"
+  framework: "FastAPI + Uvicorn"
+  default_port: 8085
+  ai_brain: "Google Gemini 3.6 Flash (google-genai SDK)"
+  search_engine: "Parallel Semantic Search API (v1)"
+  pdf_engine: "ReportLab 5.0.1"
+  script_engine: "PyMuPDF (fitz) + pdfplumber"
+  video_engine: "OpenCV (cv2) + Pillow"
+  desktop_launcher: "CineClear AI.lnk & Launch-CineClear-AI.bat"
+
+statutory_and_clearance_framework:
+  trademark_protection:
+    code: "Lanham Act (15 U.S.C. § 1114 / § 1125)"
+    doctrine: "Protects against unauthorized commercial placement, trade dress infringement, and false endorsement."
+  copyright_protection:
+    code: "17 U.S.C. § 106 & § 501"
+    doctrine: "Exclusive rights of reproduction, public display, and derivative works for visual fine art."
+  architectural_safe_harbor:
+    code: "17 U.S.C. § 120(a) (AWCPA)"
+    doctrine: "Exempts pictorial representations of architectural works ordinarily visible from a public space."
+  public_domain_cutoff:
+    year: 1929
+    rule: "Works published or registered before January 1, 1929 are in the worldwide public domain."
+  telephony_safe_harbor:
+    authority: "NANPA / FCC"
+    safe_range: "555-0100 through 555-0199"
+    rule: "Strict entertainment safe harbor to eliminate civil invasion of privacy liability."
+  music_licensing:
+    code: "17 U.S.C. § 106 & § 114"
+    rule: "Dual-tier licensing required: Master Sync License (Sound Recording) + Mechanical License (Composition)."
+
+endpoints:
+  - path: "/"
+    method: "GET"
+    handler: "server.serve_dashboard"
+    description: "Serves the interactive Hollywood studio dark-mode web dashboard."
+    auth_required: false
+
+  - path: "/health"
+    method: "GET"
+    handler: "server.health_check"
+    description: "Health status, API key validation, model configuration, and environment state."
+    auth_required: false
+
+  - path: "/api/samples"
+    method: "GET"
+    handler: "server.list_sample_media"
+    description: "Returns pre-loaded Hollywood test assets (set photos, screenplay PDF, scene text) for 1-click evaluation."
+    auth_required: false
+
+  - path: "/api/audit"
+    method: "POST"
+    handler: "server.audit_media_endpoint"
+    description: "Primary multimodal analysis endpoint. Ingests uploaded media, runs 3-agent triad, and compiles E&O dossier."
+    auth_required: false
+
+  - path: "/api/reports/{report_id}"
+    method: "GET"
+    handler: "server.get_report_json"
+    description: "Retrieves cached JSON clearance audit report containing flags, risk tallies, and remediation deliverables."
+    auth_required: false
+
+  - path: "/api/reports/{report_id}/pdf"
+    method: "GET"
+    handler: "server.download_report_pdf"
+    description: "Generates and streams Hollywood-grade ReportLab E&O Clearance Binder PDF."
+    auth_required: false
+
+  - path: "/static/*"
+    method: "GET"
+    handler: "StaticFiles Mount"
+    description: "Serves dark-mode studio frontend styling, icons, and asynchronous UI controller script."
+    auth_required: false
+
+agents_and_capabilities:
+  - id: "extractor_harness"
+    name: "Extractor & Ingest Harness"
+    module: "app.harness"
+    class: "ExtractorHarness"
+    role: "Harness Boundary 1"
+    status: "live"
+    features:
+      - "Keyframe and script entity deduplication across recurring scenes"
+      - "Universal candidate normalization and timecode clamping"
+      - "Protects Parallel Search and LLM token budgets"
+
+  - id: "vision_agent"
+    name: "Multimodal Vision & Keyframe Sampler (Agent 1)"
+    module: "app.vision_agent"
+    class: "VisionAgent"
+    role: "Candidate Extraction"
+    model: "gemini-3.6-flash"
+    status: "live"
+    features:
+      - "Multi-engine screenplay parsing (PyMuPDF / pdfplumber)"
+      - "Dynamic video keyframe temporal extraction (OpenCV)"
+      - "High-fidelity forensic still analysis for logos, art, and PII"
+
+  - id: "parallel_grounder"
+    name: "Parallel Search Real-World Grounding Client"
+    module: "app.parallel_client"
+    class: "ParallelSearchClient"
+    role: "Registry Grounding"
+    endpoint: "https://api.parallel.ai/v1/search"
+    status: "live"
+    features:
+      - "USPTO trademark registry cross-referencing"
+      - "US Copyright Office catalog validation"
+      - "Public domain pre-1929 verification"
+      - "NANPA fictional telephone number verification"
+
+  - id: "senior_counsel_critic"
+    name: "Senior Counsel Critic Agent (Agent 2)"
+    module: "app.auditor"
+    class: "CineClearAuditor"
+    role: "Multi-Turn Reflection & Securitization"
+    model: "gemini-3.6-flash"
+    status: "live"
+    features:
+      - "Reconciles single-pass hallucinations and contradictions"
+      - "Eliminates modern mark public domain misclassifications"
+      - "Calibrates risk tiers (CRITICAL / HIGH / MEDIUM / LOW)"
+
+  - id: "critic_harness"
+    name: "Critic & Securitization Harness"
+    module: "app.harness"
+    class: "CriticHarness"
+    role: "Harness Boundary 2"
+    status: "live"
+    features:
+      - "Deterministic statutory invariant assertions"
+      - "Mutual exclusivity enforcement (Active TM vs Public Domain)"
+      - "Strict phone PII clamp to CRITICAL risk"
+      - "Flag preservation guarantees"
+
+  - id: "remediation_dispatcher"
+    name: "Autonomous Remediation & Production Dispatcher (Agent 3)"
+    module: "app.remediation_agent"
+    class: "RemediationAgent"
+    role: "Deliverable Generation"
+    status: "live"
+    deliverables:
+      - "Pre-filled Form-4A Artwork Release Agreements (17 U.S.C. § 106)"
+      - "Trademark Product Placement & Release Agreements (Lanham Act § 1125)"
+      - "Timecoded 2D Greeking / Logo Obscure / Clean Plate VFX Work Orders"
+      - "NANPA 555-01XX Script Dialogue & ADR Substitutions"
+
+  - id: "reportlab_binder_generator"
+    name: "ReportLab Hollywood E&O Clearance Binder Generator"
+    module: "app.report_generator"
+    handler: "generate_eo_clearance_binder"
+    role: "Court-Ready PDF Compilation"
+    status: "live"
+    features:
+      - "Executive risk matrix and insurance risk summary"
+      - "Itemized clearance ledgers with timecodes and statutory citations"
+      - "Parallel Search chain-of-custody audit logs"
+      - "Underwriting endorsement and attorney sign-off blocks"
+
+  - id: "cli_batch_engine"
+    name: "Batch Media Scanner & Terminal CLI"
+    module: "main"
+    role: "Headless Pipeline Execution"
+    status: "live"
+    features:
+      - "Instant demo audit on bundled set stills (--demo)"
+      - "Custom file intake (--file) for scripts, stills, and video footage"
+      - "Direct PDF export and terminal rich logging"
+
+models_and_schemas:
+  - model: "RiskLevel"
+    type: "Enum (str)"
+    values: ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+  - model: "ClearanceCategory"
+    type: "Enum (str)"
+    values: ["TRADEMARK_LOGO", "COPYRIGHTED_ART", "ARCHITECTURAL_RIGHTS", "MUSIC_AUDIO", "NAME_DEFAMATION", "PHONE_PII"]
+  - model: "ParallelVerification"
+    fields: ["search_objective", "sources_checked", "is_public_domain", "active_trademark_found", "rights_holder_identified", "statutory_context"]
+  - model: "ClearanceFlag"
+    fields: ["id", "timestamp_or_page", "category", "detected_entity", "visual_description", "risk_level", "verification", "mitigation_action"]
+  - model: "VFXWorkOrder"
+    fields: ["timestamp_or_page", "target_entity", "action_type", "tracking_notes", "priority"]
+  - model: "LegalReleaseAgreement"
+    fields: ["form_type", "licensor_entity", "property_description", "governing_statute", "agreement_text"]
+  - model: "ScriptFixDirective"
+    fields: ["page_number", "original_text", "recommended_replacement", "rationale"]
+  - model: "RemediationPackage"
+    fields: ["vfx_work_orders", "legal_releases", "script_fixes"]
+  - model: "ClearanceAuditReport"
+    fields: ["id", "project_title", "media_filename", "media_type", "total_flags", "critical_count", "high_count", "medium_count", "low_count", "flags", "generated_at", "remediation_package", "pdf_report_path"]
+
+ledgers_and_storage:
+  - path: "reports/"
+    format: "PDF Document Store (ReportLab)"
+    role: "Permanent archive for compiled E&O Insurance Clearance Binders."
+  - path: "uploads/"
+    format: "Media Asset Ingestion Cache"
+    role: "Temporary staging directory for uploaded screenplays, stills, and video keyframes."
+  - path: "sample_media/"
+    format: "Bundled Test Assets"
+    role: "Production stills (sample_set_photo.jpg) and screenplays (sample_screenplay.pdf/.txt)."
+  - path: ".env"
+    format: "Key-Value Configuration"
+    role: "Encrypted/local storage for GEMINI_API_KEY, PARALLEL_API_KEY, and PORT settings."
+  - path: "wiring.yaml"
+    format: "YAML Specification"
+    role: "Complete capability wiring and component directory."
