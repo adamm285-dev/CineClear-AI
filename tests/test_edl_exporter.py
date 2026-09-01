@@ -13,6 +13,7 @@ def test_timecode_and_frame_conversions():
     assert timecode_to_frames("00:00:01", fps=24) == 24
     assert timecode_to_frames("00:01:00", fps=24) == 1440
     assert timecode_to_frames("01:00:00", fps=24) == 86400
+    assert timecode_to_frames("Page 4", fps=24) == 96
     assert frames_to_timecode(24, fps=24) == "00:00:01:00"
     assert frames_to_timecode(1440, fps=24) == "00:01:00:00"
 

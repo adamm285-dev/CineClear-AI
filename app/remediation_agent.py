@@ -5,6 +5,7 @@ timecoded VFX paint/Greeking work orders, and NANPA script PII substitutions.
 """
 
 import logging
+from datetime import datetime, timezone
 from typing import List, Optional
 from app.models import (
     ClearanceFlag,
@@ -78,7 +79,7 @@ class RemediationAgent:
         releases: List[LegalReleaseAgreement] = []
         script_fixes: List[ScriptFixDirective] = []
 
-        date_str = "2026-09-01"
+        date_str = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
         for flag in flags:
             # 1. Route Living Artist Visual Art -> Form-4A Legal Release & Backup VFX Blur

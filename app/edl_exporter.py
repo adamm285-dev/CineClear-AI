@@ -4,15 +4,18 @@ Converts clearance liabilities into industry-standard CMX 3600 Edit Decision Lis
 for direct import into DaVinci Resolve, Adobe Premiere Pro, and Avid Media Composer.
 """
 
+import re
 from app.models import ClearanceAuditReport, RiskLevel
 
 
 def timecode_to_frames(tc: str, fps: int = 24) -> int:
-    """Converts HH:MM:SS or HH:MM:SS:FF to total frames."""
-    clean_tc = tc.replace("Page ", "").strip()
-    parts = clean_tc.split(":")
+    """Converts HH:MM:SS, HH:MM:SS:FF, or Page N to total frames."""
+    clean_tc = re.sub(r'[^\d:]', '', tc).strip(":")
+    parts = clean_tc.split(":") if clean_tc else []
     try:
-        if len(parts) == 2:
+        if len(parts) == 1 and parts[0]:
+            return int(parts[0]) * fps
+        elif len(parts) == 2:
             return (int(parts[0]) * 60 + int(parts[1])) * fps
         elif len(parts) == 3:
             return (int(parts[0]) * 3600 + int(parts[1]) * 60 + int(parts[2])) * fps
