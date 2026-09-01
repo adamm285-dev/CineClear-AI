@@ -25,6 +25,7 @@ from app.models import (
 from app.parallel_client import ParallelSearchClient
 from app.vision_agent import VisionAgent
 from app.harness import ExtractorHarness, CriticHarness
+from app.remediation_agent import RemediationAgent
 
 logger = logging.getLogger("cineclear.auditor")
 
@@ -54,6 +55,7 @@ class CineClearAuditor:
     def __init__(self):
         self.parallel_client = ParallelSearchClient()
         self.vision_agent = VisionAgent()
+        self.remediation_agent = RemediationAgent()
         self.model = settings.GEMINI_MODEL
         self._init_genai_client()
 
@@ -385,7 +387,13 @@ class CineClearAuditor:
         # 3. Senior Counsel Critic Agent Reflection Pass
         final_flags = await self.review_and_securitize_flags(grounded_flags)
 
-        # 4. Calculate risk tallies
+        # 4. Autonomous Remediation & Production Dispatcher (Agent 3)
+        remediation_package = self.remediation_agent.generate_remediation_package(
+            flags=final_flags,
+            project_title=project_title
+        )
+
+        # 5. Calculate risk tallies
         crit_count = sum(1 for f in final_flags if f.risk_level == RiskLevel.CRITICAL)
         high_count = sum(1 for f in final_flags if f.risk_level == RiskLevel.HIGH)
         med_count = sum(1 for f in final_flags if f.risk_level == RiskLevel.MEDIUM)
@@ -402,10 +410,11 @@ class CineClearAuditor:
             medium_count=med_count,
             low_count=low_count,
             flags=final_flags,
-            generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+            generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
+            remediation_package=remediation_package
         )
 
-        # 5. Generate ReportLab PDF E&O Binder
+        # 6. Generate ReportLab PDF E&O Binder
         try:
             from app.report_generator import generate_eo_clearance_binder
             pdf_path = generate_eo_clearance_binder(report)

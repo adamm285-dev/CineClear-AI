@@ -4,44 +4,33 @@ This document provides the definitive architectural map and component directory 
 
 ---
 
-## 1. System Overview
+## 1. System Overview & 3-Agent Triad
 
 ```mermaid
 graph TD
-    Media[🎬 Input Production Media: Video / Stills / Script PDF] --> Ingest[📥 FastAPI Ingestion & Asset Dispatcher]
+    Media[🎬 Input Production Media: Video / Stills / Script PDF] --> ExtractorHarness[🛡️ Role 1: Extractor Harness]
     
-    Ingest -->|Video / Stills| VisionAgent[👁️ Gemini Multimodal Vision & Keyframe Sampler]
-    Ingest -->|Screenplay PDF / TXT| ScriptAgent[📄 PyMuPDF Screenplay & PII Scanner]
-    
+    ExtractorHarness -->|Deduplicate & Sanitize| VisionAgent[👁️ Agent 1: Gemini Multimodal Vision & PyMuPDF Scanner]
     VisionAgent --> CandidateFlags[⚠️ Candidate Clearance Liabilities]
-    ScriptAgent --> CandidateFlags
     
-    CandidateFlags --> Auditor[⚖️ CineClear Legal Reasoning Loop]
-    
-    Auditor --> ParallelClient[🌐 Parallel Search Grounding Client]
+    CandidateFlags --> ParallelClient[🌐 Parallel Search Grounding Client]
     ParallelClient -->|Query: https://api.parallel.ai/v1/search| ParallelAPI[🔍 Parallel Semantic Search API]
     ParallelAPI --> RealWorldData[📚 Real-World Ground Truth: USPTO, Copyright Office, NANPA]
-    RealWorldData --> Auditor
+    RealWorldData --> GroundedFlags[⚖️ Grounded Legal Flags]
     
-    Auditor --> GeminiLegal[🧠 Gemini Statutory Risk Synthesis]
-    GeminiLegal --> CalibratedRisk[🎯 Calibrated Risk Level: CRITICAL / HIGH / MEDIUM / LOW]
+    GroundedFlags --> CriticHarness[🛡️ Role 2: Critic & Securitization Harness]
+    CriticHarness --> CriticAgent[🧑‍⚖️ Agent 2: Senior Counsel Critic Reflection Pass]
+    CriticAgent -->|Enforce Invariants & Reconcile Contradictions| SecuritizedFlags[🎯 Securitized Clearance Flags]
     
-    CalibratedRisk --> ReportGenerator[📑 ReportLab E&O PDF Clearance Binder Generator]
-    CalibratedRisk --> StudioDashboard[💻 Interactive Hollywood Dark-Mode Dashboard]
+    SecuritizedFlags --> RemediationAgent[⚡ Agent 3: Autonomous Remediation & Dispatcher]
     
-    ReportGenerator --> PDFBinder[📄 EO_Clearance_Binder_*.pdf]
+    RemediationAgent --> Form4A[📄 Pre-Filled Form-4A Art Releases]
+    RemediationAgent --> TMReleases[🏷️ Trademark Placement Agreements]
+    RemediationAgent --> VFXOrders[🎨 Timecoded VFX Paint / Greeking Work Orders]
+    RemediationAgent --> ScriptFixes[📞 NANPA 555-01XX Script Substitutions]
     
-    subgraph "Legal Defense & Statutory Framework"
-        Lanham[🏛️ Lanham Act 15 U.S.C. § 1114/1125]
-        Title17[📜 17 U.S.C. § 106 Exclusive Rights & § 107 Fair Use]
-        AWCPA[🏢 17 U.S.C. § 120 Architectural Works Act]
-        NANPA[📞 NANPA 555-0100/0199 Fictional Phone Safe Harbor]
-    end
-    
-    GeminiLegal -.-> Lanham
-    GeminiLegal -.-> Title17
-    GeminiLegal -.-> AWCPA
-    GeminiLegal -.-> NANPA
+    SecuritizedFlags --> ReportGenerator[📑 ReportLab E&O PDF Clearance Binder Generator]
+    SecuritizedFlags --> StudioDashboard[💻 Interactive Hollywood Dark-Mode Dashboard]
 ```
 
 ---
@@ -62,7 +51,7 @@ graph TD
 
 ## 3. Data Model & Schema Definitions
 
-### Legal Clearance Schemas (`app/models.py`)
+### Legal Clearance & Remediation Schemas (`app/models.py`)
 
 ```python
 class RiskLevel(str, Enum):
@@ -97,6 +86,31 @@ class ClearanceFlag(BaseModel):
     verification: ParallelVerification
     mitigation_action: str
 
+class VFXWorkOrder(BaseModel):
+    timestamp_or_page: str
+    target_entity: str
+    action_type: str
+    tracking_notes: str
+    priority: str
+
+class LegalReleaseAgreement(BaseModel):
+    form_type: str
+    licensor_entity: str
+    property_description: str
+    governing_statute: str
+    agreement_text: str
+
+class ScriptFixDirective(BaseModel):
+    page_number: str
+    original_text: str
+    recommended_replacement: str
+    rationale: str
+
+class RemediationPackage(BaseModel):
+    vfx_work_orders: List[VFXWorkOrder] = Field(default_factory=list)
+    legal_releases: List[LegalReleaseAgreement] = Field(default_factory=list)
+    script_fixes: List[ScriptFixDirective] = Field(default_factory=list)
+
 class ClearanceAuditReport(BaseModel):
     id: str
     project_title: str
@@ -109,6 +123,7 @@ class ClearanceAuditReport(BaseModel):
     low_count: int
     flags: List[ClearanceFlag]
     generated_at: str
+    remediation_package: Optional[RemediationPackage] = None
     pdf_report_path: Optional[str] = None
 ```
 
@@ -133,15 +148,17 @@ C:\Users\adamm_000\Desktop\CineClearAi\
 ├── app/
 │   ├── __init__.py
 │   ├── config.py                    # Pydantic Settings & environment manager
-│   ├── models.py                    # Pydantic legal clearance schemas
+│   ├── models.py                    # Pydantic legal clearance & remediation schemas
+│   ├── harness.py                   # ExtractorHarness & CriticHarness boundaries
 │   ├── parallel_client.py           # Parallel Search API client with live search & mock engine
-│   ├── vision_agent.py              # Gemini Multimodal visual & audio parser
-│   ├── auditor.py                   # Multi-turn clearance reasoning & verification loop
+│   ├── vision_agent.py              # Agent 1: Gemini Multimodal visual & audio parser
+│   ├── auditor.py                   # Agent 2: Multi-turn reasoning & Senior Counsel Critic loop
+│   ├── remediation_agent.py         # Agent 3: Departmental Remediation & Dispatcher
 │   └── report_generator.py          # ReportLab PDF E&O Clearance Binder generator
 ├── static/
 │   ├── index.html                   # Cinematic dark-mode studio dashboard
 │   ├── style.css                    # Production styling & risk color variables
-│   └── app.js                       # Interactive UI controller & async pipeline client
+│   └── app.js                       # Interactive UI controller & remediation package renderer
 ├── sample_media/
 │   ├── sample_set_photo.jpg         # Sample production still (wardrobe logos, set art)
 │   ├── sample_screenplay.pdf        # Screenplay PDF with PII/phone & brand mentions
@@ -151,8 +168,10 @@ C:\Users\adamm_000\Desktop\CineClearAi\
 └── tests/                           # Automated test suite
     ├── __init__.py
     ├── test_models.py               # Schema & validation tests
+    ├── test_harness.py              # Dual harness eval suite
     ├── test_parallel_client.py      # Parallel search client tests
-    ├── test_auditor.py              # Clearance audit & reasoning tests
+    ├── test_auditor.py              # Clearance audit & critic reflection tests
+    ├── test_remediation.py          # Agent 3 remediation dispatcher tests
     └── test_server.py               # FastAPI endpoint tests
 ```
 
@@ -165,7 +184,8 @@ C:\Users\adamm_000\Desktop\CineClearAi\
 2. **Statutory Safe Harbor Verification:**
    * Automatically cross-references architectural landmarks against **17 U.S.C. § 120(a)** (AWCPA) to avoid unnecessary licensing costs for public buildings.
    * Enforces **NANPA 555-0100 through 555-0199** reservation range to eliminate civil privacy liability.
-3. **De-biasing & Deterministic Fallback:**
-   * If third-party APIs experience rate limits or network degradation, the auditor gracefully utilizes an offline verified knowledge database without crashing or returning ungrounded hallucinations.
+3. **Dual Harness Boundaries & De-biasing:**
+   * `ExtractorHarness` protects API budgets from duplicate recurring video keyframe queries.
+   * `CriticHarness` prevents modern corporate marks from hallucinating into public domain status.
 4. **Court-Ready E&O Binder Deliverables:**
    * PDF output adheres to entertainment insurance underwriting specifications, including clear executive summaries, risk matrices, itemized ledgers, and attorney/underwriter signature certification blocks.

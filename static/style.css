@@ -817,6 +817,89 @@ body {
     color: #f1f5f9;
 }
 
+/* Remediation Deliverables Section */
+.remediation-section {
+    margin-top: 36px;
+    background: var(--bg-card);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+}
+
+.remediation-header {
+    margin-bottom: 20px;
+}
+
+.remediation-header h3 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.remediation-header p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.remediation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
+}
+
+.remediation-card {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.remediation-card.vfx { border-top: 3px solid #38bdf8; }
+.remediation-card.legal { border-top: 3px solid #a855f7; }
+.remediation-card.script { border-top: 3px solid #f59e0b; }
+
+.rem-badge {
+    align-self: flex-start;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+
+.rem-badge.vfx { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+.rem-badge.legal { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+.rem-badge.script { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+
+.rem-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.rem-details {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.rem-code {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: #e2e8f0;
+    max-height: 160px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+}
+
 /* Footer */
 .footer {
     border-top: 1px solid var(--border-color);

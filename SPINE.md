@@ -11,7 +11,7 @@ This document defines the **core philosophy, legal clearance invariants, statuto
 2. **Never Rely on Un-Grounded Assumptions:**
    * Every detected brand, artwork, building, or audio cue MUST be grounded through **Parallel Web Search** against official government registers (USPTO, US Copyright Office, NANPA) or binding case law before assigning risk tiers.
 3. **Actionable Remediation over Abstract Warnings:**
-   * The system does not merely flag problems—it provides concrete, industry-standard Hollywood remediation directives (e.g., "Obtain Form-4A Artwork Release", "Replace with 555-0149 prefix", "VFX Greeking / Digital De-badging", "De minimis defense documented").
+   * The system does not merely flag problems—it provides concrete, industry-standard Hollywood remediation deliverables via **Agent 3** (pre-filled Form-4A art releases, trademark placement agreements, timecoded VFX Greeking work orders, and NANPA script substitutions).
 4. **Deterministic Risk Calibration Tiers:**
    * **`CRITICAL`**: Mandatory distribution block. Real working telephone numbers, defamatory brand portrayals in criminal schemes, or living person likeness violations.
    * **`HIGH`**: Action required prior to picture lock. Modern copyrighted visual art in sharp focus, uncleared commercial music, or proprietary lighting installations.
@@ -20,7 +20,24 @@ This document defines the **core philosophy, legal clearance invariants, statuto
 
 ---
 
-## 2. The 6 Core Clearance Pipeline Lifecycles
+## 2. The 3-Agent Autonomous Triad
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         CINECLEAR 3-AGENT TRIAD                             │
+├──────────────────────────┬──────────────────────────┬───────────────────────┤
+│ AGENT 1: EXTRACTOR       │ AGENT 2: CRITIC COUNSEL  │ AGENT 3: REMEDIATION  │
+├──────────────────────────┼──────────────────────────┼───────────────────────┤
+│ • Multimodal vision/audio│ • Multi-turn reflection  │ • Form-4A Art Releases│
+│ • PyMuPDF script parsing │ • Public domain check    │ • Trademark agreements│
+│ • Parallel Search Ground │ • Reconcile anomalies    │ • VFX Greeking orders │
+│ • Entity deduplication   │ • Risk tier calibration  │ • NANPA 555-01XX fixes│
+└──────────────────────────┴──────────────────────────┴───────────────────────┘
+```
+
+---
+
+## 3. The 6 Core Clearance Pipeline Lifecycles
 
 ### 🏷️ Pipeline A — Trademark & Product Placement Clearance
 * **Trigger:** Visual or script detection of registered brand names, logos, trade dress, or distinctive product packaging (e.g., Nike Swoosh, Apple bitten apple, Starbucks siren).
@@ -95,7 +112,19 @@ This document defines the **core philosophy, legal clearance invariants, statuto
 
 ---
 
-## 3. E&O Underwriting Certification & Sign-Off Contract
+## 4. Dual Harness Boundaries & Statutory Invariants
+
+1. **`ExtractorHarness` Invariants:**
+   * Recurring keyframe and repeated script entity deduplication prevents runaway token and search API utilization.
+   * Universal schema normalization ensures every candidate item arrives with timecodes and valid entity descriptions.
+2. **`CriticHarness` Statutory Invariants:**
+   * Modern corporate marks (`MODERN_CORPORATE_MARKS`) are strictly disallowed from being flagged as pre-1929 public domain.
+   * `active_trademark_found == True` strictly enforces `is_public_domain = False`.
+   * Unmasked telephone numbers are strictly clamped to `CRITICAL` risk.
+
+---
+
+## 5. E&O Underwriting Certification & Sign-Off Contract
 
 Every generated CineClear AI report concludes with an **Underwriting Certification Table**:
 

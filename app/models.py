@@ -41,6 +41,35 @@ class ClearanceFlag(BaseModel):
     mitigation_action: str = Field(..., description="Actionable fix (e.g., 'Obtain location release', 'Blur in VFX', 'Replace with 555-number')")
 
 
+class VFXWorkOrder(BaseModel):
+    timestamp_or_page: str = Field(..., description="Timecode or script page reference")
+    target_entity: str = Field(..., description="Visual mark, artwork, or prop to be remediated")
+    action_type: str = Field(..., description="e.g., '2D Greeking / Logo Obscure', 'Gaussian Blur', 'Clean Plate Paint'")
+    tracking_notes: str = Field(..., description="Specific VFX tracking and paint instructions")
+    priority: str = Field(default="MEDIUM", description="Production priority: CRITICAL, HIGH, MEDIUM, LOW")
+
+
+class LegalReleaseAgreement(BaseModel):
+    form_type: str = Field(..., description="e.g., 'Form-4A Artwork Release', 'Trademark Placement Release'")
+    licensor_entity: str = Field(..., description="Name of rights holder or licensor")
+    property_description: str = Field(..., description="Description of protected artwork or trademark")
+    governing_statute: str = Field(..., description="Applicable statutory code (e.g., 17 U.S.C. § 106, Lanham Act)")
+    agreement_text: str = Field(..., description="Complete pre-filled legal agreement text ready for execution")
+
+
+class ScriptFixDirective(BaseModel):
+    page_number: str = Field(..., description="Screenplay page reference")
+    original_text: str = Field(..., description="Original dialogue line or prop text containing PII")
+    recommended_replacement: str = Field(..., description="Safe replacement (e.g., NANPA 555-01XX number)")
+    rationale: str = Field(..., description="Legal rationale for script substitution")
+
+
+class RemediationPackage(BaseModel):
+    vfx_work_orders: List[VFXWorkOrder] = Field(default_factory=list)
+    legal_releases: List[LegalReleaseAgreement] = Field(default_factory=list)
+    script_fixes: List[ScriptFixDirective] = Field(default_factory=list)
+
+
 class ClearanceAuditReport(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Audit report identifier")
     project_title: str = Field(..., description="Production / Film / TV Project Title")
@@ -53,6 +82,7 @@ class ClearanceAuditReport(BaseModel):
     low_count: int = Field(default=0, description="Count of LOW risk flags")
     flags: List[ClearanceFlag] = Field(default_factory=list, description="List of itemized clearance flags")
     generated_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"))
+    remediation_package: Optional[RemediationPackage] = Field(default=None, description="Departmental remediation deliverables")
     pdf_report_path: Optional[str] = Field(default=None, description="Path to generated ReportLab PDF binder")
 
 

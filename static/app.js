@@ -192,6 +192,75 @@ document.addEventListener('DOMContentLoaded', () => {
         countLow.textContent = report.low_count || 0;
 
         renderFlagsList(report.flags);
+        renderRemediationPackage(report.remediation_package);
+    }
+
+    // Render Remediation Package
+    function renderRemediationPackage(pkg) {
+        const remContainer = document.getElementById('remediation-container');
+        const remCards = document.getElementById('remediation-cards');
+        if (!remContainer || !remCards) return;
+
+        if (!pkg || (!pkg.vfx_work_orders?.length && !pkg.legal_releases?.length && !pkg.script_fixes?.length)) {
+            remContainer.classList.add('hidden');
+            return;
+        }
+
+        remContainer.classList.remove('hidden');
+        remCards.innerHTML = '';
+
+        // 1. Legal Releases
+        if (pkg.legal_releases) {
+            pkg.legal_releases.forEach(rel => {
+                const card = document.createElement('div');
+                card.className = 'remediation-card legal';
+                card.innerHTML = `
+                    <span class="rem-badge legal">LEGAL AGREEMENT</span>
+                    <div class="rem-title">${rel.form_type}</div>
+                    <div class="rem-details">
+                        <strong>Licensor:</strong> ${rel.licensor_entity}<br/>
+                        <strong>Property:</strong> ${rel.property_description}<br/>
+                        <strong>Statute:</strong> ${rel.governing_statute}
+                    </div>
+                    <pre class="rem-code">${rel.agreement_text}</pre>
+                `;
+                remCards.appendChild(card);
+            });
+        }
+
+        // 2. VFX Work Orders
+        if (pkg.vfx_work_orders) {
+            pkg.vfx_work_orders.forEach(vfx => {
+                const card = document.createElement('div');
+                card.className = 'remediation-card vfx';
+                card.innerHTML = `
+                    <span class="rem-badge vfx">VFX WORK ORDER [${vfx.priority}]</span>
+                    <div class="rem-title">${vfx.target_entity} (${vfx.timestamp_or_page})</div>
+                    <div class="rem-details">
+                        <strong>Action:</strong> ${vfx.action_type}<br/>
+                        <strong>Tracking Notes:</strong> ${vfx.tracking_notes}
+                    </div>
+                `;
+                remCards.appendChild(card);
+            });
+        }
+
+        // 3. Script Fixes
+        if (pkg.script_fixes) {
+            pkg.script_fixes.forEach(fix => {
+                const card = document.createElement('div');
+                card.className = 'remediation-card script';
+                card.innerHTML = `
+                    <span class="rem-badge script">SCRIPT PII FIX</span>
+                    <div class="rem-title">${fix.page_number}: ${fix.original_text}</div>
+                    <div class="rem-details">
+                        <strong>Recommended:</strong> <span style="color:#34d399; font-weight:700;">${fix.recommended_replacement}</span><br/>
+                        <strong>Rationale:</strong> ${fix.rationale}
+                    </div>
+                `;
+                remCards.appendChild(card);
+            });
+        }
     }
 
     // Render Filterable Flags
