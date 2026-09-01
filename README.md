@@ -148,29 +148,56 @@ CineClear AI bridges the gap between production legal counsel and physical on-se
 
 ---
 
-## 🚀 Quickstart & Installation
+## 🚀 1-Click Judge Auto-Deploy & Quickstart
 
-### 1. Clone Repository & Install Dependencies
+For hackathon judges and evaluators, CineClear AI includes **1-click zero-configuration deployment scripts** that automatically provision virtual environments, install dependencies, initialize environment files, launch the studio server, and pop open your web browser.
+
+### ⚡ 1-Click Evaluator Launchers
+
+| Operating System | 1-Click Command | What Happens Automatically |
+| :--- | :--- | :--- |
+| **🪟 Windows** | Double-click `run.bat`<br>*(or run `.\run.bat` in PowerShell/CMD)* | 1. Auto-creates isolated virtual environment (`.venv`).<br>2. Verifies & silently installs `requirements.txt`.<br>3. Auto-initializes `.env` from `.env.example`.<br>4. Starts FastAPI server on `http://localhost:8085`.<br>5. **Opens default browser directly to the dashboard.** |
+| **🍎 macOS / 🐧 Linux** | `chmod +x run.sh && ./run.sh`<br>*(or `bash run.sh`)* | Same automated pipeline: provisions `.venv`, installs packages, initializes `.env`, launches server, and opens browser. |
+| **⚡ Python (Any OS)** | `python deploy.py` | Cross-platform Python orchestrator for all environments. |
+
+### 🕹️ Evaluator Command Flags
+Judges can pass flags to `deploy.py` or `run.sh` for instant headless evaluation:
+```bash
+# 1. Standard 1-Click Studio Launch (starts server & opens browser)
+python deploy.py
+
+# 2. Instant End-to-End Demo Audit (audits bundled production set photo & generates PDF binder)
+python deploy.py --demo
+
+# 3. Full 27-Test Validation Suite (runs complete pytest suite)
+python deploy.py --test
+```
+
+---
+
+### 🛠️ Manual Installation (Alternative)
+
+If you prefer manual setup:
+
 ```bash
 git clone https://github.com/adamm285-dev/CineClear-AI.git
 cd CineClear-AI
 
-# Create virtual environment
+# 1. Create and activate virtual environment
 python -m venv venv
 # Windows:
 venv\Scripts\activate
 # Linux/macOS:
 source venv/bin/activate
 
-# Install requirements
+# 2. Install requirements
 pip install -r requirements.txt
-```
 
-### 2. Configure Environment (`.env`)
-```bash
+# 3. Configure .env (optional; local verified fallback works out of the box)
 cp .env.example .env
 ```
-Edit `.env` with your API keys:
+
+Edit `.env` (optional):
 ```ini
 # Google Gemini API
 GEMINI_API_KEY=your_gemini_api_key_here
@@ -185,13 +212,13 @@ HOST=0.0.0.0
 PORT=8085
 ENVIRONMENT=development
 ```
-*(Note: CineClear AI includes offline verified legal knowledge grounding so you can test immediately even without custom keys!)*
+*(Note: CineClear AI includes an offline verified legal knowledge engine so you can evaluate the full system immediately even before supplying custom API keys!)*
 
 ---
 
 ## 💻 Web Dashboard
 
-Start the FastAPI application:
+Start the FastAPI application manually:
 ```bash
 python server.py
 ```
@@ -272,6 +299,9 @@ CineClearAi/
 ├── LICENSE                          # Official Apache-2.0 Open Source License
 ├── requirements.txt                 # Dependencies (FastAPI, PyMuPDF, ReportLab, OpenCV, Pydantic)
 ├── README.md                        # Documentation & architecture guide
+├── deploy.py                        # Cross-platform 1-click auto-deploy & evaluation orchestrator
+├── run.bat                          # Windows 1-click automated batch launcher
+├── run.sh                           # Linux / macOS 1-click automated shell launcher
 ├── STATE.md                         # Project state tracking
 ├── APP_MAP.md                       # Comprehensive architectural component map
 ├── SPINE.md                         # Operational spine & statutory invariants
