@@ -92,7 +92,8 @@ flowchart LR
 
 ### Multi-Agent Specifications:
 1. **Agent 1: Forensic Extractor (`app/vision_agent.py`)** — Ingests video dailies and screenplays via OpenCV temporal sampling & multimodal Gemini Vision, isolating liabilities with normalized 2D spatial bounding boxes (`[ymin, xmin, ymax, xmax]`).
-2. **Agent 2: Senior Counsel Critic (`app/auditor.py`)** — Queries the **Parallel Search API** in real time against USPTO trademark registers and copyright catalogs to eliminate hallucinations and compute an objective 4-Factor Fair Use Scorecard (17 U.S.C. § 107), *Rogers v. Grimaldi* test, and multi-territory legal matrix (US, UK, EU, CA).
+2. **Agent 2: Senior Counsel Critic (`app/auditor.py`)** — Queries the **Parallel Search API** in real time against USPTO trademark registers and copyright catalogs to eliminate hallucinations and compute an objective 4-Factor Fair Use Scorecard (17 U.S.C. § 107), *Rogers v. Grimaldi* test, and multi-territory legal matrix (US, UK, EU, CA).  
+   ↳ *Parallel Runtime:* [`app/parallel_client.py`](app/parallel_client.py) constructs semantic search payloads to query real-time USPTO, WIPO, and trademark registry endpoints via [https://api.parallel.ai/v1](https://api.parallel.ai/v1).
 3. **Agent 3: Production Dispatcher (`app/remediation_agent.py`, `app/edl_exporter.py`, `app/report_generator.py`)** — Dispatches execution-ready Form-4A contracts with UPL notices, timecoded VFX 2D Greeking paint directives, CMX 3600 EDL timeline markers, PRO cue sheets, and ReportLab E&O PDF binders.
 
 ---
