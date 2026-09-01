@@ -92,7 +92,7 @@ def run_doctor_if_requested():
 
 def run_tests_if_requested():
     if "--test" in sys.argv or "--pytest" in sys.argv:
-        print("\n[*] Running CineClear AI 27-test validation suite...")
+        print("\n[*] Running CineClear AI 33-test validation suite...")
         res = subprocess.run([sys.executable, "-m", "pytest", "tests/", "-v"], cwd=str(ROOT_DIR))
         sys.exit(res.returncode)
 

@@ -8,8 +8,8 @@ class Settings(BaseSettings):
 
     # Gemini AI (High Quota Tier: 1,500 requests/day)
     GEMINI_API_KEY: str = ""
-    GEMINI_MODEL: str = "gemini-3.5-flash-lite"
-    GEMINI_FALLBACK_MODELS: list[str] = ["gemini-3.5-flash-lite", "gemini-flash-latest", "gemini-3.6-flash"]
+    GEMINI_MODEL: str = "gemini-3.5-flash"
+    GEMINI_FALLBACK_MODELS: list[str] = ["gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.6-flash", "gemini-flash-latest"]
 
     # Parallel Search API
     PARALLEL_API_KEY: str = ""

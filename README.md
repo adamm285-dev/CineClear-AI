@@ -107,13 +107,13 @@ CineClear AI utilizes a **Dynamic Model Cascade** ladder that catches `429 RESOU
 ┌────────────────────────────────────────────────────────────────────────┐
 │                        DYNAMIC MODEL CASCADE LADDER                    │
 ├────────┬─────────────────────────┬─────────────────────────────────────┤
-│ TIER 1 │ gemini-3.6-flash        │ High-Acuity Visual & Spatial Target │
+│ TIER 1 │ gemini-3.5-flash        │ High-Acuity Visual & Spatial Target │
 ├────────┼─────────────────────────┼─────────────────────────────────────┤
-│ TIER 2 │ gemini-3.5-pro          │ Deep Multimodal Reasoning Fallback  │
+│ TIER 2 │ gemini-3.5-flash-lite   │ Lightweight Multimodal Reasoning    │
 ├────────┼─────────────────────────┼─────────────────────────────────────┤
-│ TIER 3 │ gemini-3.1-pro          │ High-Quota Production Tier          │
+│ TIER 3 │ gemini-3.6-flash        │ High-Quota Production Tier          │
 ├────────┼─────────────────────────┼─────────────────────────────────────┤
-│ TIER 4 │ gemini-1.5-flash        │ High-Throughput Cloud Fallback      │
+│ TIER 4 │ gemini-flash-latest     │ High-Throughput Cloud Fallback      │
 ├────────┴─────────────────────────┴─────────────────────────────────────┤
 │                              THE BEDROCK                               │
 │           Deterministic Python Extractor & Critic Harnesses            │
@@ -205,7 +205,7 @@ python deploy.py
 # 3. Instant End-to-End Demo Audit (audits bundled production set photo & generates PDF binder)
 python deploy.py --demo
 
-# 4. Full 27-Test Validation Suite (runs complete pytest suite)
+# 4. Full 33-Test Validation Suite (runs complete pytest suite)
 python deploy.py --test
 ```
 
@@ -237,7 +237,7 @@ Edit `.env` (optional):
 ```ini
 # Google Gemini API
 GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-3.5-flash-lite
+GEMINI_MODEL=gemini-3.5-flash
 
 # Parallel Search API (Web Grounding)
 PARALLEL_API_KEY=your_parallel_api_key_here
