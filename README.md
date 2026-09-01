@@ -107,7 +107,7 @@ PARALLEL_BASE_URL=https://api.parallel.ai/v1
 
 # Server
 HOST=0.0.0.0
-PORT=8000
+PORT=8085
 ENVIRONMENT=development
 ```
 *(Note: CineClear AI includes an offline verified legal knowledge engine so you can test immediately even before setting custom keys!)*
@@ -120,7 +120,7 @@ Start the FastAPI server:
 ```bash
 python server.py
 ```
-Open your browser at **[http://localhost:8000](http://localhost:8000)**.
+Open your browser at **[http://localhost:8085](http://localhost:8085)**.
 
 ### Dashboard Features:
 - 🎬 **Instant Sample Media**: 1-click evaluation of bundled set stills and screenplay PDFs.
