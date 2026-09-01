@@ -37,7 +37,8 @@ jobs:
 
       - name: Run Test Suite (33 Passing Invariants)
         env:
+          PYTHONPATH: "."
           GEMINI_API_KEY: "mock_gemini_key_for_ci"
           PARALLEL_API_KEY: "mock_parallel_key_for_ci"
         run: |
-          pytest tests/ -v
+          python -m pytest tests/ -v
