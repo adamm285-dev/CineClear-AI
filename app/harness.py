@@ -16,6 +16,11 @@ class ExtractorHarness:
     """Guards Role 1: Ingest, Entity Extraction, and Search Dispatch."""
 
     @staticmethod
+    def sanitize_and_deduplicate(candidates: List[Union[Dict[str, Any], Any]]) -> List[Dict[str, Any]]:
+        """Convenience method combining deduplication and coordinate/field sanitization."""
+        return ExtractorHarness.deduplicate_entities(candidates)
+
+    @staticmethod
     def deduplicate_entities(candidates: List[Union[Dict[str, Any], Any]]) -> List[Dict[str, Any]]:
         """
         Prevents duplicate Parallel Search API calls and token waste
@@ -64,6 +69,19 @@ class ExtractorHarness:
         if not raw.get("visual_description"):
             raw["visual_description"] = f"Visual depiction of {entity} in scene."
 
+        # Sanitize and clamp box_2d coordinates to [0, 1000]
+        box = raw.get("box_2d")
+        if box and isinstance(box, list) and len(box) == 4:
+            try:
+                ymin, xmin, ymax, xmax = [max(0, min(1000, int(v))) for v in box]
+                if ymin > ymax:
+                    ymin, ymax = ymax, ymin
+                if xmin > xmax:
+                    xmin, xmax = xmax, xmin
+                raw["box_2d"] = [ymin, xmin, ymax, xmax]
+            except (ValueError, TypeError):
+                raw["box_2d"] = None
+
         return raw
 
 
@@ -81,20 +99,23 @@ class CriticHarness:
     def enforce_invariants(cls, flags: List[ClearanceFlag]) -> List[ClearanceFlag]:
         """
         Deterministic Rule Engine (Runs regardless of whether LLM passes or fails).
-        Guarantees zero invalid statutory claims or halluncinated public domain statuses
+        Guarantees zero invalid statutory claims or hallucinated public domain statuses
         reach the final E&O PDF Binder.
         """
         sanitized: List[ClearanceFlag] = []
         for flag in flags:
             entity_lower = flag.detected_entity.lower()
+            vis_lower = flag.visual_description.lower()
 
             # Invariant 1: Modern corporate trademarks cannot be pre-1929 public domain
             if any(mark in entity_lower for mark in cls.MODERN_CORPORATE_MARKS):
                 flag.verification.is_public_domain = False
                 flag.verification.active_trademark_found = True
-                if flag.risk_level == RiskLevel.LOW:
+                if any(w in vis_lower for w in ["wardrobe", "hero", "apparel", "clothing", "hoodie", "shirt"]):
+                    flag.risk_level = RiskLevel.HIGH
+                elif flag.risk_level == RiskLevel.LOW:
                     flag.risk_level = RiskLevel.MEDIUM
-                if "public domain" in flag.mitigation_action.lower():
+                if "public domain" in flag.mitigation_action.lower() or flag.mitigation_action.strip() in ("", "None", "none"):
                     flag.mitigation_action = (
                         "RECOMMENDED ACTION: Verify incidental de minimis use; if featured prominently "
                         "as hero prop/wardrobe, obtain written Product Placement Release or Greek logo in VFX."
