@@ -1,0 +1,299 @@
+import os
+from pathlib import Path
+from typing import Optional
+from datetime import datetime
+
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.lib.units import inch
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Paragraph,
+    Spacer,
+    Table,
+    TableStyle,
+    KeepTogether,
+    HRFlowable
+)
+
+from app.config import settings
+from app.models import ClearanceAuditReport, RiskLevel, ClearanceCategory
+
+
+def get_risk_color(risk: RiskLevel) -> colors.Color:
+    if risk == RiskLevel.CRITICAL:
+        return colors.HexColor("#dc2626")  # Vibrant Red
+    elif risk == RiskLevel.HIGH:
+        return colors.HexColor("#ea580c")  # Vibrant Orange
+    elif risk == RiskLevel.MEDIUM:
+        return colors.HexColor("#d97706")  # Amber / Yellow
+    else:
+        return colors.HexColor("#16a34a")  # Green
+
+
+def generate_eo_clearance_binder(report: ClearanceAuditReport, output_path: Optional[str] = None) -> str:
+    """
+    Generates a Hollywood-grade Errors & Omissions (E&O) Legal Clearance Binder in PDF format.
+    """
+    if not output_path:
+        filename = f"EO_Clearance_Binder_{report.project_title.replace(' ', '_')}_{report.id[:8]}.pdf"
+        output_path = str(settings.REPORT_OUTPUT_DIR / filename)
+
+    doc = SimpleDocTemplate(
+        output_path,
+        pagesize=letter,
+        leftMargin=36,
+        rightMargin=36,
+        topMargin=36,
+        bottomMargin=36
+    )
+
+    styles = getSampleStyleSheet()
+
+    # Custom styles
+    title_style = ParagraphStyle(
+        'DocTitle',
+        parent=styles['Normal'],
+        fontName='Helvetica-Bold',
+        fontSize=20,
+        leading=24,
+        textColor=colors.HexColor("#0f172a"),
+        alignment=0
+    )
+
+    subtitle_style = ParagraphStyle(
+        'DocSubtitle',
+        parent=styles['Normal'],
+        fontName='Helvetica-Bold',
+        fontSize=12,
+        leading=16,
+        textColor=colors.HexColor("#475569")
+    )
+
+    section_heading = ParagraphStyle(
+        'SectionHeading',
+        parent=styles['Normal'],
+        fontName='Helvetica-Bold',
+        fontSize=14,
+        leading=18,
+        textColor=colors.HexColor("#1e293b"),
+        spaceBefore=12,
+        spaceAfter=6
+    )
+
+    body_style = ParagraphStyle(
+        'BodyTextCustom',
+        parent=styles['Normal'],
+        fontName='Helvetica',
+        fontSize=9,
+        leading=13,
+        textColor=colors.HexColor("#334155")
+    )
+
+    bold_body = ParagraphStyle(
+        'BoldBody',
+        parent=body_style,
+        fontName='Helvetica-Bold'
+    )
+
+    story = []
+
+    # 1. Header Banner
+    header_data = [
+        [
+            Paragraph("<b>CINECLEAR AI // LEGAL CLEARANCE COUNSEL</b>", ParagraphStyle('HeaderTop', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=10, textColor=colors.HexColor("#4f46e5"))),
+            Paragraph(f"<b>REPORT ID:</b> {report.id[:8].upper()}", ParagraphStyle('HeaderRight', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=9, textColor=colors.HexColor("#64748b"), alignment=2))
+        ]
+    ]
+    header_table = Table(header_data, colWidths=[340, 200])
+    header_table.setStyle(TableStyle([
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    story.append(header_table)
+
+    story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#4f46e5"), spaceAfter=10))
+
+    # Main Title
+    story.append(Paragraph("ERRORS & OMISSIONS (E&O) LEGAL CLEARANCE BINDER", title_style))
+    story.append(Paragraph(f"Production Title: <b>{report.project_title}</b>", subtitle_style))
+    story.append(Spacer(1, 10))
+
+    # 2. Executive Metadata Box
+    meta_data = [
+        [
+            Paragraph(f"<b>Analyzed Media:</b> {report.media_filename}", body_style),
+            Paragraph(f"<b>Audit Date:</b> {report.generated_at}", body_style)
+        ],
+        [
+            Paragraph(f"<b>Media Type:</b> {report.media_type.upper()}", body_style),
+            Paragraph("<b>Underwriting Standard:</b> Entertainment E&O Guidelines v4.2", body_style)
+        ]
+    ]
+    meta_table = Table(meta_data, colWidths=[270, 270])
+    meta_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#f8fafc")),
+        ('BOX', (0, 0), (-1, -1), 1, colors.HexColor("#cbd5e1")),
+        ('INNERGRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#e2e8f0")),
+        ('TOPPADDING', (0, 0), (-1, -1), 6),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+        ('LEFTPADDING', (0, 0), (-1, -1), 8),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 8),
+    ]))
+    story.append(meta_table)
+    story.append(Spacer(1, 12))
+
+    # 3. Executive Risk Matrix
+    story.append(Paragraph("1. Executive Risk Summary & Flag Breakdown", section_heading))
+    
+    tally_data = [
+        [
+            Paragraph("<b>TOTAL LIABILITIES</b>", ParagraphStyle('TallyH', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=8, textColor=colors.white, alignment=1)),
+            Paragraph("<b>CRITICAL RISK</b>", ParagraphStyle('TallyH', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=8, textColor=colors.white, alignment=1)),
+            Paragraph("<b>HIGH RISK</b>", ParagraphStyle('TallyH', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=8, textColor=colors.white, alignment=1)),
+            Paragraph("<b>MEDIUM RISK</b>", ParagraphStyle('TallyH', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=8, textColor=colors.white, alignment=1)),
+            Paragraph("<b>LOW RISK</b>", ParagraphStyle('TallyH', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=8, textColor=colors.white, alignment=1))
+        ],
+        [
+            Paragraph(f"<font size=16><b>{report.total_flags}</b></font>", ParagraphStyle('TallyV', parent=styles['Normal'], fontName='Helvetica-Bold', alignment=1)),
+            Paragraph(f"<font size=16 color='#dc2626'><b>{report.critical_count}</b></font>", ParagraphStyle('TallyV', parent=styles['Normal'], fontName='Helvetica-Bold', alignment=1)),
+            Paragraph(f"<font size=16 color='#ea580c'><b>{report.high_count}</b></font>", ParagraphStyle('TallyV', parent=styles['Normal'], fontName='Helvetica-Bold', alignment=1)),
+            Paragraph(f"<font size=16 color='#d97706'><b>{report.medium_count}</b></font>", ParagraphStyle('TallyV', parent=styles['Normal'], fontName='Helvetica-Bold', alignment=1)),
+            Paragraph(f"<font size=16 color='#16a34a'><b>{report.low_count}</b></font>", ParagraphStyle('TallyV', parent=styles['Normal'], fontName='Helvetica-Bold', alignment=1))
+        ]
+    ]
+    tally_table = Table(tally_data, colWidths=[108, 108, 108, 108, 108])
+    tally_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#1e293b")),
+        ('BACKGROUND', (0, 1), (-1, 1), colors.HexColor("#f1f5f9")),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('BOX', (0, 0), (-1, -1), 1, colors.HexColor("#cbd5e1")),
+        ('INNERGRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
+        ('TOPPADDING', (0, 0), (-1, -1), 6),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+    ]))
+    story.append(tally_table)
+    story.append(Spacer(1, 12))
+
+    # 4. Itemized Clearance Ledger Table
+    story.append(Paragraph("2. Itemized Legal Clearance Ledger", section_heading))
+
+    ledger_header = [
+        Paragraph("<b>Time / Page</b>", ParagraphStyle('LH', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=8, textColor=colors.white)),
+        Paragraph("<b>Category</b>", ParagraphStyle('LH', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=8, textColor=colors.white)),
+        Paragraph("<b>Detected Entity</b>", ParagraphStyle('LH', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=8, textColor=colors.white)),
+        Paragraph("<b>Risk Level</b>", ParagraphStyle('LH', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=8, textColor=colors.white, alignment=1)),
+        Paragraph("<b>Actionable Mitigation</b>", ParagraphStyle('LH', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=8, textColor=colors.white)),
+    ]
+    ledger_rows = [ledger_header]
+
+    for f in report.flags:
+        risk_color_hex = "#dc2626" if f.risk_level == RiskLevel.CRITICAL else (
+            "#ea580c" if f.risk_level == RiskLevel.HIGH else (
+                "#d97706" if f.risk_level == RiskLevel.MEDIUM else "#16a34a"
+            )
+        )
+        ledger_rows.append([
+            Paragraph(f"<b>{f.timestamp_or_page}</b>", body_style),
+            Paragraph(f.category.value.replace("_", " "), body_style),
+            Paragraph(f"<b>{f.detected_entity}</b>", body_style),
+            Paragraph(f"<font color='{risk_color_hex}'><b>{f.risk_level.value}</b></font>", ParagraphStyle('RC', parent=body_style, alignment=1)),
+            Paragraph(f.mitigation_action, ParagraphStyle('MC', parent=body_style, fontSize=8, leading=11))
+        ])
+
+    ledger_table = Table(ledger_rows, colWidths=[65, 95, 115, 65, 200])
+    ledger_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#0f172a")),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('BOX', (0, 0), (-1, -1), 1, colors.HexColor("#cbd5e1")),
+        ('INNERGRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#e2e8f0")),
+        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor("#f8fafc")]),
+        ('TOPPADDING', (0, 0), (-1, -1), 5),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+        ('LEFTPADDING', (0, 0), (-1, -1), 5),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 5),
+    ]))
+    story.append(ledger_table)
+    story.append(Spacer(1, 14))
+
+    # 5. Deep-Dive Audit Dossiers
+    story.append(Paragraph("3. Detailed Clearance Dossiers & Web Grounding Evidence", section_heading))
+
+    for idx, flag in enumerate(report.flags, 1):
+        risk_color_hex = "#dc2626" if flag.risk_level == RiskLevel.CRITICAL else (
+            "#ea580c" if flag.risk_level == RiskLevel.HIGH else (
+                "#d97706" if flag.risk_level == RiskLevel.MEDIUM else "#16a34a"
+            )
+        )
+
+        dossier_content = [
+            [
+                Paragraph(f"<b>FLAG #{idx}: {flag.detected_entity.upper()}</b>", ParagraphStyle('FH', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=10, textColor=colors.white)),
+                Paragraph(f"<b>RISK: <font color='{risk_color_hex}'>{flag.risk_level.value}</font></b> | {flag.timestamp_or_page}", ParagraphStyle('FHR', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=9, textColor=colors.white, alignment=2))
+            ],
+            [
+                Paragraph(f"<b>Visual Context:</b> {flag.visual_description}", body_style),
+                Paragraph(f"<b>Category:</b> {flag.category.value}", body_style)
+            ],
+            [
+                Paragraph(f"<b>Parallel Search Objective:</b> <i>{flag.verification.search_objective}</i>", ParagraphStyle('SO', parent=body_style, fontSize=8, textColor=colors.HexColor("#475569"))),
+                Paragraph(f"<b>Rights Holder:</b> {flag.verification.rights_holder_identified or 'Unspecified'}", body_style)
+            ],
+            [
+                Paragraph(f"<b>Statutory Analysis:</b> {flag.verification.statutory_context}", ParagraphStyle('SA', parent=body_style, fontSize=8.5, leading=12)),
+                Paragraph(f"<b>Mitigation Action:</b> <b>{flag.mitigation_action}</b>", ParagraphStyle('MA', parent=body_style, fontSize=8.5, leading=12, textColor=colors.HexColor("#0f172a")))
+            ]
+        ]
+
+        if flag.verification.sources_checked:
+            sources_str = ", ".join(flag.verification.sources_checked[:3])
+            dossier_content.append([
+                Paragraph(f"<b>Sources Checked:</b> <font color='#2563eb'>{sources_str}</font>", ParagraphStyle('SC', parent=body_style, fontSize=7.5)),
+                Paragraph(f"<b>Public Domain:</b> {'YES' if flag.verification.is_public_domain else 'NO'} | <b>Active TM:</b> {'YES' if flag.verification.active_trademark_found else 'NO'}", body_style)
+            ])
+
+        dossier_table = Table(dossier_content, colWidths=[360, 180])
+        dossier_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#1e293b")),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.HexColor("#f8fafc")),
+            ('BOX', (0, 0), (-1, -1), 1, colors.HexColor("#94a3b8")),
+            ('INNERGRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+            ('LEFTPADDING', (0, 0), (-1, -1), 6),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+        ]))
+
+        story.append(KeepTogether([
+            dossier_table,
+            Spacer(1, 8)
+        ]))
+
+    # 6. E&O Insurance Legal Counsel Sign-Off Block
+    story.append(Spacer(1, 10))
+    story.append(KeepTogether([
+        Paragraph("4. Legal Counsel & E&O Underwriting Certification", section_heading),
+        HRFlowable(width="100%", thickness=1, color=colors.HexColor("#cbd5e1"), spaceAfter=8),
+        Paragraph(
+            "This E&O Clearance Binder has been compiled pursuant to standard entertainment industry legal guidelines. "
+            "All Critical and High risk flags must be mitigated via written release or visual VFX remediation prior to commercial distribution.",
+            ParagraphStyle('CertText', parent=body_style, fontSize=8, leading=11, textColor=colors.HexColor("#64748b"))
+        ),
+        Spacer(1, 14),
+        Table([
+            [
+                Paragraph("____________________________________________<br/><b>Lead Clearance Counsel Signature</b>", body_style),
+                Paragraph("____________________________________________<br/><b>Date & Bar Registration No.</b>", body_style)
+            ],
+            [
+                Paragraph("<br/>____________________________________________<br/><b>E&O Underwriter Policy Endorsement</b>", body_style),
+                Paragraph("<br/>____________________________________________<br/><b>Production Executive Sign-Off</b>", body_style)
+            ]
+        ], colWidths=[270, 270])
+    ]))
+
+    doc.build(story)
+    return output_path
