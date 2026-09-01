@@ -364,6 +364,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 remCards.appendChild(card);
             });
         }
+
+        // 4. PRO Music Cue Sheet
+        if (pkg.music_cue_sheet && pkg.music_cue_sheet.cue_entries?.length) {
+            pkg.music_cue_sheet.cue_entries.forEach(cue => {
+                const card = document.createElement('div');
+                card.className = 'remediation-card music';
+                card.innerHTML = `
+                    <span class="rem-badge music">PRO MUSIC CUE [${cue.cue_number}]</span>
+                    <div class="rem-title">${cue.track_title} - ${cue.artist_performer}</div>
+                    <div class="rem-details">
+                        <strong>PRO / Publisher:</strong> ${cue.publisher_pro}<br/>
+                        <strong>Master Owner:</strong> ${cue.master_rights_holder}<br/>
+                        <strong>Usage &amp; Dur:</strong> ${cue.usage_type} (${cue.duration})<br/>
+                        <strong style="color:#f87171;">Status:</strong> ${cue.clearance_status}
+                    </div>
+                `;
+                remCards.appendChild(card);
+            });
+        }
     }
 
     // Render Filterable Flags
@@ -421,6 +440,62 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span><strong>Sources:</strong> ${sourcesHtml}</span>
                     </div>
                 </div>
+
+                ${flag.fair_use_scorecard ? `
+                <div class="fair-use-box">
+                    <div class="fair-use-header">
+                        <span>⚖️ STATUTORY FAIR USE DEFENSE (17 U.S.C. § 107)</span>
+                        <span class="defense-pill ${flag.fair_use_scorecard.composite_score >= 3.5 ? 'strong' : (flag.fair_use_scorecard.composite_score >= 2.5 ? 'moderate' : 'risk')}">
+                            ${flag.fair_use_scorecard.defense_rating} (Score: ${flag.fair_use_scorecard.composite_score}/5.0)
+                        </span>
+                    </div>
+                    <div class="fair-use-factors-grid">
+                        <div class="factor-item">
+                            <span class="factor-score">${flag.fair_use_scorecard.purpose_and_character.score}/5</span>
+                            <div class="factor-text"><strong>Factor 1 (Purpose):</strong> ${flag.fair_use_scorecard.purpose_and_character.rationale}</div>
+                        </div>
+                        <div class="factor-item">
+                            <span class="factor-score">${flag.fair_use_scorecard.nature_of_work.score}/5</span>
+                            <div class="factor-text"><strong>Factor 2 (Nature):</strong> ${flag.fair_use_scorecard.nature_of_work.rationale}</div>
+                        </div>
+                        <div class="factor-item">
+                            <span class="factor-score">${flag.fair_use_scorecard.amount_and_substantiality.score}/5</span>
+                            <div class="factor-text"><strong>Factor 3 (Amount):</strong> ${flag.fair_use_scorecard.amount_and_substantiality.rationale}</div>
+                        </div>
+                        <div class="factor-item">
+                            <span class="factor-score">${flag.fair_use_scorecard.market_harm.score}/5</span>
+                            <div class="factor-text"><strong>Factor 4 (Market):</strong> ${flag.fair_use_scorecard.market_harm.rationale}</div>
+                        </div>
+                    </div>
+                </div>` : ''}
+
+                ${flag.territory_matrix && flag.territory_matrix.length > 0 ? `
+                <div class="territory-box">
+                    <div class="territory-header">🌐 MULTI-TERRITORY JURISDICTIONAL COMPLIANCE MATRIX</div>
+                    <div class="territory-grid">
+                        ${flag.territory_matrix.map(t => `
+                            <div class="territory-card">
+                                <div class="territory-name">${t.territory}</div>
+                                <div class="territory-status">${t.clearance_status}</div>
+                                <div class="territory-statute">${t.governing_statute}</div>
+                                <div class="territory-notes">${t.jurisdictional_notes}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>` : ''}
+
+                ${flag.arch_assessment ? `
+                <div class="arch-box ${flag.arch_assessment.is_public_view_safe_harbor ? 'safe' : 'restricted'}">
+                    <div class="arch-header">
+                        <span>🏛️ AWCPA ARCHITECTURAL JURISDICTION (17 U.S.C. § 120(a))</span>
+                        <span class="arch-badge ${flag.arch_assessment.is_public_view_safe_harbor ? 'safe' : 'restricted'}">
+                            ${flag.arch_assessment.is_public_view_safe_harbor ? '✅ STATUTORY SAFE HARBOR' : '⚠️ RESTRICTED COMMERCIAL FACADE'}
+                        </span>
+                    </div>
+                    <div class="arch-statute"><strong>Statute:</strong> ${flag.arch_assessment.governing_statute}</div>
+                    <div class="arch-restrictions">${flag.arch_assessment.commercial_filing_restrictions}</div>
+                    <div class="arch-recommendation"><strong>Recommendation:</strong> ${flag.arch_assessment.clearance_recommendation}</div>
+                </div>` : ''}
 
                 <div class="mitigation-box">
                     <div class="mitigation-icon">

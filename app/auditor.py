@@ -23,6 +23,8 @@ from app.models import (
 from app.parallel_client import ParallelSearchClient
 from app.remediation_agent import RemediationAgent
 from app.vision_agent import VisionAgent
+from app.fair_use_analyzer import FairUseAnalyzer
+from app.music_arch_analyzer import AWCPAValidator, MusicSyncAnalyzer
 
 logger = logging.getLogger("cineclear.auditor")
 
@@ -49,6 +51,7 @@ class CineClearAuditor:
         self.vision_agent = VisionAgent()
         self.remediation_agent = RemediationAgent()
         self.cascade = GeminiCascadeClient()
+        self.fair_use_analyzer = FairUseAnalyzer()
 
     async def verify_flag_with_parallel(
         self,
@@ -197,6 +200,32 @@ class CineClearAuditor:
                 category=cat,
                 scene_context=vis_desc
             )
+
+            # Calculate Fair Use Scorecard (17 U.S.C. § 107) & Multi-Territory Matrix
+            scorecard = FairUseAnalyzer.evaluate_fair_use(
+                category=cat,
+                entity_name=entity,
+                scene_context=vis_desc,
+                risk_level=risk
+            )
+            territories = FairUseAnalyzer.evaluate_territories(
+                category=cat,
+                entity_name=entity,
+                risk_level=risk
+            )
+
+            # Evaluate AWCPA § 120(a) for Architectural Works
+            arch_assessment = None
+            if cat in [ClearanceCategory.ARCHITECTURAL_RIGHTS, "ARCHITECTURAL_WORK", "ARCHITECTURAL_RIGHTS"]:
+                arch_assessment = AWCPAValidator.evaluate_landmark(
+                    entity_name=entity,
+                    visual_context=vis_desc,
+                    risk_level=risk
+                )
+                if arch_assessment.is_public_view_safe_harbor:
+                    risk = RiskLevel.LOW
+                    mitigation = arch_assessment.clearance_recommendation
+
             grounded_flags.append(
                 ClearanceFlag(
                     id=str(uuid.uuid4())[:8],
@@ -207,7 +236,10 @@ class CineClearAuditor:
                     risk_level=risk,
                     verification=verification,
                     mitigation_action=mitigation,
-                    box_2d=box_2d
+                    box_2d=box_2d,
+                    fair_use_scorecard=scorecard,
+                    territory_matrix=territories,
+                    arch_assessment=arch_assessment
                 )
             )
 
@@ -216,6 +248,12 @@ class CineClearAuditor:
 
         # 4. Remediation Dispatcher (Agent 3)
         remediation_pkg = self.remediation_agent.generate_remediation_package(
+            flags=securitized_flags,
+            project_title=project_title
+        )
+
+        # Compile ASCAP/BMI Music Cue Sheet if music flags exist
+        remediation_pkg.music_cue_sheet = MusicSyncAnalyzer.build_cue_sheet(
             flags=securitized_flags,
             project_title=project_title
         )

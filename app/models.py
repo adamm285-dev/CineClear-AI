@@ -30,6 +30,37 @@ class ParallelVerification(BaseModel):
     statutory_context: str = Field(..., description="Legal rationale from Parallel web search and statutory citations")
 
 
+class FairUseFactor(BaseModel):
+    factor_name: str
+    score: int = Field(..., ge=1, le=5, description="1 (Favors Infringement) to 5 (Strong Fair Use Defense)")
+    rationale: str
+
+
+class FairUseScorecard(BaseModel):
+    purpose_and_character: FairUseFactor      # Factor 1: Transformative / Contextual vs Commercial
+    nature_of_work: FairUseFactor             # Factor 2: Factual / Functional vs Highly Creative Fine Art
+    amount_and_substantiality: FairUseFactor  # Factor 3: Incidental / Background vs Hero Focal Point
+    market_harm: FairUseFactor                # Factor 4: Market Substitution & Licensing Impact
+    composite_score: float                    # Average score out of 5.0
+    defense_rating: str                       # "STRONG DEFENSE (DE MINIMIS)", "MODERATE DEFENSE", "HIGH LITIGATION RISK"
+
+
+class TerritoryAssessment(BaseModel):
+    territory: str                            # e.g., "United States", "United Kingdom", "European Union", "Canada"
+    clearance_status: str                     # "EXPLICIT RELEASE REQUIRED", "INCIDENTAL SAFE HARBOR", "PERMITTED FAIR DEALING"
+    governing_statute: str                    # e.g., "17 U.S.C. § 106", "CDPA 1988 § 31", "EU InfoSoc Dir. Art 5(3)(i)"
+    jurisdictional_notes: str
+
+
+class ArchitecturalLandmarkAssessment(BaseModel):
+    structure_name: str
+    jurisdiction_status: str
+    is_public_view_safe_harbor: bool
+    governing_statute: str
+    commercial_filing_restrictions: str
+    clearance_recommendation: str
+
+
 class ClearanceFlag(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4())[:8], description="Unique identifier for the flag")
     timestamp_or_page: str = Field(..., description="Timecode (00:01:24) or script page number (Page 4)")
@@ -43,6 +74,28 @@ class ClearanceFlag(BaseModel):
         default=None,
         description="Normalized 2D bounding box [ymin, xmin, ymax, xmax] scaled 0 to 1000"
     )
+    fair_use_scorecard: Optional[FairUseScorecard] = None
+    territory_matrix: Optional[List[TerritoryAssessment]] = None
+    arch_assessment: Optional[ArchitecturalLandmarkAssessment] = None
+
+
+class MusicCueEntry(BaseModel):
+    cue_number: str
+    track_title: str
+    artist_performer: str
+    composer_author: str
+    publisher_pro: str = Field(..., description="e.g., 'ASCAP (50%) / BMI (50%)'")
+    master_rights_holder: str = Field(..., description="Record label / Master recording owner (17 U.S.C. § 114)")
+    sync_publisher: str = Field(..., description="Sync licensing publisher (17 U.S.C. § 106(4))")
+    usage_type: str = Field(..., description="'Visual Vocal', 'Background Instrumental', 'Source Music / Radio'")
+    duration: str
+    clearance_status: str
+
+
+class MusicCueSheet(BaseModel):
+    production_title: str
+    cue_entries: List[MusicCueEntry] = Field(default_factory=list)
+    pro_compliance_certified: bool = True
 
 
 class VFXWorkOrder(BaseModel):
@@ -72,6 +125,7 @@ class RemediationPackage(BaseModel):
     vfx_work_orders: List[VFXWorkOrder] = Field(default_factory=list)
     legal_releases: List[LegalReleaseAgreement] = Field(default_factory=list)
     script_fixes: List[ScriptFixDirective] = Field(default_factory=list)
+    music_cue_sheet: Optional[MusicCueSheet] = None
 
 
 class ClearanceAuditReport(BaseModel):

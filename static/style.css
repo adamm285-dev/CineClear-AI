@@ -852,13 +852,173 @@ body {
     color: var(--text-muted);
 }
 
-.source-link {
-    color: #60a5fa;
-    text-decoration: none;
+/* Fair Use Scorecard Box */
+.fair-use-box {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    margin-bottom: 14px;
 }
-.source-link:hover {
-    text-decoration: underline;
+
+.fair-use-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    flex-wrap: wrap;
+    gap: 8px;
 }
+
+.defense-pill {
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 20px;
+}
+
+.defense-pill.strong { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+.defense-pill.moderate { background: rgba(234, 179, 8, 0.15); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.3); }
+.defense-pill.risk { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+.fair-use-factors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 8px;
+}
+
+.factor-item {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.factor-score {
+    background: rgba(99, 102, 241, 0.2);
+    color: #a5b4fc;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.factor-text {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.35;
+}
+
+/* Multi-Territory Compliance Box */
+.territory-box {
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    margin-bottom: 14px;
+}
+
+.territory-header {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #38bdf8;
+    margin-bottom: 10px;
+}
+
+.territory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px;
+}
+
+.territory-card {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.territory-name {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.territory-status {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.1);
+    padding: 2px 6px;
+    border-radius: 3px;
+    align-self: flex-start;
+}
+
+.territory-statute {
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: #94a3b8;
+}
+
+.territory-notes {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    line-height: 1.3;
+}
+
+/* AWCPA Architectural Box */
+.arch-box {
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    margin-bottom: 14px;
+    font-size: 0.8rem;
+}
+
+.arch-box.safe {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.arch-box.restricted {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.arch-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: #e2e8f0;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.arch-badge {
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.arch-badge.safe { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+.arch-badge.restricted { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+.arch-statute { color: #94a3b8; font-size: 0.75rem; margin-bottom: 4px; }
+.arch-restrictions { color: var(--text-muted); font-size: 0.75rem; line-height: 1.35; margin-bottom: 6px; }
+.arch-recommendation { color: #f1f5f9; font-size: 0.78rem; }
 
 /* Mitigation Directive Box */
 .mitigation-box {
@@ -926,6 +1086,7 @@ body {
 .remediation-card.vfx { border-top: 3px solid #38bdf8; }
 .remediation-card.legal { border-top: 3px solid #a855f7; }
 .remediation-card.script { border-top: 3px solid #f59e0b; }
+.remediation-card.music { border-top: 3px solid #ec4899; }
 
 .rem-badge {
     align-self: flex-start;
@@ -939,6 +1100,7 @@ body {
 .rem-badge.vfx { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
 .rem-badge.legal { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
 .rem-badge.script { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+.rem-badge.music { background: rgba(236, 72, 153, 0.15); color: #f472b6; }
 
 .rem-title {
     font-size: 0.95rem;

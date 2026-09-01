@@ -183,6 +183,28 @@ agents_and_capabilities:
       - "Parallel Search chain-of-custody audit logs"
       - "Underwriting endorsement and attorney sign-off blocks"
 
+  - id: "fair_use_analyzer"
+    name: "4-Factor Statutory Fair Use & Multi-Territory Engine"
+    module: "app.fair_use_analyzer"
+    class: "FairUseAnalyzer"
+    role: "Legal Defense Rubric & Jurisdiction Mapping"
+    status: "live"
+    features:
+      - "Computes statutory 4-factor fair use defense scoring (17 U.S.C. § 107)"
+      - "Evaluates multi-territory clearance compliance across US, UK, EU, and Canada"
+      - "Generates defense rating pills and jurisdictional safe harbor citations"
+
+  - id: "music_and_arch_engine"
+    name: "Music Sync Clearance & AWCPA Architectural Validator"
+    module: "app.music_arch_analyzer"
+    class: "AWCPAValidator / MusicSyncAnalyzer"
+    role: "Audio Sync & Structural Facade Rights"
+    status: "live"
+    features:
+      - "Audits dual-tier musical rights (17 U.S.C. § 114 Master + § 106(4) Sync)"
+      - "Generates industry-standard ASCAP/BMI/SESAC cue sheets"
+      - "Evaluates public panorama safe harbors under 17 U.S.C. § 120(a) vs restricted trademarked/illuminated facades"
+
   - id: "edl_marker_exporter"
     name: "NLE Timeline Marker & CMX 3600 EDL Exporter"
     module: "app.edl_exporter"
@@ -213,8 +235,18 @@ models_and_schemas:
     values: ["TRADEMARK_LOGO", "COPYRIGHTED_ART", "ARCHITECTURAL_RIGHTS", "MUSIC_AUDIO", "NAME_DEFAMATION", "PHONE_PII"]
   - model: "ParallelVerification"
     fields: ["search_objective", "sources_checked", "is_public_domain", "active_trademark_found", "rights_holder_identified", "statutory_context"]
+  - model: "FairUseScorecard"
+    fields: ["purpose_and_character", "nature_of_work", "amount_and_substantiality", "market_harm", "composite_score", "defense_rating"]
+  - model: "TerritoryAssessment"
+    fields: ["territory", "clearance_status", "governing_statute", "jurisdictional_notes"]
+  - model: "ArchitecturalLandmarkAssessment"
+    fields: ["structure_name", "jurisdiction_status", "is_public_view_safe_harbor", "governing_statute", "commercial_filing_restrictions", "clearance_recommendation"]
   - model: "ClearanceFlag"
-    fields: ["id", "timestamp_or_page", "category", "detected_entity", "visual_description", "risk_level", "verification", "mitigation_action", "box_2d"]
+    fields: ["id", "timestamp_or_page", "category", "detected_entity", "visual_description", "risk_level", "verification", "mitigation_action", "box_2d", "fair_use_scorecard", "territory_matrix", "arch_assessment"]
+  - model: "MusicCueEntry"
+    fields: ["cue_number", "track_title", "artist_performer", "composer_author", "publisher_pro", "master_rights_holder", "sync_publisher", "usage_type", "duration", "clearance_status"]
+  - model: "MusicCueSheet"
+    fields: ["production_title", "cue_entries", "pro_compliance_certified"]
   - model: "VFXWorkOrder"
     fields: ["timestamp_or_page", "target_entity", "action_type", "tracking_notes", "priority"]
   - model: "LegalReleaseAgreement"
@@ -222,7 +254,7 @@ models_and_schemas:
   - model: "ScriptFixDirective"
     fields: ["page_number", "original_text", "recommended_replacement", "rationale"]
   - model: "RemediationPackage"
-    fields: ["vfx_work_orders", "legal_releases", "script_fixes"]
+    fields: ["vfx_work_orders", "legal_releases", "script_fixes", "music_cue_sheet"]
   - model: "ClearanceAuditReport"
     fields: ["id", "project_title", "media_filename", "media_type", "total_flags", "critical_count", "high_count", "medium_count", "low_count", "flags", "generated_at", "remediation_package", "pdf_report_path"]
 

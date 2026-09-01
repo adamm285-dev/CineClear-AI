@@ -255,6 +255,31 @@ def generate_eo_clearance_binder(report: ClearanceAuditReport, output_path: Opti
                 Paragraph(f"<b>Public Domain:</b> {'YES' if flag.verification.is_public_domain else 'NO'} | <b>Active TM:</b> {'YES' if flag.verification.active_trademark_found else 'NO'}", body_style)
             ])
 
+        # Fair Use Scorecard (17 U.S.C. § 107)
+        if flag.fair_use_scorecard:
+            sc = flag.fair_use_scorecard
+            dossier_content.append([
+                Paragraph(f"<b>Statutory Fair Use Defense (17 U.S.C. § 107):</b> {sc.defense_rating} (Score: <b>{sc.composite_score}/5.0</b>)", ParagraphStyle('FUD', parent=body_style, fontSize=8, textColor=colors.HexColor("#0f172a"))),
+                Paragraph(f"F1: {sc.purpose_and_character.score}/5 | F2: {sc.nature_of_work.score}/5 | F3: {sc.amount_and_substantiality.score}/5 | F4: {sc.market_harm.score}/5", ParagraphStyle('FUDS', parent=body_style, fontSize=7.5, alignment=1))
+            ])
+
+        # Multi-Territory Jurisdictional Matrix
+        if flag.territory_matrix:
+            terr_summary = " | ".join([f"<b>{t.territory}:</b> {t.clearance_status}" for t in flag.territory_matrix[:4]])
+            dossier_content.append([
+                Paragraph(f"<b>Multi-Territory Status:</b> {terr_summary}", ParagraphStyle('MTS', parent=body_style, fontSize=7.5, leading=10, textColor=colors.HexColor("#334155"))),
+                Paragraph(f"<b>Jurisdictions:</b> US, UK, EU, CA", ParagraphStyle('MTJ', parent=body_style, fontSize=7.5, alignment=1))
+            ])
+
+        # AWCPA § 120(a) Architectural Assessment
+        if flag.arch_assessment:
+            aa = flag.arch_assessment
+            arch_status_color = "#16a34a" if aa.is_public_view_safe_harbor else "#dc2626"
+            dossier_content.append([
+                Paragraph(f"<b>AWCPA Architectural Status:</b> <font color='{arch_status_color}'><b>{aa.jurisdiction_status}</b></font><br/><i>{aa.governing_statute}:</i> {aa.commercial_filing_restrictions}", ParagraphStyle('AAS', parent=body_style, fontSize=7.5, leading=10)),
+                Paragraph(f"<b>Safe Harbor:</b> {'YES' if aa.is_public_view_safe_harbor else 'RESTRICTED'}", ParagraphStyle('AAJ', parent=body_style, fontSize=7.5, alignment=1))
+            ])
+
         dossier_table = Table(dossier_content, colWidths=[360, 180])
         dossier_table.setStyle(TableStyle([
             ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#1e293b")),
@@ -272,10 +297,52 @@ def generate_eo_clearance_binder(report: ClearanceAuditReport, output_path: Opti
             Spacer(1, 8)
         ]))
 
-    # 6. E&O Insurance Legal Counsel Sign-Off Block
+    # 6. Music Cue Sheet Appendix (if present)
+    if report.remediation_package and report.remediation_package.music_cue_sheet and report.remediation_package.music_cue_sheet.cue_entries:
+        story.append(Spacer(1, 10))
+        story.append(KeepTogether([
+            Paragraph("4. Standard Entertainment Music Cue Sheet (ASCAP / BMI / SESAC)", section_heading),
+            Paragraph(f"Synchronized audio compositions and sound recordings requiring dual-tier master & sync clearance for '{report.project_title}'.", ParagraphStyle('CueSub', parent=body_style, fontSize=8, leading=11, textColor=colors.HexColor("#64748b"))),
+            Spacer(1, 6)
+        ]))
+
+        cue_rows = [
+            [
+                Paragraph("<b>Cue #</b>", ParagraphStyle('TH', parent=body_style, fontName='Helvetica-Bold', fontSize=8, textColor=colors.white)),
+                Paragraph("<b>Track / Performer</b>", ParagraphStyle('TH', parent=body_style, fontName='Helvetica-Bold', fontSize=8, textColor=colors.white)),
+                Paragraph("<b>PRO / Publisher</b>", ParagraphStyle('TH', parent=body_style, fontName='Helvetica-Bold', fontSize=8, textColor=colors.white)),
+                Paragraph("<b>Master Rights Owner</b>", ParagraphStyle('TH', parent=body_style, fontName='Helvetica-Bold', fontSize=8, textColor=colors.white)),
+                Paragraph("<b>Usage</b>", ParagraphStyle('TH', parent=body_style, fontName='Helvetica-Bold', fontSize=8, textColor=colors.white)),
+                Paragraph("<b>Status</b>", ParagraphStyle('TH', parent=body_style, fontName='Helvetica-Bold', fontSize=8, textColor=colors.white))
+            ]
+        ]
+        for cue in report.remediation_package.music_cue_sheet.cue_entries:
+            cue_rows.append([
+                Paragraph(cue.cue_number, ParagraphStyle('CD', parent=body_style, fontSize=7.5)),
+                Paragraph(f"<b>{cue.track_title}</b><br/><i>{cue.artist_performer}</i>", ParagraphStyle('CD', parent=body_style, fontSize=7.5)),
+                Paragraph(cue.publisher_pro, ParagraphStyle('CD', parent=body_style, fontSize=7.5)),
+                Paragraph(cue.master_rights_holder, ParagraphStyle('CD', parent=body_style, fontSize=7.5)),
+                Paragraph(f"{cue.usage_type}<br/>({cue.duration})", ParagraphStyle('CD', parent=body_style, fontSize=7.5)),
+                Paragraph(f"<font color='#dc2626'><b>{cue.clearance_status}</b></font>", ParagraphStyle('CD', parent=body_style, fontSize=7.5))
+            ])
+
+        cue_table = Table(cue_rows, colWidths=[45, 125, 95, 115, 75, 85])
+        cue_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#0f172a")),
+            ('BOX', (0, 0), (-1, -1), 1, colors.HexColor("#cbd5e1")),
+            ('INNERGRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#e2e8f0")),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor("#f8fafc")]),
+        ]))
+        story.append(cue_table)
+        story.append(Spacer(1, 12))
+
+    # 7. E&O Insurance Legal Counsel Sign-Off Block
     story.append(Spacer(1, 10))
     story.append(KeepTogether([
-        Paragraph("4. Legal Counsel & E&O Underwriting Certification", section_heading),
+        Paragraph("5. Legal Counsel & E&O Underwriting Certification", section_heading),
         HRFlowable(width="100%", thickness=1, color=colors.HexColor("#cbd5e1"), spaceAfter=8),
         Paragraph(
             "This E&O Clearance Binder has been compiled pursuant to standard entertainment industry legal guidelines. "
