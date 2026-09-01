@@ -143,7 +143,13 @@ class CineClearAuditor:
         search_res = await self.parallel.search(objective=objective)
         results = search_res.get("results", [])
         sources = [r.get("url") for r in results if "url" in r and r.get("url")]
-        excerpts = " ".join([r.get("excerpt", "") for r in results])
+        excerpts_list = []
+        for r in results:
+            if "excerpts" in r and isinstance(r["excerpts"], list):
+                excerpts_list.extend(r["excerpts"])
+            elif "excerpt" in r and r["excerpt"]:
+                excerpts_list.append(str(r["excerpt"]))
+        excerpts = " ".join(excerpts_list)
 
         # If Gemini is live, synthesize legal rationale
         if self.genai_client and settings.is_gemini_configured():

@@ -17,7 +17,7 @@ class ParallelSearchClient:
             "Content-Type": "application/json"
         }
 
-    async def search(self, objective: str, max_results: int = 5) -> Dict[str, Any]:
+    async def search(self, objective: str, search_queries: Optional[List[str]] = None, max_results: int = 5) -> Dict[str, Any]:
         """
         Executes a semantic objective search using Parallel Search API.
         Falls back to specialized legal knowledge base if API key is unconfigured or call fails.
@@ -25,19 +25,33 @@ class ParallelSearchClient:
         # If API key is available and configured, attempt live call
         if settings.is_parallel_configured():
             try:
+                # Generate query variants from objective if not explicitly provided
+                if not search_queries:
+                    search_queries = [
+                        objective,
+                        f"{objective} USPTO trademark copyright film clearance",
+                        f"{objective} legal rights holder"
+                    ]
+
                 payload = {
                     "objective": objective,
-                    "max_results": max_results,
-                    "mode": "fast"
+                    "search_queries": search_queries[:3]
                 }
-                async with httpx.AsyncClient(timeout=12.0) as client:
+                async with httpx.AsyncClient(timeout=15.0) as client:
                     response = await client.post(
                         f"{self.base_url}/search",
                         headers=self.headers,
                         json=payload
                     )
                     if response.status_code == 200:
-                        return response.json()
+                        data = response.json()
+                        # Normalize results to ensure excerpts is accessible consistently
+                        for r in data.get("results", []):
+                            if "excerpts" in r and isinstance(r["excerpts"], list):
+                                r["excerpt"] = " ".join(r["excerpts"])
+                            elif "excerpt" in r and "excerpts" not in r:
+                                r["excerpts"] = [r["excerpt"]]
+                        return data
                     else:
                         logger.warning(
                             f"Parallel Search API returned status {response.status_code}: {response.text}. Using fallback legal grounding."
