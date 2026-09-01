@@ -24,7 +24,7 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg libgl1
+          sudo apt-get install -y --no-install-recommends ffmpeg libgl1 libglib2.0-0
 
       - name: Install Dependencies
         run: |
@@ -35,6 +35,9 @@ jobs:
         run: |
           python doctor.py
 
-      - name: Run Test Suite (27 Passing Invariants)
+      - name: Run Test Suite (33 Passing Invariants)
+        env:
+          GEMINI_API_KEY: "mock_gemini_key_for_ci"
+          PARALLEL_API_KEY: "mock_parallel_key_for_ci"
         run: |
           pytest tests/ -v
