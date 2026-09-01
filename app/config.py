@@ -8,7 +8,7 @@ class Settings(BaseSettings):
 
     # Gemini AI
     GEMINI_API_KEY: str = ""
-    GEMINI_MODEL: str = "gemini-2.5-pro"
+    GEMINI_MODEL: str = "gemini-3.6-flash"
 
     # Parallel Search API
     PARALLEL_API_KEY: str = ""
