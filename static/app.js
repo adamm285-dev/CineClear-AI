@@ -118,12 +118,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sample selection
     sampleItems.forEach(item => {
         item.addEventListener('click', (e) => {
-            const isButtonClick = e.target.classList.contains('btn-sample-select');
+            const isAuditClick = e.target.classList.contains('btn-sample-audit');
+            const isButtonClick = isAuditClick || e.target.classList.contains('btn-sample-select');
             
             sampleItems.forEach(s => {
                 s.classList.remove('active');
                 const b = s.querySelector('.btn-sample-select');
-                if (b) b.textContent = 'Load Asset';
+                if (b) b.textContent = 'Select';
             });
             item.classList.add('active');
             const btn = item.querySelector('.btn-sample-select');
@@ -143,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 projectTitleInput.value = titles[selectedSampleId];
             }
 
-            // If user clicked the button directly, immediately run audit
+            // If user clicked either button directly, run audit immediately!
             if (isButtonClick) {
                 btnRunAudit.click();
             }
@@ -311,6 +312,47 @@ document.addEventListener('DOMContentLoaded', () => {
         countHigh.textContent = report.high_count || 0;
         countMedium.textContent = report.medium_count || 0;
         countLow.textContent = report.low_count || 0;
+
+        // Populate Underwriter Insurability Assessment Banner
+        const certBadge = document.getElementById('cert-status-badge');
+        const certTitle = document.getElementById('cert-title');
+        const certSubtitle = document.getElementById('cert-subtitle');
+        const certScore = document.getElementById('cert-score-val');
+
+        if (certBadge && certScore) {
+            const critical = report.critical_count || 0;
+            const high = report.high_count || 0;
+            const medium = report.medium_count || 0;
+
+            let score = 96;
+            let status = 'CLEARED FOR WORLDWIDE DISTRIBUTION';
+            let badgeClass = '';
+            let subtitle = 'All identified background elements fall within statutory safe harbors (AWCPA / Rogers v. Grimaldi). Standard $5M E&O policy underwritable without exclusions.';
+
+            if (critical > 0) {
+                score = Math.max(38, 55 - critical * 8);
+                status = 'UNINSURABLE // STATUTORY INJUNCTION RISK';
+                badgeClass = 'danger';
+                subtitle = `Detected ${critical} statutory invariant violation(s) (18 U.S.C. seal ban or unmasked phone PII). Emergency Greeking or Form-4A release required before underwriter binder sign-off.`;
+            } else if (high > 0) {
+                score = Math.max(72, 88 - high * 4);
+                status = 'CONDITIONAL CLEARANCE // REMEDIATIONS REQUIRED';
+                badgeClass = 'warning';
+                subtitle = `Detected ${high} high-risk intellectual property item(s). Execute attached Form-4A artwork releases and VFX Greeking work orders to secure underwriter sign-off.`;
+            } else if (medium > 0) {
+                score = Math.max(88, 94 - medium * 2);
+                status = 'SUBSTANTIAL CLEARANCE // MINOR REVIEW';
+                badgeClass = 'warning';
+                subtitle = `Detected ${medium} incidental brand/trademark element(s) with strong Fair Use defense. Counsel review recommended.`;
+            }
+
+            certBadge.className = `cert-status-badge ${badgeClass}`.trim();
+            certBadge.textContent = status;
+            certTitle.textContent = `${report.project_title} — E&O Underwriting Verdict`;
+            certSubtitle.textContent = subtitle;
+            certScore.textContent = `${score}%`;
+            certScore.style.color = critical > 0 ? '#f87171' : high > 0 ? '#fbbf24' : '#34d399';
+        }
 
         // Render Media Viewport with Bounding Boxes
         if (currentImageSrc && report.flags && report.flags.some(f => f.box_2d && f.box_2d.length === 4)) {

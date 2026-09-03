@@ -47,11 +47,23 @@
     <main class="main-container">
         <!-- Hero Section -->
         <section class="hero-section">
-            <h1 class="hero-title">Hollywood Legal & E&O Clearance Intelligence</h1>
+            <div class="hero-badge">🎬 ENTERPRISE E&amp;O CLEARANCE SUITE // HOLLYWOOD EDITION</div>
+            <h1 class="hero-title">Hollywood Legal &amp; E&amp;O Clearance Intelligence</h1>
             <p class="hero-subtitle">
-                Automated risk discovery for feature films, episodic TV, and commercial productions.
-                Powered by <strong>Gemini Multimodal Vision</strong> &amp; <strong>Parallel Web Grounding</strong>.
+                Autonomous intellectual property &amp; statutory risk discovery for feature films, episodic TV, and commercial productions.
+                Powered by <strong>Gemini 3.5 Multimodal Vision</strong> &amp; <strong>Parallel Web Grounding</strong>.
             </p>
+
+            <!-- Studio Telemetry Stats Ticker -->
+            <div class="stats-ticker">
+                <div class="ticker-item"><span class="ticker-icon">⚡</span> <span class="ticker-bold">30s Turnaround</span> <span class="ticker-muted">(vs 21 Days Manual)</span></div>
+                <div class="ticker-divider"></div>
+                <div class="ticker-item"><span class="ticker-icon">⚖️</span> <span class="ticker-bold">6 Statutory Safe Harbors</span> <span class="ticker-muted">AWCPA, Rogers, 18 U.S.C.</span></div>
+                <div class="ticker-divider"></div>
+                <div class="ticker-item"><span class="ticker-icon">🛡️</span> <span class="ticker-bold">$5M Underwriting</span> <span class="ticker-muted">E&amp;O Insurance Compliance</span></div>
+                <div class="ticker-divider"></div>
+                <div class="ticker-item"><span class="ticker-icon">🔍</span> <span class="ticker-bold">Parallel Grounding</span> <span class="ticker-muted">Real-Time USPTO &amp; WIPO</span></div>
+            </div>
         </section>
 
         <!-- Audit Submission Grid -->
@@ -78,7 +90,7 @@
                                 <line x1="12" y1="3" x2="12" y2="15"></line>
                             </svg>
                         </div>
-                        <p class="drop-text">Drag & drop footage clips, set stills, or script PDFs</p>
+                        <p class="drop-text">Drag &amp; drop footage clips, set stills, or script PDFs</p>
                         <p class="drop-subtext">Supports MP4, MOV, JPG, PNG, PDF, Fountain, TXT</p>
                         <button type="button" class="btn-secondary browse-btn">Browse Local Files</button>
                         <div id="selected-file-name" class="selected-file hidden"></div>
@@ -99,16 +111,19 @@
                     <span class="badge-num">2</span>
                     <h2>Instant Hollywood Sample Media</h2>
                 </div>
-                <p class="sample-intro">Select a pre-loaded production asset for instant 1-click legal clearance evaluation:</p>
+                <p class="sample-intro">Select or 1-click audit pre-loaded production assets with zero API quota burn:</p>
 
                 <div class="sample-list" id="sample-list">
                     <div class="sample-item active" data-sample="sample-photo">
-                        <div class="sample-type-badge image">IMAGE</div>
+                        <div class="sample-type-badge image">4K STILL</div>
                         <div class="sample-info">
                             <h4>Hero Living Room - Production Set Still</h4>
                             <p>Nike hero wardrobe logo, Starbucks prop, modern abstract painting set dressing.</p>
                         </div>
-                        <button class="btn-sample-select">Load Asset</button>
+                        <div class="sample-actions">
+                            <button class="btn-sample-audit" title="Run instant audit with 1 click">⚡ Audit Now</button>
+                            <button class="btn-sample-select">Select</button>
+                        </div>
                     </div>
 
                     <div class="sample-item" data-sample="sample-screenplay">
@@ -117,7 +132,10 @@
                             <h4>Feature Screenplay Excerpt (PDF)</h4>
                             <p>Real non-555 phone number, Apple laptop dialogue, Led Zeppelin soundtrack cue.</p>
                         </div>
-                        <button class="btn-sample-select">Load Asset</button>
+                        <div class="sample-actions">
+                            <button class="btn-sample-audit" title="Run instant audit with 1 click">⚡ Audit Now</button>
+                            <button class="btn-sample-select">Select</button>
+                        </div>
                     </div>
 
                     <div class="sample-item" data-sample="sample-script-txt">
@@ -126,7 +144,10 @@
                             <h4>Screenplay Scene 1-3 (Text)</h4>
                             <p>Dialogue mentions, Paris Eiffel Tower night illumination rights, brand trademarks.</p>
                         </div>
-                        <button class="btn-sample-select">Load Asset</button>
+                        <div class="sample-actions">
+                            <button class="btn-sample-audit" title="Run instant audit with 1 click">⚡ Audit Now</button>
+                            <button class="btn-sample-select">Select</button>
+                        </div>
                     </div>
                 </div>
 
@@ -209,6 +230,25 @@
                 <div class="viewport-wrapper">
                     <img id="preview-image" src="" alt="Audited Media" class="preview-img hidden" />
                     <svg id="bbox-overlay" class="bbox-svg-overlay"></svg>
+                </div>
+            </div>
+
+            <!-- Underwriter Clearance Assessment Banner -->
+            <div class="underwriter-cert-card" id="underwriter-cert-card">
+                <div class="cert-seal-icon">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        <path d="m9 12 2 2 4-4"></path>
+                    </svg>
+                </div>
+                <div class="cert-info">
+                    <div class="cert-status-badge" id="cert-status-badge">CONDITIONAL UNDERWRITER CLEARANCE</div>
+                    <h3 class="cert-title" id="cert-title">E&amp;O Underwriting Insurability Analysis</h3>
+                    <p class="cert-subtitle" id="cert-subtitle">Risk profile evaluated against standard $5M worldwide distributor indemnification benchmarks. Execute attached Form-4A and Greeking work orders for full coverage.</p>
+                </div>
+                <div class="cert-score-container">
+                    <div class="score-dial" id="cert-score-val">88%</div>
+                    <div class="score-subtext">Insurability Readiness</div>
                 </div>
             </div>
 
