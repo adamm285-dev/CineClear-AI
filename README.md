@@ -3,12 +3,14 @@
 
 [![CineClear AI CI Suite](https://github.com/adamm285-dev/CineClear-AI/actions/workflows/ci.yml/badge.svg)](https://github.com/adamm285-dev/CineClear-AI/actions)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Python: 3.11+](https://img.shields.io/badge/Python-3.11+-brightgreen.svg)](https://python.org)
+[![Live Studio: cineclear.pro](https://img.shields.io/badge/Live_Studio-cineclear.pro-8b5cf6.svg)](https://cineclear.pro?access=cineclear-judge-2026)
 [![Track: Parallel Search](https://img.shields.io/badge/Hackathon_Track-Parallel_Search_($15k)-orange.svg)](https://devpost.com)
-[![Tests: 33/33 Passed](https://img.shields.io/badge/Tests-33%2F33%20Passed-brightgreen.svg)](https://github.com/adamm285-dev/CineClear-AI)
+[![Tests: 35/35 Passed](https://img.shields.io/badge/Tests-35%2F35%20Passed-brightgreen.svg)](https://github.com/adamm285-dev/CineClear-AI)
 
-> **Repository:** [https://github.com/adamm285-dev/CineClear-AI](https://github.com/adamm285-dev/CineClear-AI)  
-> **Build Guide & Live Demo:** Watch the [Parallel Web-Grounded Gemini Agent Build Guide](https://www.youtube.com/watch?v=6BG12veBOII)
+> 🌐 **Live Web Application:** **[https://cineclear.pro](https://cineclear.pro)**  
+> ⚖️ **Direct Judge 1-Click VIP Pass:** **[https://cineclear.pro?access=cineclear-judge-2026](https://cineclear.pro?access=cineclear-judge-2026)** *(Zero-login evaluator access)*  
+> 🎬 **Repository:** [https://github.com/adamm285-dev/CineClear-AI](https://github.com/adamm285-dev/CineClear-AI)  
+> 📺 **Build Guide & Live Demo:** Watch the [Parallel Web-Grounded Gemini Agent Build Guide](https://www.youtube.com/watch?v=6BG12veBOII)
 
 ---
 
@@ -179,6 +181,7 @@ For hackathon judges and evaluators, CineClear AI includes **1-click zero-config
 | **🪟 Windows** | Double-click `run.bat`<br>*(or run `.\run.bat` in PowerShell/CMD)* | 1. Auto-creates isolated virtual environment (`.venv`).<br>2. Verifies & silently installs `requirements.txt`.<br>3. Auto-initializes `.env` from `.env.example`.<br>4. Starts FastAPI server on `http://localhost:8085`.<br>5. **Opens default browser directly to the dashboard.** |
 | **🍎 macOS / 🐧 Linux** | `chmod +x run.sh && ./run.sh`<br>*(or `bash run.sh`)* | Same automated pipeline: provisions `.venv`, installs packages, initializes `.env`, launches server, and opens browser. |
 | **⚡ Python (Any OS)** | `python deploy.py` | Cross-platform Python orchestrator for all environments. |
+| **☁️ Google Cloud Run** | `deploy_cloudrun.bat` *(Win)*<br>`./deploy_cloudrun.sh` *(Mac/Linux)* | 1-command container build & deployment to Google Cloud Run with custom domain `https://cineclear.pro`. |
 | **🐳 Docker (Any OS)** | `docker-compose up` | Single-command containerized deployment with volumes. |
 
 ### 🩺 System Diagnostic Doctor & CLI Flags
@@ -193,7 +196,7 @@ python deploy.py
 # 3. Instant End-to-End Demo Audit (audits bundled production set photo & generates PDF binder)
 python deploy.py --demo
 
-# 4. Full 33-Test Validation Suite (runs complete pytest suite)
+# 4. Full 35-Test Validation Suite (runs complete pytest suite)
 python deploy.py --test
 ```
 
@@ -278,7 +281,7 @@ python main.py --file path/to/footage.mp4 --title "Episode 104"
 
 ## 🧪 Comprehensive Verification Suite
 
-Run all 33 unit, integration, and statutory invariant tests:
+Run all 35 unit, integration, statutory invariant, and Judge auth tests:
 ```bash
 python -m pytest tests/ -v
 ```
@@ -287,37 +290,39 @@ python -m pytest tests/ -v
 tests/test_auditor.py::test_cineclear_auditor_script PASSED              [  3%]
 tests/test_auditor.py::test_cineclear_auditor_image PASSED               [  6%]
 tests/test_auditor.py::test_critic_agent_fixes_nike_hallucination PASSED [  9%]
-tests/test_auditor.py::test_pdf_binder_generation_without_music PASSED   [ 12%]
-tests/test_cascade.py::test_cascade_initialization PASSED                [ 15%]
-tests/test_cascade.py::test_cascade_execution_order PASSED               [ 18%]
-tests/test_cascade.py::test_cascade_offline_fallback PASSED              [ 21%]
-tests/test_cascade.py::test_clean_json_text_and_parse_json_safe PASSED   [ 24%]
-tests/test_edl_exporter.py::test_timecode_and_frame_conversions PASSED   [ 27%]
-tests/test_edl_exporter.py::test_cmx3600_edl_generation PASSED           [ 30%]
-tests/test_fair_use.py::test_fair_use_scorecard_calculation PASSED       [ 33%]
-tests/test_fair_use.py::test_territory_matrix_resolutions PASSED         [ 36%]
-tests/test_harness.py::test_extractor_harness_deduplication PASSED       [ 39%]
-tests/test_harness.py::test_extractor_harness_sanitization PASSED        [ 42%]
-tests/test_harness.py::test_critic_harness_statutory_invariants PASSED   [ 45%]
-tests/test_harness.py::test_critic_harness_phone_pii_clamp PASSED        [ 48%]
-tests/test_harness.py::test_critic_harness_statutory_seal_red_cross_and_fbi_clamp PASSED [ 51%]
-tests/test_harness.py::test_critic_harness_rfc2606_web_domain_safe_harbor PASSED [ 54%]
-tests/test_harness.py::test_critic_harness_awcpa_architecture_safe_harbor PASSED [ 57%]
-tests/test_harness.py::test_critic_harness_prop_currency_compliance PASSED [ 60%]
-tests/test_harness.py::test_rogers_v_grimaldi_artistic_relevance_assessment PASSED [ 63%]
-tests/test_harness.py::test_upl_disclaimer_invariant PASSED              [ 66%]
-tests/test_models.py::test_models_instantiation PASSED                   [ 69%]
-tests/test_models.py::test_fuzzy_category_and_risk_coercion PASSED       [ 72%]
-tests/test_music_arch.py::test_awcpa_public_view_safe_harbor PASSED      [ 75%]
-tests/test_music_arch.py::test_restricted_landmark_detection PASSED      [ 78%]
-tests/test_music_arch.py::test_music_cue_sheet_generation PASSED         [ 81%]
-tests/test_parallel_client.py::test_parallel_search_mock PASSED          [ 84%]
-tests/test_parallel_client.py::test_parallel_search_phone_pii PASSED     [ 87%]
-tests/test_remediation.py::test_remediation_agent_generates_releases_and_vfx_orders PASSED [ 90%]
-tests/test_server.py::test_health_endpoint PASSED                        [ 93%]
-tests/test_server.py::test_samples_endpoint PASSED                       [ 96%]
-tests/test_server.py::test_audit_sample_photo PASSED                     [100%]
-================== 33 passed, 1 warning in 2.34s ==================
+tests/test_auditor.py::test_pdf_binder_generation_without_music PASSED   [ 11%]
+tests/test_cascade.py::test_cascade_initialization PASSED                [ 14%]
+tests/test_cascade.py::test_cascade_execution_order PASSED               [ 17%]
+tests/test_cascade.py::test_cascade_offline_fallback PASSED              [ 20%]
+tests/test_cascade.py::test_clean_json_text_and_parse_json_safe PASSED   [ 23%]
+tests/test_edl_exporter.py::test_timecode_and_frame_conversions PASSED   [ 26%]
+tests/test_edl_exporter.py::test_cmx3600_edl_generation PASSED           [ 29%]
+tests/test_fair_use.py::test_fair_use_scorecard_calculation PASSED       [ 31%]
+tests/test_fair_use.py::test_territory_matrix_resolutions PASSED         [ 34%]
+tests/test_harness.py::test_extractor_harness_deduplication PASSED       [ 37%]
+tests/test_harness.py::test_extractor_harness_sanitization PASSED        [ 40%]
+tests/test_harness.py::test_critic_harness_statutory_invariants PASSED   [ 43%]
+tests/test_harness.py::test_critic_harness_phone_pii_clamp PASSED        [ 46%]
+tests/test_harness.py::test_critic_harness_statutory_seal_red_cross_and_fbi_clamp PASSED [ 49%]
+tests/test_harness.py::test_critic_harness_rfc2606_web_domain_safe_harbor PASSED [ 51%]
+tests/test_harness.py::test_critic_harness_awcpa_architecture_safe_harbor PASSED [ 54%]
+tests/test_harness.py::test_critic_harness_prop_currency_compliance PASSED [ 57%]
+tests/test_harness.py::test_rogers_v_grimaldi_artistic_relevance_assessment PASSED [ 60%]
+tests/test_harness.py::test_upl_disclaimer_invariant PASSED              [ 63%]
+tests/test_models.py::test_models_instantiation PASSED                   [ 66%]
+tests/test_models.py::test_fuzzy_category_and_risk_coercion PASSED       [ 69%]
+tests/test_music_arch.py::test_awcpa_public_view_safe_harbor PASSED      [ 71%]
+tests/test_music_arch.py::test_restricted_landmark_detection PASSED      [ 74%]
+tests/test_music_arch.py::test_music_cue_sheet_generation PASSED         [ 77%]
+tests/test_parallel_client.py::test_parallel_search_mock PASSED          [ 80%]
+tests/test_parallel_client.py::test_parallel_search_phone_pii PASSED     [ 83%]
+tests/test_remediation.py::test_remediation_agent_generates_releases_and_vfx_orders PASSED [ 86%]
+tests/test_server.py::test_health_endpoint PASSED                        [ 89%]
+tests/test_server.py::test_samples_endpoint PASSED                       [ 91%]
+tests/test_server.py::test_audit_sample_photo PASSED                     [ 94%]
+tests/test_server.py::test_judge_auth_verify_endpoint PASSED             [ 97%]
+tests/test_server.py::test_protected_upload_requires_judge_key_when_configured PASSED [100%]
+================== 35 passed, 1 warning in 2.45s ==================
 ```
 
 ---

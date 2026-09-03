@@ -8,6 +8,74 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnRunAudit = document.getElementById('btn-run-audit');
     const sampleItems = document.querySelectorAll('.sample-item');
     
+    // Judge VIP Modal Elements
+    const judgeStatusPill = document.getElementById('judge-status');
+    const judgeStatusText = document.getElementById('judge-status-text');
+    const judgeDot = document.getElementById('judge-dot');
+    const judgeModal = document.getElementById('judge-modal');
+    const closeJudgeModal = document.getElementById('close-judge-modal');
+    const cancelJudgeModal = document.getElementById('cancel-judge-modal');
+    const saveJudgePasskey = document.getElementById('save-judge-passkey');
+    const judgePasskeyInput = document.getElementById('judge-passkey-input');
+
+    // Check URL parameters for judge access (?access=... or ?passcode=...)
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryAccessKey = urlParams.get('access') || urlParams.get('passcode') || urlParams.get('key');
+    if (queryAccessKey) {
+        localStorage.setItem('cineclear_judge_passkey', queryAccessKey);
+    } else if (!localStorage.getItem('cineclear_judge_passkey')) {
+        // Auto-set default judge token for hackathon testing
+        localStorage.setItem('cineclear_judge_passkey', 'cineclear-judge-2026');
+    }
+
+    function getJudgePasskey() {
+        return localStorage.getItem('cineclear_judge_passkey') || 'cineclear-judge-2026';
+    }
+
+    function isJudgeAuthActive() {
+        return Boolean(localStorage.getItem('cineclear_judge_passkey'));
+    }
+
+    function updateJudgeUI() {
+        if (!judgeStatusPill) return;
+        if (isJudgeAuthActive()) {
+            judgeStatusPill.classList.add('active-vip');
+            judgeStatusPill.classList.remove('locked-guest');
+            if (judgeDot) judgeDot.className = 'pulse-dot active';
+            if (judgeStatusText) judgeStatusText.textContent = '⚖️ Judge VIP Active';
+        } else {
+            judgeStatusPill.classList.remove('active-vip');
+            judgeStatusPill.classList.add('locked-guest');
+            if (judgeDot) judgeDot.className = 'pulse-dot';
+            if (judgeStatusText) judgeStatusText.textContent = '🔓 Unlock Judge Pass';
+        }
+    }
+    updateJudgeUI();
+
+    if (judgeStatusPill) {
+        judgeStatusPill.addEventListener('click', () => {
+            if (judgePasskeyInput) {
+                judgePasskeyInput.value = getJudgePasskey();
+            }
+            judgeModal.style.display = 'flex';
+        });
+    }
+
+    if (closeJudgeModal) {
+        closeJudgeModal.addEventListener('click', () => judgeModal.style.display = 'none');
+    }
+    if (cancelJudgeModal) {
+        cancelJudgeModal.addEventListener('click', () => judgeModal.style.display = 'none');
+    }
+    if (saveJudgePasskey) {
+        saveJudgePasskey.addEventListener('click', () => {
+            const key = judgePasskeyInput.value.trim() || 'cineclear-judge-2026';
+            localStorage.setItem('cineclear_judge_passkey', key);
+            updateJudgeUI();
+            judgeModal.style.display = 'none';
+        });
+    }
+    
     // Views
     const processingView = document.getElementById('processing-view');
     const resultsView = document.getElementById('results-view');
@@ -158,12 +226,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 formData.append('sample_id', 'sample-photo');
             }
 
+            const headers = {};
+            const judgeKey = getJudgePasskey();
+            if (judgeKey) {
+                headers['X-Judge-Access'] = judgeKey;
+            }
+
             const response = await fetch('/api/audit', {
                 method: 'POST',
+                headers: headers,
                 body: formData
             });
 
             if (!response.ok) {
+                if (response.status === 401) {
+                    processingView.classList.add('hidden');
+                    judgeModal.style.display = 'flex';
+                    if (judgePasskeyInput) judgePasskeyInput.focus();
+                    return;
+                }
                 const errData = await response.json();
                 throw new Error(errData.detail || 'Audit processing failed');
             }

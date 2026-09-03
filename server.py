@@ -5,7 +5,7 @@ import uuid
 import logging
 from pathlib import Path
 from typing import Dict, Any, List, Optional
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTasks, Response
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTasks, Response, Header, Query
 from fastapi.responses import FileResponse, JSONResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -94,15 +94,36 @@ async def list_sample_media():
     ]
 
 
+@app.get("/api/auth/verify")
+async def verify_judge_auth(
+    authorization: Optional[str] = Header(None),
+    x_judge_access: Optional[str] = Header(None),
+    access: Optional[str] = Query(None)
+):
+    """Validates whether client holds valid Hackathon Judge VIP access."""
+    candidate = x_judge_access or access or authorization
+    is_valid = settings.is_judge_authenticated(candidate)
+    return {
+        "authenticated": is_valid,
+        "auth_required_for_uploads": settings.REQUIRE_JUDGE_AUTH_FOR_UPLOADS,
+        "role": "VIP_JUDGE" if is_valid else "PUBLIC_GUEST"
+    }
+
+
 @app.post("/api/audit")
 async def audit_media_endpoint(
     project_title: str = Form("Untitled Production"),
     media_type: str = Form("auto"),
     sample_id: Optional[str] = Form(None),
+    access_key: Optional[str] = Form(None),
+    authorization: Optional[str] = Header(None),
+    x_judge_access: Optional[str] = Header(None),
     file: Optional[UploadFile] = File(None)
 ):
     """
     Submits a media file or sample asset for multimodal vision analysis & Parallel search legal grounding.
+    Public visitors can instantly audit bundled Hollywood sample assets.
+    Custom footage uploads are protected by the Judge VIP Pass to prevent automated API quota abuse.
     """
     file_path_to_analyze: Optional[Path] = None
 
@@ -123,6 +144,15 @@ async def audit_media_endpoint(
             raise HTTPException(status_code=400, detail=f"Unknown sample ID: {sample_id}")
 
     elif file:
+        # Check Judge VIP Pass for live file uploads
+        candidate = x_judge_access or access_key or authorization
+        if not settings.is_judge_authenticated(candidate):
+            raise HTTPException(
+                status_code=401,
+                detail="Judge Access Required: Custom footage uploads require judge VIP pass. "
+                       "Open https://cineclear.pro?access=cineclear-judge-2026 or enter the judge passkey in the header."
+            )
+
         raw_name = Path(file.filename or "uploaded_media").name
         clean_name = re.sub(r'[^a-zA-Z0-9_.-]', '_', raw_name) or "uploaded_media"
         safe_filename = f"{uuid.uuid4().hex[:8]}_{clean_name}"

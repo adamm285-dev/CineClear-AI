@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import Optional, List
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -14,6 +15,10 @@ class Settings(BaseSettings):
     # Parallel Search API
     PARALLEL_API_KEY: str = ""
     PARALLEL_BASE_URL: str = "https://api.parallel.ai/v1"
+
+    # Judge VIP Access Gate (Protects live uploads without login friction)
+    JUDGE_ACCESS_KEY: str = "cineclear-judge-2026"
+    REQUIRE_JUDGE_AUTH_FOR_UPLOADS: bool = False
 
     # Server Settings
     HOST: str = "0.0.0.0"
@@ -38,6 +43,16 @@ class Settings(BaseSettings):
 
     def is_parallel_configured(self) -> bool:
         return bool(self.PARALLEL_API_KEY and self.PARALLEL_API_KEY.strip() and self.PARALLEL_API_KEY != "your_parallel_api_key_here")
+
+    def is_judge_authenticated(self, candidate: Optional[str]) -> bool:
+        if not self.REQUIRE_JUDGE_AUTH_FOR_UPLOADS:
+            return True
+        if not candidate:
+            return False
+        clean = candidate.strip()
+        if clean.lower().startswith("bearer "):
+            clean = clean[7:].strip()
+        return clean.lower() == self.JUDGE_ACCESS_KEY.strip().lower()
 
 
 settings = Settings()

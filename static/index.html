@@ -27,9 +27,13 @@
             </div>
             
             <div class="status-badges">
+                <div class="status-pill judge-vip" id="judge-status" title="Click to manage Hackathon Judge Access">
+                    <span class="pulse-dot" id="judge-dot"></span>
+                    <span id="judge-status-text">⚖️ Judge VIP Active</span>
+                </div>
                 <div class="status-pill" id="gemini-status">
                     <span class="pulse-dot"></span>
-                    <span>Gemini 3.6 Flash Active</span>
+                    <span>Gemini 3.5 Flash Active</span>
                 </div>
                 <div class="status-pill parallel" id="parallel-status">
                     <span class="pulse-dot active"></span>
@@ -260,6 +264,33 @@
             </div>
         </div>
     </main>
+
+    <!-- Judge VIP Access Modal -->
+    <div class="modal-overlay" id="judge-modal" style="display: none;">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <div class="modal-icon">⚖️</div>
+                <div>
+                    <h3 style="margin: 0; font-size: 1.15rem; color: #fff;">Hackathon Judge VIP Pass</h3>
+                    <p style="margin: 2px 0 0; font-size: 0.8rem; color: #94a3b8;">Instant 1-click access for custom footage &amp; screenplay audits</p>
+                </div>
+                <button class="modal-close" id="close-judge-modal">&times;</button>
+            </div>
+            <div class="modal-body" style="padding-top: 12px;">
+                <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.4; margin-bottom: 14px;">
+                    Public guests can audit all bundled Hollywood sample sets with zero limits. To unlock live multimodal file uploads, enter the judge passkey below (pre-filled for hackathon evaluators):
+                </p>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label for="judge-passkey-input" style="font-size: 0.8rem; color: #a5b4fc; font-weight: 600;">Judge Passkey</label>
+                    <input type="text" id="judge-passkey-input" class="input-field" value="cineclear-judge-2026" placeholder="Enter judge passkey">
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button class="btn btn-secondary" id="cancel-judge-modal" style="padding: 8px 16px;">Cancel</button>
+                    <button class="btn btn-primary" id="save-judge-passkey" style="padding: 8px 20px;">Activate Judge Pass</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
