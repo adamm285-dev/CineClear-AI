@@ -118,17 +118,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sample selection
     sampleItems.forEach(item => {
         item.addEventListener('click', (e) => {
-            const isAuditClick = e.target.classList.contains('btn-sample-audit');
-            const isButtonClick = isAuditClick || e.target.classList.contains('btn-sample-select');
-            
-            sampleItems.forEach(s => {
-                s.classList.remove('active');
-                const b = s.querySelector('.btn-sample-select');
-                if (b) b.textContent = 'Select';
-            });
+            sampleItems.forEach(s => s.classList.remove('active'));
             item.classList.add('active');
-            const btn = item.querySelector('.btn-sample-select');
-            if (btn) btn.textContent = '✓ Ready';
             
             selectedSampleId = item.getAttribute('data-sample');
             selectedFile = null;
@@ -144,10 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 projectTitleInput.value = titles[selectedSampleId];
             }
 
-            // If user clicked either button directly, run audit immediately!
-            if (isButtonClick) {
-                btnRunAudit.click();
-            }
+            // 1-Click execution: selecting a sample runs the audit immediately!
+            btnRunAudit.click();
         });
     });
 
