@@ -9,7 +9,7 @@ system:
   runtime: "Python 3.13"
   framework: "FastAPI + Uvicorn"
   default_port: 8085
-  ai_brain: "Google Gemini 3.5 Flash Lite (High-Quota 1,500 req/day Tier)"
+  ai_brain: "Google Gemini 3.8 Flash (High-Quota 1,500 req/day Tier)"
   search_engine: "Parallel Semantic Search API (v1)"
   pdf_engine: "ReportLab 5.0.1"
   script_engine: "PyMuPDF (fitz) + pdfplumber"
