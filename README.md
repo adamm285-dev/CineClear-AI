@@ -97,13 +97,15 @@ CineClear AI utilizes a **Dynamic Model Cascade** ladder that catches `429 RESOU
 ┌────────────────────────────────────────────────────────────────────────┐
 │                        DYNAMIC MODEL CASCADE LADDER                    │
 ├────────┬─────────────────────────┬─────────────────────────────────────┤
-│ TIER 1 │ gemini-3.5-flash        │ High-Acuity Visual & Spatial Target │
+│ TIER 1 │ gemini-3.8-flash        │ Next-Gen Flagship Multimodal Target │
 ├────────┼─────────────────────────┼─────────────────────────────────────┤
-│ TIER 2 │ gemini-3.5-flash-lite   │ Lightweight Multimodal Reasoning    │
+│ TIER 2 │ gemini-3.5-flash        │ High-Acuity Visual & Spatial Target │
 ├────────┼─────────────────────────┼─────────────────────────────────────┤
-│ TIER 3 │ gemini-3.6-flash        │ High-Quota Production Tier          │
+│ TIER 3 │ gemini-3.5-flash-lite   │ Lightweight Multimodal Reasoning    │
 ├────────┼─────────────────────────┼─────────────────────────────────────┤
-│ TIER 4 │ gemini-flash-latest     │ High-Throughput Cloud Fallback      │
+│ TIER 4 │ gemini-3.6-flash        │ High-Quota Production Tier          │
+├────────┼─────────────────────────┼─────────────────────────────────────┤
+│ TIER 5 │ gemini-flash-latest     │ High-Throughput Cloud Fallback      │
 ├────────┴─────────────────────────┴─────────────────────────────────────┤
 │                              THE BEDROCK                               │
 │           Deterministic Python Extractor & Critic Harnesses            │

@@ -4,7 +4,8 @@ from app.gemini_cascade import GeminiCascadeClient, DEFAULT_MODEL_LADDER
 
 def test_cascade_initialization():
     cascade = GeminiCascadeClient()
-    assert len(cascade.ladder) == 4
+    assert len(cascade.ladder) == 5
+    assert cascade.ladder[0] == "gemini-3.8-flash"
     assert "gemini-3.5-flash" in cascade.ladder
     assert "gemini-3.6-flash" in cascade.ladder
 
