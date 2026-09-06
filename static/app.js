@@ -223,7 +223,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const response = await fetch('/api/audit/stream', {
                 method: 'POST',
-                headers: headers,
+                cache: 'no-store',
+                headers: { ...headers, 'Accept': 'text/event-stream' },
                 body: formData
             });
 
@@ -283,8 +284,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         lines.forEach(l => l.classList.remove('completed'));
         if (bar) bar.style.width = '4%';
+        if (steps[0]) steps[0].className = 'step-item running';
         if (processingStepLabel) {
-            processingStepLabel.textContent = 'Waiting for engine stage 1...';
+            processingStepLabel.textContent = 'Connecting to clearance engine...';
         }
     }
 
@@ -337,14 +339,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const { done, value } = await reader.read();
             if (done) break;
             buffer += decoder.decode(value, { stream: true });
-            const lines = buffer.split('\n');
-            buffer = lines.pop() || '';
-            for (const line of lines) {
-                const trimmed = line.trim();
-                if (!trimmed) continue;
+            const frames = buffer.split('\n\n');
+            buffer = frames.pop() || '';
+            for (const frame of frames) {
+                const dataLines = frame
+                    .split('\n')
+                    .filter((line) => line.startsWith('data:'))
+                    .map((line) => line.slice(5).trim());
+                const payload = dataLines.join('\n') || frame.trim();
+                if (!payload || payload.startsWith(':')) continue;
                 let evt;
                 try {
-                    evt = JSON.parse(trimmed);
+                    evt = JSON.parse(payload);
                 } catch (_) {
                     continue;
                 }
@@ -359,12 +365,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (!report && buffer.trim()) {
+            const dataLines = buffer
+                .split('\n')
+                .filter((line) => line.startsWith('data:'))
+                .map((line) => line.slice(5).trim());
+            const payload = dataLines.join('\n') || buffer.trim();
             try {
-                const evt = JSON.parse(buffer.trim());
+                const evt = JSON.parse(payload);
                 if (evt.type === 'complete') report = evt.report;
                 if (evt.type === 'error') throw new Error(evt.message || 'Audit processing failed');
             } catch (e) {
-                if (e.message && e.message !== 'Audit processing failed') throw e;
+                if (e.message && !e.message.includes('JSON')) throw e;
             }
         }
 

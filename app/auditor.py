@@ -300,13 +300,24 @@ class CineClearAuditor:
                 rogers_assessment=rogers_assessment
             )
 
+        total = max(1, len(candidate_items))
         await emit(
             2,
             "running",
-            f"Stage 2/4: Parallel Search grounding {len(candidate_items)} entities (USPTO / copyright)...",
+            f"Stage 2/4: Parallel Search + Gemini synthesis on {len(candidate_items)} entities...",
             40,
         )
-        grounded_flags = await asyncio.gather(*[_ground_candidate(c) for c in candidate_items])
+        grounded_flags: List[ClearanceFlag] = []
+        if candidate_items:
+            tasks = [asyncio.create_task(_ground_candidate(c)) for c in candidate_items]
+            for i, fut in enumerate(asyncio.as_completed(tasks), 1):
+                grounded_flags.append(await fut)
+                await emit(
+                    2,
+                    "running",
+                    f"Stage 2/4: Grounded {i}/{len(tasks)} entities (Parallel Search + Gemini)...",
+                    40 + int(18 * i / total),
+                )
         await emit(
             2,
             "done",

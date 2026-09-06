@@ -7,7 +7,7 @@ import asyncio
 import logging
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTasks, Response, Header, Query
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTasks, Response, Header, Query, Request
 from fastapi.responses import FileResponse, JSONResponse, HTMLResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -46,6 +46,18 @@ auditor = CineClearAuditor()
 STATIC_DIR = settings.BASE_DIR / "static"
 STATIC_DIR.mkdir(parents=True, exist_ok=True)
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+
+
+@app.middleware("http")
+async def disable_chrome_asset_cache(request: Request, call_next):
+    """Chrome caches /static/app.js aggressively; Opera often does not."""
+    response = await call_next(request)
+    path = request.url.path
+    if path == "/" or path.endswith((".js", ".css", ".html")):
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+    return response
 
 # Mount sample media directory for image previews
 ensure_sample_media(settings.SAMPLE_MEDIA_DIR)
@@ -220,8 +232,21 @@ async def audit_media_stream_endpoint(
 
     logger.info(f"Streaming clearance audit for: {file_path_to_analyze.name} (Project: {project_title})")
 
+    def _sse_bytes(evt: Dict[str, Any]) -> bytes:
+        """SSE frame padded so Cloud Run / GFE flush each engine stage immediately."""
+        payload = json.dumps(evt, default=str)
+        pad = ":" + ("." * 2048) + "\n"
+        return f"{pad}data: {payload}\n\n".encode("utf-8")
+
     async def event_gen():
         queue: asyncio.Queue = asyncio.Queue()
+        yield _sse_bytes({
+            "type": "stage",
+            "step": 1,
+            "status": "running",
+            "label": "Stage 1/4: Engine connected — starting Gemini extraction...",
+            "progress": 6,
+        })
 
         async def on_progress(evt: Dict[str, Any]):
             await queue.put(evt)
@@ -250,15 +275,16 @@ async def audit_media_stream_endpoint(
                 evt = await queue.get()
                 if evt is None:
                     break
-                yield json.dumps(evt) + "\n"
+                yield _sse_bytes(evt)
         finally:
             await task
 
     return StreamingResponse(
         event_gen(),
-        media_type="application/x-ndjson",
+        media_type="text/event-stream",
         headers={
-            "Cache-Control": "no-cache",
+            "Cache-Control": "no-cache, no-transform",
+            "Connection": "keep-alive",
             "X-Accel-Buffering": "no",
         },
     )
@@ -353,7 +379,10 @@ async def serve_dashboard():
     """Serves the CineClear AI interactive Hollywood dark-mode web dashboard."""
     index_file = STATIC_DIR / "index.html"
     if index_file.exists():
-        return HTMLResponse(content=index_file.read_text(encoding="utf-8"))
+        return HTMLResponse(
+            content=index_file.read_text(encoding="utf-8"),
+            headers={"Cache-Control": "no-cache, no-store, must-revalidate"},
+        )
     return HTMLResponse(content="<h1>CineClear AI API is running.</h1><p>Visit /static/index.html or /docs</p>")
 
 

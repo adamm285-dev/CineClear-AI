@@ -93,7 +93,17 @@ async def test_audit_stream_emits_engine_stages_then_report():
             async for chunk in response.aiter_text():
                 body += chunk
 
-    events = [json.loads(line) for line in body.splitlines() if line.strip()]
+    events = []
+    for frame in body.split("\n\n"):
+        data_lines = [
+            line[5:].strip()
+            for line in frame.splitlines()
+            if line.startswith("data:")
+        ]
+        payload = "\n".join(data_lines).strip()
+        if not payload:
+            continue
+        events.append(json.loads(payload))
     types = [e.get("type") for e in events]
     assert "stage" in types
     assert types[-1] == "complete"
