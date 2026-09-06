@@ -238,6 +238,12 @@ async def serve_dashboard():
 
 if __name__ == "__main__":
     import uvicorn
+    print("\n" + "=" * 65)
+    print("   🎬 CineClear AI // Hollywood Legal & E&O Clearance Suite")
+    print("=" * 65)
+    print(f"  💻 Local Development:  http://localhost:{settings.PORT}")
+    print(f"  🌐 Live Cloud Run:     https://cineclear.pro")
+    print("=" * 65 + "\n")
     uvicorn.run(
         "server:app",
         host=settings.HOST,
