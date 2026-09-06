@@ -1,7 +1,10 @@
 import json
 import pytest
 from httpx import AsyncClient, ASGITransport
+from app.config import settings
 from server import app
+
+JUDGE_HEADERS = {"X-Judge-Access": settings.JUDGE_ACCESS_KEY}
 
 
 @pytest.mark.asyncio
@@ -72,6 +75,7 @@ async def test_audit_sample_screenplay_pdf_exists_or_is_created():
         async with AsyncClient(transport=transport, base_url="http://test") as client:
             response = await client.post(
                 "/api/audit",
+                headers=JUDGE_HEADERS,
                 data={
                     "project_title": "Feature Screenplay Excerpt",
                     "sample_id": "sample-screenplay",
@@ -96,6 +100,7 @@ async def test_audit_stream_emits_engine_stages_then_report():
         async with client.stream(
             "POST",
             "/api/audit/stream",
+            headers=JUDGE_HEADERS,
             data={
                 "project_title": "Streamed Studio Audit",
                 "sample_id": "sample-photo",
@@ -135,6 +140,7 @@ async def test_audit_sample_photo():
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         response = await client.post(
             "/api/audit",
+            headers=JUDGE_HEADERS,
             data={
                 "project_title": "Hollywood Test Studio",
                 "sample_id": "sample-photo",
@@ -239,9 +245,16 @@ async def test_protected_upload_requires_judge_key_when_configured():
         settings.REQUIRE_JUDGE_AUTH_FOR_UPLOADS = True
         transport = ASGITransport(app=app)
         async with AsyncClient(transport=transport, base_url="http://test") as client:
-            # 1. Public sample audit continues to work freely
+            # 1. Sample audit without VIP pass is blocked (protects Gemini/Parallel quota)
+            res_sample_unauth = await client.post(
+                "/api/audit",
+                data={"project_title": "Public Sample", "sample_id": "sample-photo"}
+            )
+            assert res_sample_unauth.status_code == 401
+
             res_sample = await client.post(
                 "/api/audit",
+                headers={"X-Judge-Access": settings.JUDGE_ACCESS_KEY},
                 data={"project_title": "Public Sample", "sample_id": "sample-photo"}
             )
             assert res_sample.status_code == 200

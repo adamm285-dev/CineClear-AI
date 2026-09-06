@@ -7,10 +7,24 @@
 [![Track: Parallel Search](https://img.shields.io/badge/Hackathon_Track-Parallel_Search_($15k)-orange.svg)](https://devpost.com)
 [![Tests: 35/35 Passed](https://img.shields.io/badge/Tests-35%2F35%20Passed-brightgreen.svg)](https://github.com/adamm285-dev/CineClear-AI)
 
-> 🌐 **Live Web Application:** **[https://cineclear.pro](https://cineclear.pro)**  
-> ⚖️ **Direct Judge 1-Click VIP Pass:** **[https://cineclear.pro?access=cineclear-judge-2026](https://cineclear.pro?access=cineclear-judge-2026)** *(Zero-login evaluator access)*  
-> 🎬 **Repository:** [https://github.com/adamm285-dev/CineClear-AI](https://github.com/adamm285-dev/CineClear-AI)  
-> 📺 **Build Guide & Live Demo:** Watch the [Parallel Web-Grounded Gemini Agent Build Guide](https://www.youtube.com/watch?v=6BG12veBOII)
+---
+
+## ⚖️ Hackathon judges — start here (no account, no signup)
+
+Live Gemini 3.8 and Parallel Search audits are **gated**. Random visitors cannot burn API quota. Evaluators unlock the studio with a one-click URL (it stores a VIP pass in the browser; there is no username/password).
+
+1. **Open the Judge VIP link:** **[https://cineclear.pro?access=cineclear-judge-2026](https://cineclear.pro?access=cineclear-judge-2026)**  
+   - Header pill should read `Judge VIP Active`. If not, click it and paste passkey `cineclear-judge-2026`.
+2. Accept the Terms (decision-support only — not a legal clearance certificate).
+3. Click **4K STILL** (then optionally **PDF SCRIPT** / **TXT SCENE**). Do not click two samples at once.
+4. Watch the four live engine stages and the **Live Partner API Trace** under the bar — you should see `GEMINI models.generateContent` and `POST api.parallel.ai/v1/search`.
+5. Export the **E&O dossier PDF** and **CMX 3600 EDL**.
+
+📺 **Video walkthrough:** [Parallel Web-Grounded Gemini Agent Build Guide](https://www.youtube.com/watch?v=6BG12veBOII)
+
+Public guests can read the landing page. **Live audits (bundled samples and uploads) return 401 without that pass.** Production also rate-limits to **12 live jobs per hour per IP**.
+
+> 🌐 Studio: [cineclear.pro](https://cineclear.pro) · ⚖️ Terms: [cineclear.pro/terms](https://cineclear.pro/terms) · 🎬 Repo: [github.com/adamm285-dev/CineClear-AI](https://github.com/adamm285-dev/CineClear-AI)
 
 ---
 
@@ -18,7 +32,7 @@
 
 Streaming networks (Netflix, Apple TV+, Prime Video, Disney+) legally mandate **Errors & Omissions (E&O) insurance** prior to worldwide distribution. A single missed background canvas, active telephone number, or hero wardrobe logo risks statutory copyright suits (**17 U.S.C. § 106**), trademark dilution (**15 U.S.C. § 1125**), privacy torts, or emergency $40k+ VFX paint-out reshoots.
 
-Traditional Hollywood legal clearance requires **3 to 4 weeks** of manual spreadsheet cross-referencing across thousands of frames. **CineClear AI** transforms this into an autonomous **30-second workflow**, delivering underwriter-ready PDF binders and actionable cross-departmental deliverables.
+Traditional Hollywood legal clearance requires **3 to 4 weeks** of manual spreadsheet cross-referencing across thousands of frames. **CineClear AI** is a **paralegal research accelerator** for licensed production counsel: it compresses detection + public-registry grounding into a short live audit and produces an evidence-gathering dossier (PDF, Form-4A drafts, EDL markers) **for attorney / E&O broker review** — not a distribution certificate.
 
 ---
 
@@ -26,7 +40,7 @@ Traditional Hollywood legal clearance requires **3 to 4 weeks** of manual spread
 
 Judges can inspect pre-compiled deliverables directly inside GitHub without running the application:
 
-- 📄 **[Sample Hollywood E&O Legal Clearance Binder (PDF)](examples/Sample_Hollywood_EO_Clearance_Binder.pdf)** — 4-Appendix court-ready ReportLab binder with executive risk metrics, Fair Use scorecards, UPL decision-support notices, and Underwriter Sign-off certification blocks.
+- 📄 **[Sample Hollywood E&O Legal Clearance Binder (PDF)](examples/Sample_Hollywood_EO_Clearance_Binder.pdf)** — ReportLab evidence dossier with executive risk metrics, Fair Use scorecards, UPL decision-support notices, and **licensed counsel / E&O broker sign-off lines** (CineClear is the gatherer, not the certifier).
 - 🎬 **[Sample DaVinci Resolve & Premiere Timeline Markers (CMX 3600 EDL)](examples/Sample_DaVinci_Resolve_Timeline.edl)** — Color-coded NLE timeline marker export (`Red = Critical`, `Orange = High`, `Yellow = Medium`, `Green = Low`).
 - ⚖️ **[Sample Form-4A Entertainment Artwork Release Agreement (PDF)](examples/Sample_Form_4A_Artwork_Release.pdf)** — Pre-populated copyright release contract under 17 U.S.C. § 106 & § 501 with State Bar UPL notices.
 
@@ -38,7 +52,7 @@ Judges can inspect pre-compiled deliverables directly inside GitHub without runn
 
 | 🔴 THE THREAT: Unseen Statutory Liabilities | 🟢 THE GOAL: Instant Underwriter Sign-Off |
 | :--- | :--- |
-| **A single missed background painting, hero wardrobe mark, or real phone number halts distribution immediately or triggers statutory copyright lawsuits.** Streaming platforms legally mandate Errors & Omissions insurance. Human clearance coordinators spend **3+ weeks** manually cross-referencing background props, artwork, and dialogue across thousands of footage frames. | **CineClear AI compresses a 3-week legal review into a 30-second autonomous clearance audit.** It delivers an underwriter-certified, court-ready **ReportLab E&O PDF Clearance Binder** paired with departmental deliverables: execution-ready Form-4A contracts, timecoded VFX 2D Greeking paint orders, and 1-Click CMX 3600 NLE timeline markers. |
+| **A single missed background painting, hero wardrobe mark, or real phone number halts distribution immediately or triggers statutory copyright lawsuits.** Streaming platforms legally mandate Errors & Omissions insurance. Human clearance coordinators spend **3+ weeks** manually cross-referencing background props, artwork, and dialogue across thousands of footage frames. | **CineClear AI compresses weeks of detection work into a live Gemini + Parallel audit.** It delivers a **ReportLab E&O evidence-gathering dossier** for licensed counsel: draft Form-4A language, timecoded VFX Greeking notes, and CMX 3600 NLE markers. Final clearance is a human attorney / E&O broker signature, not the model. |
 
 ---
 

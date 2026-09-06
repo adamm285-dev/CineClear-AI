@@ -18,7 +18,7 @@ class Settings(BaseSettings):
 
     # Judge VIP Access Gate (Protects live uploads without login friction)
     JUDGE_ACCESS_KEY: str = "cineclear-judge-2026"
-    REQUIRE_JUDGE_AUTH_FOR_UPLOADS: bool = False
+    REQUIRE_JUDGE_AUTH_FOR_UPLOADS: bool = True
 
     # Server Settings
     HOST: str = "0.0.0.0"

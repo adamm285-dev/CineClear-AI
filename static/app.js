@@ -26,6 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!tosCheckbox.checked) return;
             localStorage.setItem(TOS_STORAGE_KEY, TOS_VERSION);
             hideTosGate();
+            if (!isJudgeAuthActive()) {
+                judgeModal.style.display = 'flex';
+                if (judgePasskeyInput) {
+                    judgePasskeyInput.value = '';
+                    judgePasskeyInput.focus();
+                }
+            }
         });
     }
     if (!hasAcceptedTos()) {
@@ -56,17 +63,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const queryAccessKey = urlParams.get('access') || urlParams.get('passcode') || urlParams.get('key');
     if (queryAccessKey) {
         localStorage.setItem('cineclear_judge_passkey', queryAccessKey);
-    } else if (!localStorage.getItem('cineclear_judge_passkey')) {
-        // Auto-set default judge token for hackathon testing
-        localStorage.setItem('cineclear_judge_passkey', 'cineclear-judge-2026');
     }
 
     function getJudgePasskey() {
-        return localStorage.getItem('cineclear_judge_passkey') || 'cineclear-judge-2026';
+        return localStorage.getItem('cineclear_judge_passkey') || '';
     }
 
     function isJudgeAuthActive() {
-        return Boolean(localStorage.getItem('cineclear_judge_passkey'));
+        return Boolean(getJudgePasskey());
     }
 
     function updateJudgeUI() {

@@ -3,6 +3,7 @@ import re
 import json
 import shutil
 import uuid
+import time
 import asyncio
 import logging
 from pathlib import Path
@@ -42,6 +43,7 @@ app.add_middleware(
 
 # In-memory cache for recent reports
 REPORTS_DB: Dict[str, ClearanceAuditReport] = {}
+AUDIT_HITS: Dict[str, List[float]] = {}
 auditor = CineClearAuditor()
 
 # Mount static directory
@@ -130,6 +132,43 @@ async def verify_judge_auth(
     }
 
 
+def _client_ip(request: Request) -> str:
+    forwarded = request.headers.get("x-forwarded-for", "")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    if request.client and request.client.host:
+        return request.client.host
+    return "unknown"
+
+
+def _enforce_audit_rate_limit(request: Request, limit: int = 12, window_sec: int = 3600) -> None:
+    """Caps live Gemini/Parallel audits per IP so a public passkey cannot drain quota."""
+    ip = _client_ip(request)
+    now = time.time()
+    recent = [t for t in AUDIT_HITS.get(ip, []) if now - t < window_sec]
+    if len(recent) >= limit:
+        raise HTTPException(
+            status_code=429,
+            detail="Audit rate limit reached (12 live Gemini/Parallel jobs per hour from this network). Try again later."
+        )
+    recent.append(now)
+    AUDIT_HITS[ip] = recent
+
+
+def _require_judge_for_audit(
+    access_key: Optional[str],
+    authorization: Optional[str],
+    x_judge_access: Optional[str],
+) -> None:
+    candidate = x_judge_access or access_key or authorization
+    if not settings.is_judge_authenticated(candidate):
+        raise HTTPException(
+            status_code=401,
+            detail="Judge Access Required: Live Gemini + Parallel audits need the VIP pass. "
+                   "Open https://cineclear.pro?access=cineclear-judge-2026 or enter the passkey in the header."
+        )
+
+
 def _resolve_audit_target(
     sample_id: Optional[str],
     media_type: str,
@@ -183,6 +222,7 @@ def _resolve_audit_target(
 
 @app.post("/api/audit")
 async def audit_media_endpoint(
+    request: Request,
     project_title: str = Form("Untitled Production"),
     media_type: str = Form("auto"),
     sample_id: Optional[str] = Form(None),
@@ -194,8 +234,10 @@ async def audit_media_endpoint(
     """
     Submits a media file or sample asset for multimodal vision analysis & Parallel search legal grounding.
     Public visitors can instantly audit bundled Hollywood sample assets.
-    Custom footage uploads are protected by the Judge VIP Pass to prevent automated API quota abuse.
+    Custom footage uploads and sample audits require the Judge VIP Pass in production to protect Gemini/Parallel quota.
     """
+    _require_judge_for_audit(access_key, authorization, x_judge_access)
+    _enforce_audit_rate_limit(request)
     file_path_to_analyze, media_type = _resolve_audit_target(
         sample_id, media_type, file, access_key, authorization, x_judge_access
     )
@@ -218,6 +260,7 @@ async def audit_media_endpoint(
 
 @app.post("/api/audit/stream")
 async def audit_media_stream_endpoint(
+    request: Request,
     project_title: str = Form("Untitled Production"),
     media_type: str = Form("auto"),
     sample_id: Optional[str] = Form(None),
@@ -226,7 +269,9 @@ async def audit_media_stream_endpoint(
     x_judge_access: Optional[str] = Header(None),
     file: Optional[UploadFile] = File(None)
 ):
-    """NDJSON stream of real engine stages, then the completed report."""
+    """SSE stream of real engine stages, then the completed report."""
+    _require_judge_for_audit(access_key, authorization, x_judge_access)
+    _enforce_audit_rate_limit(request)
     file_path_to_analyze, media_type = _resolve_audit_target(
         sample_id, media_type, file, access_key, authorization, x_judge_access
     )
