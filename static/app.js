@@ -1,4 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const TOS_VERSION = '2026-09-06';
+    const TOS_STORAGE_KEY = 'cineclear_tos_accepted';
+
+    function hasAcceptedTos() {
+        return localStorage.getItem(TOS_STORAGE_KEY) === TOS_VERSION;
+    }
+
+    function showTosGate() {
+        const modal = document.getElementById('tos-modal');
+        if (modal) modal.style.display = 'flex';
+    }
+
+    function hideTosGate() {
+        const modal = document.getElementById('tos-modal');
+        if (modal) modal.style.display = 'none';
+    }
+
+    const tosCheckbox = document.getElementById('tos-checkbox');
+    const tosAcceptBtn = document.getElementById('tos-accept-btn');
+    if (tosCheckbox && tosAcceptBtn) {
+        tosCheckbox.addEventListener('change', () => {
+            tosAcceptBtn.disabled = !tosCheckbox.checked;
+        });
+        tosAcceptBtn.addEventListener('click', () => {
+            if (!tosCheckbox.checked) return;
+            localStorage.setItem(TOS_STORAGE_KEY, TOS_VERSION);
+            hideTosGate();
+        });
+    }
+    if (!hasAcceptedTos()) {
+        showTosGate();
+    }
+
     // DOM Elements
     const projectTitleInput = document.getElementById('project-title-input');
     const dropZone = document.getElementById('drop-zone');
@@ -182,6 +215,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Run Audit
     btnRunAudit.addEventListener('click', async () => {
+        if (!hasAcceptedTos()) {
+            showTosGate();
+            return;
+        }
         const projectTitle = projectTitleInput.value.trim() || 'Untitled Production';
         
         // Setup image preview source for visualization
@@ -458,30 +495,30 @@ document.addEventListener('DOMContentLoaded', () => {
             const medium = report.medium_count || 0;
 
             let score = 96;
-            let status = 'CLEARED FOR WORLDWIDE DISTRIBUTION';
+            let status = 'COUNSEL REVIEW DOSSIER // NO DISTRIBUTION CERTIFICATE';
             let badgeClass = '';
-            let subtitle = 'All identified background elements fall within statutory safe harbors (AWCPA / Rogers v. Grimaldi). Standard $5M E&O policy underwritable without exclusions.';
+            let subtitle = 'Automated detections organized for licensed production counsel. Not a clearance, not an insurance certificate, not legal advice. A licensed attorney or E&O broker must independently sign off.';
 
             if (critical > 0) {
                 score = Math.max(38, 55 - critical * 8);
-                status = 'UNINSURABLE // STATUTORY INJUNCTION RISK';
+                status = 'PRIORITY COUNSEL REVIEW // CRITICAL FLAGS PRESENT';
                 badgeClass = 'danger';
-                subtitle = `Detected ${critical} statutory invariant violation(s) (18 U.S.C. seal ban or unmasked phone PII). Emergency Greeking or Form-4A release required before underwriter binder sign-off.`;
+                subtitle = `Detected ${critical} high-severity flag(s). Treat as research only. Licensed counsel must decide any Greeking, Form-4A, or holdback before distribution.`;
             } else if (high > 0) {
                 score = Math.max(72, 88 - high * 4);
-                status = 'CONDITIONAL CLEARANCE // REMEDIATIONS REQUIRED';
+                status = 'COUNSEL REVIEW RECOMMENDED // HIGH-RISK FLAGS';
                 badgeClass = 'warning';
-                subtitle = `Detected ${high} high-risk intellectual property item(s). Execute attached Form-4A artwork releases and VFX Greeking work orders to secure underwriter sign-off.`;
+                subtitle = `Detected ${high} high-risk item(s). Draft Form-4A / VFX notes are workflow aids for counsel — they do not constitute legal clearance.`;
             } else if (medium > 0) {
                 score = Math.max(88, 94 - medium * 2);
-                status = 'SUBSTANTIAL CLEARANCE // MINOR REVIEW';
+                status = 'COUNSEL REVIEW RECOMMENDED // INCIDENTAL FLAGS';
                 badgeClass = 'warning';
-                subtitle = `Detected ${medium} incidental brand/trademark element(s) with strong Fair Use defense. Counsel review recommended.`;
+                subtitle = `Detected ${medium} incidental item(s). Fair Use / de minimis notes are research organization only and require attorney confirmation.`;
             }
 
             certBadge.className = `cert-status-badge ${badgeClass}`.trim();
             certBadge.textContent = status;
-            certTitle.textContent = `${report.project_title} — E&O Underwriting Verdict`;
+            certTitle.textContent = `${report.project_title} — Evidence dossier for licensed counsel`;
             certSubtitle.textContent = subtitle;
             certScore.textContent = `${score}%`;
             certScore.style.color = critical > 0 ? '#f87171' : high > 0 ? '#fbbf24' : '#34d399';

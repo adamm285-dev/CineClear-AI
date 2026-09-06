@@ -23,7 +23,7 @@ from app.models import (
     RiskLevel,
     ClearanceCategory,
     UPL_LEGAL_DISCLAIMER,
-    RogersTestAssessment
+    RogersTestAssessment,
 )
 
 
@@ -52,8 +52,19 @@ def generate_eo_clearance_binder(report: ClearanceAuditReport, output_path: Opti
         leftMargin=36,
         rightMargin=36,
         topMargin=36,
-        bottomMargin=36
+        bottomMargin=48
     )
+
+    def _draw_page_chrome(canvas, _doc):
+        canvas.saveState()
+        canvas.setFillColor(colors.HexColor("#475569"))
+        canvas.setFont("Helvetica", 6)
+        canvas.drawString(
+            36,
+            22,
+            "DECISION-SUPPORT ONLY — not legal advice, not a clearance certificate, not an underwriting approval. Licensed counsel must sign."
+        )
+        canvas.restoreState()
 
     styles = getSampleStyleSheet()
 
@@ -108,7 +119,7 @@ def generate_eo_clearance_binder(report: ClearanceAuditReport, output_path: Opti
     # 1. Header Banner
     header_data = [
         [
-            Paragraph("<b>CINECLEAR AI // LEGAL CLEARANCE COUNSEL</b>", ParagraphStyle('HeaderTop', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=10, textColor=colors.HexColor("#4f46e5"))),
+            Paragraph("<b>CINECLEAR AI // COUNSEL RESEARCH DOSSIER (NOT A LEGAL OPINION)</b>", ParagraphStyle('HeaderTop', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=9, textColor=colors.HexColor("#4f46e5"))),
             Paragraph(f"<b>REPORT ID:</b> {report.id[:8].upper()}", ParagraphStyle('HeaderRight', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=9, textColor=colors.HexColor("#64748b"), alignment=2))
         ]
     ]
@@ -122,7 +133,8 @@ def generate_eo_clearance_binder(report: ClearanceAuditReport, output_path: Opti
     story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#4f46e5"), spaceAfter=10))
 
     # Main Title
-    story.append(Paragraph("ERRORS & OMISSIONS (E&O) LEGAL CLEARANCE BINDER", title_style))
+    story.append(Paragraph("E&amp;O RISK MITIGATION &amp; EVIDENCE-GATHERING DOSSIER", title_style))
+    story.append(Paragraph("For licensed production counsel and E&amp;O broker review only — not a distribution clearance.", subtitle_style))
     story.append(Paragraph(f"Production Title: <b>{report.project_title}</b>", subtitle_style))
     story.append(Spacer(1, 10))
 
@@ -376,29 +388,31 @@ def generate_eo_clearance_binder(report: ClearanceAuditReport, output_path: Opti
         story.append(cue_table)
         story.append(Spacer(1, 12))
 
-    # 7. E&O Insurance Legal Counsel Sign-Off Block
+    # 7. Human-in-the-loop counsel / broker sign-off (CineClear is the gatherer, not the certifier)
     cert_section_num = 5 if has_music_cues else 4
     story.append(Spacer(1, 10))
     story.append(KeepTogether([
-        Paragraph(f"{cert_section_num}. Legal Counsel & E&O Underwriting Certification", section_heading),
+        Paragraph(f"{cert_section_num}. Licensed Counsel / E&amp;O Broker Review (Required Human Sign-Off)", section_heading),
         HRFlowable(width="100%", thickness=1, color=colors.HexColor("#cbd5e1"), spaceAfter=8),
         Paragraph(
-            "This E&O Clearance Binder has been compiled pursuant to standard entertainment industry legal guidelines. "
-            "All Critical and High risk flags must be mitigated via written release or visual VFX remediation prior to commercial distribution.",
+            "CineClear AI compiled this research dossier as a paralegal accelerator. It does not certify clearance, "
+            "insurability, or fitness for distribution. A licensed production attorney and/or E&amp;O broker must "
+            "independently review the evidence, accept or reject each flag, and provide the only legally operative sign-off. "
+            "Until those signatures appear, this document is an evidence-gathering work product only.",
             ParagraphStyle('CertText', parent=body_style, fontSize=8, leading=11, textColor=colors.HexColor("#64748b"))
         ),
         Spacer(1, 14),
         Table([
             [
-                Paragraph("____________________________________________<br/><b>Lead Clearance Counsel Signature</b>", body_style),
-                Paragraph("____________________________________________<br/><b>Date & Bar Registration No.</b>", body_style)
+                Paragraph("____________________________________________<br/><b>Licensed Production Attorney Signature</b><br/><font size='7'>Bar No. / Jurisdiction</font>", body_style),
+                Paragraph("____________________________________________<br/><b>Date of Independent Legal Review</b>", body_style)
             ],
             [
-                Paragraph("<br/>____________________________________________<br/><b>E&O Underwriter Policy Endorsement</b>", body_style),
-                Paragraph("<br/>____________________________________________<br/><b>Production Executive Sign-Off</b>", body_style)
+                Paragraph("<br/>____________________________________________<br/><b>E&amp;O Broker Review (not an insurance binder)</b>", body_style),
+                Paragraph("<br/>____________________________________________<br/><b>Production Executive Acknowledgement</b>", body_style)
             ]
         ], colWidths=[270, 270])
     ]))
 
-    doc.build(story)
+    doc.build(story, onFirstPage=_draw_page_chrome, onLaterPages=_draw_page_chrome)
     return output_path

@@ -47,6 +47,8 @@ class EDLExporter:
         lines = [
             f"TITLE: CINECLEAR_{safe_title.upper()}",
             "FCM: NON-DROP FRAME",
+            "* COMMENT: Decision-support markers only. Not a legal clearance or distribution certificate.",
+            "* COMMENT: Licensed production counsel must review before relying on any flag.",
             ""
         ]
 

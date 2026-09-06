@@ -7,7 +7,7 @@
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
     <link rel="apple-touch-icon" href="/static/favicon.png">
-    <link rel="stylesheet" href="/static/style.css?v=20260906d">
+    <link rel="stylesheet" href="/static/style.css?v=20260906e">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -53,8 +53,9 @@
             <div class="hero-badge">🎬 ENTERPRISE E&amp;O CLEARANCE SUITE // HOLLYWOOD EDITION</div>
             <h1 class="hero-title">Hollywood Legal &amp; E&amp;O Clearance Intelligence</h1>
             <p class="hero-subtitle">
-                Autonomous intellectual property &amp; statutory risk discovery for feature films, episodic TV, and commercial productions.
-                Powered by <strong>Gemini 3.8 Multimodal Vision</strong> &amp; <strong>Parallel Web Grounding</strong>.
+                Paralegal research accelerator for licensed production counsel: multimodal detection and public-registry grounding
+                for feature films, episodic TV, and commercials. Powered by <strong>Gemini 3.8 Multimodal Vision</strong> &amp; <strong>Parallel Web Grounding</strong>.
+                Outputs are evidence-gathering dossiers — not legal clearance and not an insurance certificate.
             </p>
 
             <!-- Studio Telemetry Stats Ticker -->
@@ -264,13 +265,13 @@
                     </svg>
                 </div>
                 <div class="cert-info">
-                    <div class="cert-status-badge" id="cert-status-badge">CONDITIONAL UNDERWRITER CLEARANCE</div>
-                    <h3 class="cert-title" id="cert-title">E&amp;O Underwriting Insurability Analysis</h3>
-                    <p class="cert-subtitle" id="cert-subtitle">Risk profile evaluated against standard $5M worldwide distributor indemnification benchmarks. Execute attached Form-4A and Greeking work orders for full coverage.</p>
+                    <div class="cert-status-badge" id="cert-status-badge">COUNSEL REVIEW DOSSIER // NOT A CLEARANCE</div>
+                    <h3 class="cert-title" id="cert-title">Evidence-gathering dossier for licensed production counsel</h3>
+                    <p class="cert-subtitle" id="cert-subtitle">Automated flags and public-registry research only. CineClear does not certify clearance, insurability, or fitness for distribution. A licensed attorney or E&amp;O broker must sign off.</p>
                 </div>
                 <div class="cert-score-container">
                     <div class="score-dial" id="cert-score-val">88%</div>
-                    <div class="score-subtext">Insurability Readiness</div>
+                    <div class="score-subtext">Counsel-review triage only</div>
                 </div>
             </div>
 
@@ -387,11 +388,45 @@
         </div>
     </div>
 
+    <!-- Un-bypassable TOS / EULA gate -->
+    <div class="modal-overlay" id="tos-modal" style="display: none;">
+        <div class="modal-content glass-card" style="max-width: 640px;">
+            <div class="modal-header">
+                <div class="modal-icon">⚖️</div>
+                <div>
+                    <h3 style="margin: 0; font-size: 1.15rem; color: #fff;">Terms of Service — Decision-Support Only</h3>
+                    <p style="margin: 2px 0 0; font-size: 0.8rem; color: #94a3b8;">Required before any audit. Version 2026-09-06.</p>
+                </div>
+            </div>
+            <div class="modal-body" style="padding-top: 12px;">
+                <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.45; margin-bottom: 12px;">
+                    CineClear AI is a <strong>paralegal workflow accelerator</strong>, not a lawyer and not an E&amp;O underwriter.
+                    Binders, Form-4A drafts, and EDL markers are <strong>research organization for licensed production counsel</strong>.
+                    They are provided <strong>AS-IS / AS-AVAILABLE</strong>, do not create an attorney-client relationship, and
+                    must not be described as “cleared for distribution.”
+                </p>
+                <p style="font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 12px;">
+                    Liability is capped at amounts paid in the last 12 months, or <strong>$0 on this free/hackathon tier</strong>.
+                    You indemnify the developer against third-party copyright, trademark, and distribution claims.
+                    Uploaded media is purged after the audit. Full terms: <a href="/terms" target="_blank" style="color:#fbbf24;">/terms</a>.
+                </p>
+                <label style="display:flex; gap:10px; align-items:flex-start; font-size:0.82rem; color:#e2e8f0; margin-bottom:16px;">
+                    <input type="checkbox" id="tos-checkbox" style="margin-top:3px;">
+                    <span>I am not relying on CineClear as legal counsel. I agree to the Terms of Service, AS-IS disclaimer, limitation of liability, indemnification, and human-in-the-loop sign-off requirement.</span>
+                </label>
+                <div style="display:flex; justify-content:flex-end;">
+                    <button class="btn btn-primary" id="tos-accept-btn" style="padding: 10px 20px;" disabled>I Agree — Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
-            <p>&copy; 2026 CineClear AI. Hollywood-grade agentic film clearance powered by Google Gemini &amp; Parallel Search.</p>
+            <p>&copy; 2026 CineClear AI. Decision-support research for licensed production counsel. Not legal advice. Powered by Google Gemini &amp; Parallel Search.</p>
             <div class="footer-links">
+                <a href="/terms">Terms of Service / EULA</a>
                 <a href="/docs" target="_blank">FastAPI Docs</a>
                 <a href="https://github.com/adamm285-dev/CineClear-AI" target="_blank">GitHub Repository</a>
                 <a href="https://www.youtube.com/watch?v=6BG12veBOII" target="_blank">Parallel Agent Build Guide</a>
@@ -399,6 +434,6 @@
         </div>
     </footer>
 
-    <script src="/static/app.js?v=20260906d"></script>
+    <script src="/static/app.js?v=20260906e"></script>
 </body>
 </html>

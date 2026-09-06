@@ -5,6 +5,20 @@ from server import app
 
 
 @pytest.mark.asyncio
+async def test_terms_of_service_page():
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        response = await client.get("/terms")
+        assert response.status_code == 200
+        body = response.text
+        assert "AS-IS" in body
+        assert "Limitation of liability" in body or "LIMITATION OF LIABILITY" in body
+        assert "Indemnif" in body
+        health = await client.get("/health")
+        assert health.json().get("decision_support_only") is True
+
+
+@pytest.mark.asyncio
 async def test_favicon_is_served():
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:

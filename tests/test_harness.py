@@ -208,5 +208,6 @@ def test_upl_disclaimer_invariant():
         media_filename="scene_01.mp4"
     )
     assert report.legal_disclaimer == UPL_LEGAL_DISCLAIMER
-    assert "State Bar regulations" in report.legal_disclaimer
-    assert "Does not constitute formal legal counsel" in report.legal_disclaimer
+    assert "DECISION-SUPPORT ONLY" in report.legal_disclaimer
+    assert "not a clearance" in report.legal_disclaimer.lower()
+    assert "attorney-client" in report.legal_disclaimer

@@ -97,10 +97,19 @@ class ArchitecturalLandmarkAssessment(BaseModel):
     clearance_recommendation: str
 
 
+TOS_VERSION = "2026-09-06"
+
 UPL_LEGAL_DISCLAIMER: str = (
-    "NOTICE: Decision-support analysis compiled for production counsel review. "
-    "Does not constitute formal legal counsel or create an attorney-client relationship "
-    "pursuant to State Bar regulations."
+    "NOTICE — DECISION-SUPPORT ONLY: CineClear AI is a paralegal research and workflow "
+    "accelerator for licensed production counsel and E&O brokers. This dossier organizes "
+    "automated heuristics, multimodal detections, and public-registry search results on an "
+    "AS-IS / AS-AVAILABLE basis. It is not legal advice, not a legal opinion, not an "
+    "insurance certificate, and not a clearance, distribution, or underwriting approval. "
+    "It does not create an attorney-client relationship. No output may be represented as "
+    "'cleared for distribution' or as a guarantee that any work is free of copyright, "
+    "trademark, privacy, or E&O risk. Final legal sign-off must be made by a licensed "
+    "production attorney and/or E&O broker. Use of this software is subject to the Terms "
+    "of Service at /terms (version " + TOS_VERSION + ")."
 )
 
 

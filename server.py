@@ -18,6 +18,8 @@ from app.auditor import CineClearAuditor
 from app.edl_exporter import EDLExporter
 from app.report_generator import generate_eo_clearance_binder
 from generate_sample_media import ensure_sample_media
+from app.retention import purge_upload_if_ephemeral
+from app.models import TOS_VERSION
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
@@ -75,7 +77,9 @@ async def health_check():
         "gemini_model": settings.GEMINI_MODEL,
         "parallel_configured": settings.is_parallel_configured(),
         "parallel_base_url": settings.PARALLEL_BASE_URL,
-        "environment": settings.ENVIRONMENT
+        "environment": settings.ENVIRONMENT,
+        "tos_version": TOS_VERSION,
+        "decision_support_only": True
     }
 
 
@@ -197,21 +201,19 @@ async def audit_media_endpoint(
     )
 
     logger.info(f"Initiating clearance audit for: {file_path_to_analyze.name} (Project: {project_title})")
-    
-    # Run full multi-turn audit
-    report = await auditor.audit_media(
-        file_path=str(file_path_to_analyze),
-        project_title=project_title,
-        media_type=media_type
-    )
-
-    if file:
-        report.media_filename = Path(file.filename).name
-
-    # Store in memory cache
-    REPORTS_DB[report.id] = report
-
-    return report
+    try:
+        report = await auditor.audit_media(
+            file_path=str(file_path_to_analyze),
+            project_title=project_title,
+            media_type=media_type
+        )
+        if file:
+            report.media_filename = Path(file.filename).name
+        REPORTS_DB[report.id] = report
+        return report
+    finally:
+        if file:
+            purge_upload_if_ephemeral(file_path_to_analyze)
 
 
 @app.post("/api/audit/stream")
@@ -267,6 +269,8 @@ async def audit_media_stream_endpoint(
                 logger.exception("Streaming audit failed")
                 await queue.put({"type": "error", "message": str(e)})
             finally:
+                if original_filename:
+                    purge_upload_if_ephemeral(file_path_to_analyze)
                 await queue.put(None)
 
         task = asyncio.create_task(run_audit())
@@ -357,6 +361,16 @@ async def export_pdf_from_report(report: ClearanceAuditReport):
 async def export_edl_from_report(report: ClearanceAuditReport):
     """Builds a CMX 3600 EDL from the completed report JSON."""
     return _edl_response(report)
+
+
+@app.get("/terms")
+@app.get("/legal")
+async def serve_terms():
+    """Public Terms of Service / EULA for the UPL and liability shield."""
+    legal = STATIC_DIR / "legal.html"
+    if not legal.exists():
+        raise HTTPException(status_code=404, detail="Terms of Service not found.")
+    return FileResponse(path=legal, media_type="text/html")
 
 
 @app.get("/favicon.ico")
