@@ -102,6 +102,7 @@ class GeminiCascadeClient:
             return None
 
         execution_order = self._build_execution_order(preferred_model)
+        # Cap failover depth so a dead ladder cannot burn ~40s of timeouts in a demo.
 
         config_params = {}
         if system_instruction:
@@ -111,7 +112,7 @@ class GeminiCascadeClient:
 
         gen_config = types.GenerateContentConfig(**config_params) if config_params else None
 
-        for model_name in execution_order:
+        for model_name in execution_order[:2]:
             try:
                 logger.info(f"[Cascade] Dispatching payload to model tier: {model_name}")
                 response = await asyncio.wait_for(

@@ -97,7 +97,7 @@ class CineClearAuditor:
         search_res = await self.parallel_client.search(objective=objective, max_results=4)
         results = search_res.get("results", [])
         sources = [r.get("url") for r in results if "url" in r and r.get("url")]
-        
+
         excerpts_list = []
         for r in results:
             if "excerpts" in r and isinstance(r["excerpts"], list):
@@ -149,7 +149,6 @@ class CineClearAuditor:
             except Exception as e:
                 logger.error(f"[Auditor] Synthesis JSON parse failed: {e}")
 
-        # Deterministic fallback grounding
         clean_holder = resolve_clean_rights_holder(entity_name)
         return ParallelVerification(
             search_objective=objective,
@@ -200,9 +199,25 @@ class CineClearAuditor:
         file_path: str,
         project_title: str = "Production Audit",
         media_type: str = "auto",
-        is_video: bool = False
+        is_video: bool = False,
+        on_progress=None,
     ) -> ClearanceAuditReport:
+        async def emit(step: int, status: str, label: str, progress: int):
+            if on_progress is None:
+                return
+            payload = {
+                "type": "stage",
+                "step": step,
+                "status": status,
+                "label": label,
+                "progress": progress,
+            }
+            result = on_progress(payload)
+            if asyncio.iscoroutine(result):
+                await result
+
         # 1. Forensic Extraction (Agent 1) & Deduplication Harness
+        await emit(1, "running", "Stage 1/4: Forensic extraction — Gemini vision / script parse...", 12)
         if media_type == "script":
             raw_candidates = await self.vision_agent.analyze_script(file_path)
         elif is_video or media_type == "video":
@@ -211,6 +226,12 @@ class CineClearAuditor:
             raw_candidates = await self.vision_agent.analyze_image(file_path)
 
         candidate_items = ExtractorHarness.deduplicate_entities(raw_candidates)
+        await emit(
+            1,
+            "done",
+            f"Stage 1/4 complete — {len(candidate_items)} candidate liabilities extracted.",
+            28,
+        )
 
         # 2. Parallel Search Grounding Loop (Concurrent Async Execution)
         async def _ground_candidate(candidate) -> ClearanceFlag:
@@ -222,7 +243,6 @@ class CineClearAuditor:
             mitigation = candidate.get("mitigation_action") if isinstance(candidate, dict) else candidate.mitigation_action
             box_2d = candidate.get("box_2d") if isinstance(candidate, dict) else getattr(candidate, "box_2d", None)
 
-            # Concurrent Parallel search + Gemini synthesis
             verification = await self.verify_flag_with_parallel(
                 entity_name=entity,
                 category=cat,
@@ -280,10 +300,29 @@ class CineClearAuditor:
                 rogers_assessment=rogers_assessment
             )
 
+        await emit(
+            2,
+            "running",
+            f"Stage 2/4: Parallel Search grounding {len(candidate_items)} entities (USPTO / copyright)...",
+            40,
+        )
         grounded_flags = await asyncio.gather(*[_ground_candidate(c) for c in candidate_items])
+        await emit(
+            2,
+            "done",
+            f"Stage 2/4 complete — {len(grounded_flags)} flags grounded with live search.",
+            58,
+        )
 
         # 3. Critic Agent Reflection (Agent 2)
+        await emit(3, "running", "Stage 3/4: Senior counsel critic — statutory invariants & Fair Use...", 68)
         securitized_flags = await self.review_and_securitize_flags(grounded_flags)
+        await emit(
+            3,
+            "done",
+            f"Stage 3/4 complete — {len(securitized_flags)} securitized flags.",
+            82,
+        )
 
         # 4. Re-sync Fair Use Scorecard and Territory Matrix if risk was adjusted
         for flag in securitized_flags:
@@ -339,12 +378,14 @@ class CineClearAuditor:
         )
 
         # 5. Generate ReportLab PDF E&O Binder
+        await emit(4, "running", "Stage 4/4: Remediation dispatcher — Form-4A, VFX orders, E&O PDF binder...", 90)
         try:
             from app.report_generator import generate_eo_clearance_binder
             pdf_path = generate_eo_clearance_binder(report)
             report.pdf_report_path = pdf_path
         except Exception as e:
             logger.error(f"Failed to generate PDF report binder: {e}")
+        await emit(4, "done", "Stage 4/4 complete — E&O binder assembled.", 100)
 
         return report
 

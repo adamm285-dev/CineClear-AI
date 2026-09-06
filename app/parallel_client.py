@@ -28,17 +28,13 @@ class ParallelSearchClient:
             try:
                 # Generate query variants from objective if not explicitly provided
                 if not search_queries:
-                    search_queries = [
-                        objective,
-                        f"{objective} USPTO trademark copyright film clearance",
-                        f"{objective} legal rights holder"
-                    ]
+                    search_queries = [objective]
 
                 payload = {
                     "objective": objective,
-                    "search_queries": search_queries[:3]
+                    "search_queries": search_queries[:1]
                 }
-                async with httpx.AsyncClient(timeout=15.0) as client:
+                async with httpx.AsyncClient(timeout=8.0) as client:
                     response = await client.post(
                         f"{self.base_url}/search",
                         headers=self.headers,

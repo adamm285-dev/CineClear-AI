@@ -51,6 +51,13 @@ logs/
 !examples/*.pdf
 !examples/*.edl
 
+# Bundled dashboard samples must ship with Cloud Run (PDF SCRIPT 1-click audit)
+!sample_media/
+!sample_media/**
+!sample_media/*.pdf
+!sample_media/*.jpg
+!sample_media/*.txt
+
 # 4. Python Bytecode, Caches & Testing Artifacts
 __pycache__/
 *.py[cod]

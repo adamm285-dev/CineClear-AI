@@ -1,12 +1,14 @@
 import os
 import re
+import json
 import shutil
 import uuid
+import asyncio
 import logging
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Tuple
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTasks, Response, Header, Query
-from fastapi.responses import FileResponse, JSONResponse, HTMLResponse
+from fastapi.responses import FileResponse, JSONResponse, HTMLResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -14,6 +16,8 @@ from app.config import settings
 from app.models import ClearanceAuditReport, SampleMediaItem, AuditRequest
 from app.auditor import CineClearAuditor
 from app.edl_exporter import EDLExporter
+from app.report_generator import generate_eo_clearance_binder
+from generate_sample_media import ensure_sample_media
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
@@ -44,7 +48,7 @@ STATIC_DIR.mkdir(parents=True, exist_ok=True)
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 # Mount sample media directory for image previews
-settings.SAMPLE_MEDIA_DIR.mkdir(parents=True, exist_ok=True)
+ensure_sample_media(settings.SAMPLE_MEDIA_DIR)
 app.mount("/sample_media", StaticFiles(directory=str(settings.SAMPLE_MEDIA_DIR)), name="sample_media")
 
 
@@ -110,24 +114,18 @@ async def verify_judge_auth(
     }
 
 
-@app.post("/api/audit")
-async def audit_media_endpoint(
-    project_title: str = Form("Untitled Production"),
-    media_type: str = Form("auto"),
-    sample_id: Optional[str] = Form(None),
-    access_key: Optional[str] = Form(None),
-    authorization: Optional[str] = Header(None),
-    x_judge_access: Optional[str] = Header(None),
-    file: Optional[UploadFile] = File(None)
-):
-    """
-    Submits a media file or sample asset for multimodal vision analysis & Parallel search legal grounding.
-    Public visitors can instantly audit bundled Hollywood sample assets.
-    Custom footage uploads are protected by the Judge VIP Pass to prevent automated API quota abuse.
-    """
+def _resolve_audit_target(
+    sample_id: Optional[str],
+    media_type: str,
+    file: Optional[UploadFile],
+    access_key: Optional[str],
+    authorization: Optional[str],
+    x_judge_access: Optional[str],
+) -> Tuple[Path, str]:
     file_path_to_analyze: Optional[Path] = None
 
     if sample_id:
+        ensure_sample_media(settings.SAMPLE_MEDIA_DIR)
         if sample_id == "sample-photo":
             file_path_to_analyze = settings.SAMPLE_MEDIA_DIR / "sample_set_photo.jpg"
             if media_type == "auto":
@@ -144,7 +142,6 @@ async def audit_media_endpoint(
             raise HTTPException(status_code=400, detail=f"Unknown sample ID: {sample_id}")
 
     elif file:
-        # Check Judge VIP Pass for live file uploads
         candidate = x_judge_access or access_key or authorization
         if not settings.is_judge_authenticated(candidate):
             raise HTTPException(
@@ -165,6 +162,28 @@ async def audit_media_endpoint(
     if not file_path_to_analyze or not file_path_to_analyze.exists():
         raise HTTPException(status_code=404, detail="Target media file could not be found.")
 
+    return file_path_to_analyze, media_type
+
+
+@app.post("/api/audit")
+async def audit_media_endpoint(
+    project_title: str = Form("Untitled Production"),
+    media_type: str = Form("auto"),
+    sample_id: Optional[str] = Form(None),
+    access_key: Optional[str] = Form(None),
+    authorization: Optional[str] = Header(None),
+    x_judge_access: Optional[str] = Header(None),
+    file: Optional[UploadFile] = File(None)
+):
+    """
+    Submits a media file or sample asset for multimodal vision analysis & Parallel search legal grounding.
+    Public visitors can instantly audit bundled Hollywood sample assets.
+    Custom footage uploads are protected by the Judge VIP Pass to prevent automated API quota abuse.
+    """
+    file_path_to_analyze, media_type = _resolve_audit_target(
+        sample_id, media_type, file, access_key, authorization, x_judge_access
+    )
+
     logger.info(f"Initiating clearance audit for: {file_path_to_analyze.name} (Project: {project_title})")
     
     # Run full multi-turn audit
@@ -183,6 +202,68 @@ async def audit_media_endpoint(
     return report
 
 
+@app.post("/api/audit/stream")
+async def audit_media_stream_endpoint(
+    project_title: str = Form("Untitled Production"),
+    media_type: str = Form("auto"),
+    sample_id: Optional[str] = Form(None),
+    access_key: Optional[str] = Form(None),
+    authorization: Optional[str] = Header(None),
+    x_judge_access: Optional[str] = Header(None),
+    file: Optional[UploadFile] = File(None)
+):
+    """NDJSON stream of real engine stages, then the completed report."""
+    file_path_to_analyze, media_type = _resolve_audit_target(
+        sample_id, media_type, file, access_key, authorization, x_judge_access
+    )
+    original_filename = Path(file.filename).name if file and file.filename else None
+
+    logger.info(f"Streaming clearance audit for: {file_path_to_analyze.name} (Project: {project_title})")
+
+    async def event_gen():
+        queue: asyncio.Queue = asyncio.Queue()
+
+        async def on_progress(evt: Dict[str, Any]):
+            await queue.put(evt)
+
+        async def run_audit():
+            try:
+                report = await auditor.audit_media(
+                    file_path=str(file_path_to_analyze),
+                    project_title=project_title,
+                    media_type=media_type,
+                    on_progress=on_progress,
+                )
+                if original_filename:
+                    report.media_filename = original_filename
+                REPORTS_DB[report.id] = report
+                await queue.put({"type": "complete", "report": json.loads(report.model_dump_json())})
+            except Exception as e:
+                logger.exception("Streaming audit failed")
+                await queue.put({"type": "error", "message": str(e)})
+            finally:
+                await queue.put(None)
+
+        task = asyncio.create_task(run_audit())
+        try:
+            while True:
+                evt = await queue.get()
+                if evt is None:
+                    break
+                yield json.dumps(evt) + "\n"
+        finally:
+            await task
+
+    return StreamingResponse(
+        event_gen(),
+        media_type="application/x-ndjson",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no",
+        },
+    )
+
+
 @app.get("/api/reports/{report_id}")
 async def get_report_json(report_id: str):
     """Retrieves JSON results for a completed clearance audit."""
@@ -191,22 +272,45 @@ async def get_report_json(report_id: str):
     return REPORTS_DB[report_id]
 
 
+def _pdf_filename(report: ClearanceAuditReport) -> str:
+    safe_title = report.project_title.replace(" ", "_").replace("/", "_")
+    return f"EO_Clearance_Binder_{safe_title}_{report.id[:8]}.pdf"
+
+
+def _edl_filename(report: ClearanceAuditReport) -> str:
+    safe_title = report.project_title.replace(" ", "_").replace("/", "_")
+    return f"CineClear_Markers_{safe_title}_{report.id[:8]}.edl"
+
+
+def _edl_response(report: ClearanceAuditReport) -> Response:
+    edl_content = EDLExporter.generate_cmx3600_edl(report)
+    return Response(
+        content=edl_content,
+        media_type="text/plain",
+        headers={"Content-Disposition": f'attachment; filename="{_edl_filename(report)}"'}
+    )
+
+
+def _pdf_file_response(report: ClearanceAuditReport) -> FileResponse:
+    pdf_path = report.pdf_report_path
+    if not pdf_path or not Path(pdf_path).exists():
+        pdf_path = generate_eo_clearance_binder(report)
+        report.pdf_report_path = pdf_path
+        if report.id:
+            REPORTS_DB[report.id] = report
+    return FileResponse(
+        path=pdf_path,
+        media_type="application/pdf",
+        filename=_pdf_filename(report)
+    )
+
+
 @app.get("/api/reports/{report_id}/pdf")
 async def download_report_pdf(report_id: str):
     """Downloads the generated Hollywood-grade ReportLab E&O Clearance Binder PDF."""
     if report_id not in REPORTS_DB:
         raise HTTPException(status_code=404, detail="Audit report not found.")
-    
-    report = REPORTS_DB[report_id]
-    if not report.pdf_report_path or not Path(report.pdf_report_path).exists():
-        raise HTTPException(status_code=404, detail="PDF report file is not available.")
-
-    filename = Path(report.pdf_report_path).name
-    return FileResponse(
-        path=report.pdf_report_path,
-        media_type="application/pdf",
-        filename=filename
-    )
+    return _pdf_file_response(REPORTS_DB[report_id])
 
 
 @app.get("/api/reports/{report_id}/edl")
@@ -214,17 +318,34 @@ async def download_edl_markers(report_id: str):
     """Exports timecoded clearance flags as an importable CMX 3600 EDL for video editors."""
     if report_id not in REPORTS_DB:
         raise HTTPException(status_code=404, detail="Audit report not found.")
-    
-    report = REPORTS_DB[report_id]
-    edl_content = EDLExporter.generate_cmx3600_edl(report)
-    safe_title = report.project_title.replace(" ", "_").replace("/", "_")
-    filename = f"CineClear_Markers_{safe_title}_{report_id[:8]}.edl"
-    
-    return Response(
-        content=edl_content,
-        media_type="text/plain",
-        headers={"Content-Disposition": f"attachment; filename={filename}"}
-    )
+    return _edl_response(REPORTS_DB[report_id])
+
+
+@app.post("/api/export/pdf")
+async def export_pdf_from_report(report: ClearanceAuditReport):
+    """Rebuilds the E&O PDF from the completed report JSON (works across Cloud Run instances)."""
+    return _pdf_file_response(report)
+
+
+@app.post("/api/export/edl")
+async def export_edl_from_report(report: ClearanceAuditReport):
+    """Builds a CMX 3600 EDL from the completed report JSON."""
+    return _edl_response(report)
+
+
+@app.get("/favicon.ico")
+async def favicon():
+    """Serves the tab icon so browsers do not 404 /favicon.ico."""
+    ico = STATIC_DIR / "favicon.ico"
+    png = STATIC_DIR / "favicon.png"
+    svg = STATIC_DIR / "favicon.svg"
+    if ico.exists():
+        return FileResponse(path=ico, media_type="image/x-icon")
+    if png.exists():
+        return FileResponse(path=png, media_type="image/png")
+    if svg.exists():
+        return FileResponse(path=svg, media_type="image/svg+xml")
+    raise HTTPException(status_code=404, detail="Favicon not found.")
 
 
 @app.get("/", response_class=HTMLResponse)

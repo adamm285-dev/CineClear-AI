@@ -199,8 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsView.classList.add('hidden');
         window.scrollTo({ top: processingView.offsetTop - 80, behavior: 'smooth' });
 
-        // Start realistic pipeline progress with active stage tracking
-        startPipelineProgress();
+        resetPipelineProgress();
 
         try {
             const formData = new FormData();
@@ -222,27 +221,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers['X-Judge-Access'] = judgeKey;
             }
 
-            const response = await fetch('/api/audit', {
+            const response = await fetch('/api/audit/stream', {
                 method: 'POST',
                 headers: headers,
                 body: formData
             });
 
             if (!response.ok) {
-                if (pipelineProgressTimer) clearInterval(pipelineProgressTimer);
                 if (response.status === 401) {
                     processingView.classList.add('hidden');
                     judgeModal.style.display = 'flex';
                     if (judgePasskeyInput) judgePasskeyInput.focus();
                     return;
                 }
-                const errData = await response.json();
-                throw new Error(errData.detail || 'Audit processing failed');
+                let detail = 'Audit processing failed';
+                try {
+                    const errData = await response.json();
+                    detail = errData.detail || detail;
+                } catch (_) {
+                    detail = (await response.text()) || detail;
+                }
+                throw new Error(detail);
             }
 
-            currentReport = await response.json();
+            currentReport = await consumeAuditStream(response);
             
-            // Finish pipeline dynamically when response arrives
             completePipelineProgress(() => {
                 renderResults(currentReport);
                 processingView.classList.add('hidden');
@@ -251,114 +254,140 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
         } catch (error) {
-            if (pipelineProgressTimer) clearInterval(pipelineProgressTimer);
             console.error('Audit failed:', error);
             alert(`Clearance Audit Error: ${error.message}`);
             processingView.classList.add('hidden');
         }
     });
 
-    // Realistic Multi-Stage Pipeline Progress Controller
-    let pipelineProgressTimer = null;
+    function pipelineEls() {
+        return {
+            steps: [
+                document.getElementById('step-1'),
+                document.getElementById('step-2'),
+                document.getElementById('step-3'),
+                document.getElementById('step-4')
+            ],
+            lines: document.querySelectorAll('.step-line'),
+            bar: document.getElementById('pipeline-progress-bar')
+        };
+    }
 
-    function startPipelineProgress() {
-        const stepItems = [
-            document.getElementById('step-1'),
-            document.getElementById('step-2'),
-            document.getElementById('step-3'),
-            document.getElementById('step-4')
-        ];
-        const stepLines = document.querySelectorAll('.step-line');
-        const progressBar = document.getElementById('pipeline-progress-bar');
-
-        // Reset all steps
-        stepItems.forEach((el, idx) => {
+    function resetPipelineProgress() {
+        const { steps, lines, bar } = pipelineEls();
+        steps.forEach((el, idx) => {
             if (!el) return;
             el.className = 'step-item';
             const c = el.querySelector('.step-circle');
-            if (c) c.textContent = (idx + 1);
+            if (c) c.textContent = String(idx + 1);
         });
-        stepLines.forEach(l => l.classList.remove('completed'));
-        if (progressBar) progressBar.style.width = '8%';
-
-        // Start at Step 1 running
-        if (stepItems[0]) stepItems[0].className = 'step-item running';
+        lines.forEach(l => l.classList.remove('completed'));
+        if (bar) bar.style.width = '4%';
         if (processingStepLabel) {
-            processingStepLabel.textContent = 'Stage 1/4: Visual & Script Parsing — Sampling keyframes with Gemini 3.8 Vision...';
+            processingStepLabel.textContent = 'Waiting for engine stage 1...';
+        }
+    }
+
+    function applyEngineStage(evt) {
+        const step = Number(evt.step) || 1;
+        const idx = Math.max(0, Math.min(3, step - 1));
+        const { steps, lines, bar } = pipelineEls();
+
+        for (let j = 0; j < idx; j++) {
+            if (steps[j]) {
+                steps[j].className = 'step-item completed';
+                const c = steps[j].querySelector('.step-circle');
+                if (c) c.textContent = '✓';
+            }
+            if (lines[j]) lines[j].classList.add('completed');
         }
 
-        const stages = [
-            { step: 0, progress: 15, delay: 0, label: 'Stage 1/4: Forensic Extraction — Sampling keyframes with Gemini 3.8 Vision...' },
-            { step: 1, progress: 45, delay: 2200, label: 'Stage 2/4: Grounded Parallel Search — Querying USPTO & copyright registries...' },
-            { step: 2, progress: 75, delay: 4400, label: 'Stage 3/4: Senior Counsel Critic — Enforcing statutory invariants & Fair Use...' },
-            { step: 3, progress: 88, delay: 6200, label: 'Stage 4/4: Remediation Dispatcher — Assembling Form-4A releases & E&O PDF binder...' }
-        ];
+        if (evt.status === 'done') {
+            if (steps[idx]) {
+                steps[idx].className = 'step-item completed';
+                const c = steps[idx].querySelector('.step-circle');
+                if (c) c.textContent = '✓';
+            }
+            if (lines[idx]) lines[idx].classList.add('completed');
+        } else if (steps[idx]) {
+            steps[idx].className = 'step-item running';
+        }
 
-        let stageIndex = 0;
-        const startTime = Date.now();
+        if (bar && typeof evt.progress === 'number') {
+            bar.style.width = `${Math.max(4, Math.min(100, evt.progress))}%`;
+        }
+        if (processingStepLabel && evt.label) {
+            processingStepLabel.textContent = evt.label;
+        }
+    }
 
-        if (pipelineProgressTimer) clearInterval(pipelineProgressTimer);
+    async function consumeAuditStream(response) {
+        if (!response.body || !response.body.getReader) {
+            const fallback = await response.json();
+            if (fallback && fallback.report) return fallback.report;
+            return fallback;
+        }
 
-        pipelineProgressTimer = setInterval(() => {
-            const elapsed = Date.now() - startTime;
-            
-            for (let i = stages.length - 1; i >= 0; i--) {
-                if (elapsed >= stages[i].delay) {
-                    if (stageIndex < stages[i].step) {
-                        for (let j = 0; j < stages[i].step; j++) {
-                            if (stepItems[j]) {
-                                stepItems[j].className = 'step-item completed';
-                                const c = stepItems[j].querySelector('.step-circle');
-                                if (c) c.textContent = '✓';
-                            }
-                            if (stepLines[j]) stepLines[j].classList.add('completed');
-                        }
-                        if (stepItems[stages[i].step]) {
-                            stepItems[stages[i].step].className = 'step-item running';
-                        }
-                        if (processingStepLabel) {
-                            processingStepLabel.textContent = stages[i].label;
-                        }
-                        stageIndex = stages[i].step;
-                    }
-                    if (progressBar) {
-                        const targetPct = Math.min(94, stages[i].progress + Math.floor((elapsed - stages[i].delay) / 300));
-                        progressBar.style.width = `${targetPct}%`;
-                    }
-                    break;
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let report = null;
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (!trimmed) continue;
+                let evt;
+                try {
+                    evt = JSON.parse(trimmed);
+                } catch (_) {
+                    continue;
+                }
+                if (evt.type === 'stage') {
+                    applyEngineStage(evt);
+                } else if (evt.type === 'complete' && evt.report) {
+                    report = evt.report;
+                } else if (evt.type === 'error') {
+                    throw new Error(evt.message || 'Audit processing failed');
                 }
             }
-        }, 150);
+        }
+
+        if (!report && buffer.trim()) {
+            try {
+                const evt = JSON.parse(buffer.trim());
+                if (evt.type === 'complete') report = evt.report;
+                if (evt.type === 'error') throw new Error(evt.message || 'Audit processing failed');
+            } catch (e) {
+                if (e.message && e.message !== 'Audit processing failed') throw e;
+            }
+        }
+
+        if (!report) {
+            throw new Error('Audit stream ended without a report');
+        }
+        return report;
     }
 
     function completePipelineProgress(callback) {
-        if (pipelineProgressTimer) {
-            clearInterval(pipelineProgressTimer);
-            pipelineProgressTimer = null;
-        }
-
-        const stepItems = [
-            document.getElementById('step-1'),
-            document.getElementById('step-2'),
-            document.getElementById('step-3'),
-            document.getElementById('step-4')
-        ];
-        const stepLines = document.querySelectorAll('.step-line');
-        const progressBar = document.getElementById('pipeline-progress-bar');
-
-        stepItems.forEach(el => {
+        const { steps, lines, bar } = pipelineEls();
+        steps.forEach(el => {
             if (!el) return;
             el.className = 'step-item completed';
             const c = el.querySelector('.step-circle');
             if (c) c.textContent = '✓';
         });
-        stepLines.forEach(l => l.classList.add('completed'));
-        if (progressBar) progressBar.style.width = '100%';
+        lines.forEach(l => l.classList.add('completed'));
+        if (bar) bar.style.width = '100%';
         if (processingStepLabel) {
-            processingStepLabel.textContent = 'Clearance Audit Complete! Rendering Hollywood Studio Dossier...';
+            processingStepLabel.textContent = 'Clearance audit complete — rendering dossier...';
         }
-
-        setTimeout(callback, 600);
+        setTimeout(callback, 350);
     }
 
     // Render Results
@@ -737,32 +766,86 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Download PDF Binder (Top & Bottom)
-    btnDownloadPdf.addEventListener('click', () => {
-        if (!currentReport || !currentReport.id) return;
-        window.open(`/api/reports/${currentReport.id}/pdf`, '_blank');
-    });
+    function filenameFromDisposition(header, fallback) {
+        if (!header) return fallback;
+        const star = header.match(/filename\*=UTF-8''([^;]+)/i);
+        if (star) return decodeURIComponent(star[1].trim());
+        const plain = header.match(/filename="?([^";]+)"?/i);
+        if (plain) return plain[1].trim();
+        return fallback;
+    }
 
+    function triggerBlobDownload(blob, filename) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+    }
+
+    async function exportCompletedReport(kind) {
+        if (!currentReport) {
+            alert('Run a clearance audit before exporting.');
+            return;
+        }
+
+        const isPdf = kind === 'pdf';
+        const fallbackName = isPdf
+            ? `EO_Clearance_Binder_${(currentReport.project_title || 'Audit').replace(/\s+/g, '_')}.pdf`
+            : `CineClear_Markers_${(currentReport.project_title || 'Audit').replace(/\s+/g, '_')}.edl`;
+
+        try {
+            let response = await fetch(isPdf ? '/api/export/pdf' : '/api/export/edl', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(currentReport)
+            });
+
+            if (!response.ok && currentReport.id) {
+                response = await fetch(
+                    isPdf
+                        ? `/api/reports/${currentReport.id}/pdf`
+                        : `/api/reports/${currentReport.id}/edl`
+                );
+            }
+
+            if (!response.ok) {
+                let detail = `Export failed (${response.status})`;
+                try {
+                    const err = await response.json();
+                    detail = err.detail || detail;
+                } catch (_) { /* ignore */ }
+                throw new Error(detail);
+            }
+
+            const blob = await response.blob();
+            const name = filenameFromDisposition(
+                response.headers.get('content-disposition'),
+                fallbackName
+            );
+            triggerBlobDownload(blob, name);
+        } catch (error) {
+            console.error('Export failed:', error);
+            alert(`Export Error: ${error.message}`);
+        }
+    }
+
+    if (btnDownloadPdf) {
+        btnDownloadPdf.addEventListener('click', () => exportCompletedReport('pdf'));
+    }
     const btnDownloadPdfBottom = document.getElementById('btn-download-pdf-bottom');
     if (btnDownloadPdfBottom) {
-        btnDownloadPdfBottom.addEventListener('click', () => {
-            btnDownloadPdf.click();
-        });
+        btnDownloadPdfBottom.addEventListener('click', () => exportCompletedReport('pdf'));
     }
-
-    // Export EDL Timeline Markers (Top & Bottom)
     if (btnExportEdl) {
-        btnExportEdl.addEventListener('click', () => {
-            if (!currentReport || !currentReport.id) return;
-            window.open(`/api/reports/${currentReport.id}/edl`, '_blank');
-        });
+        btnExportEdl.addEventListener('click', () => exportCompletedReport('edl'));
     }
-
     const btnExportEdlBottom = document.getElementById('btn-export-edl-bottom');
     if (btnExportEdlBottom) {
-        btnExportEdlBottom.addEventListener('click', () => {
-            if (btnExportEdl) btnExportEdl.click();
-        });
+        btnExportEdlBottom.addEventListener('click', () => exportCompletedReport('edl'));
     }
 
     // New Audit button

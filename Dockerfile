@@ -17,8 +17,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Ensure upload and report directories exist
-RUN mkdir -p uploads reports
+# Ensure upload and report directories exist, and bundled samples (PDF script) are present
+RUN mkdir -p uploads reports sample_media \
+    && python generate_sample_media.py
 
 EXPOSE 8085
 
