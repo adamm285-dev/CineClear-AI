@@ -26,7 +26,7 @@ from app.models import (
 logger = logging.getLogger("cineclear.vision")
 
 EXTRACTION_SYSTEM_PROMPT = """
-You are a Hollywood Legal Clearance Specialist & Visual Forensic Auditor.
+You are a cinema legal clearance specialist and visual forensic auditor.
 Analyze the provided film media and extract all legal liabilities with normalized bounding boxes:
 1. TRADEMARK_LOGO: Visible commercial logos, distinctive brand marks, trade dress.
 2. COPYRIGHTED_ART: Fine art paintings, sculptures, non-incidental background art.

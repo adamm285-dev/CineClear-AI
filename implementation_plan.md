@@ -18,9 +18,9 @@ CineClearAi/
 │   ├── parallel_client.py           # Parallel Search API client with live search & resilient fallback mock
 │   ├── vision_agent.py              # Gemini Multimodal parser for video frames, still photos, and script PDFs
 │   ├── auditor.py                   # CineClearAuditor multi-turn legal reasoning & Parallel verification loop
-│   └── report_generator.py          # ReportLab Hollywood-grade E&O Clearance Binder PDF generator
+│   └── report_generator.py          # ReportLab cinema-grade E&O Clearance Binder PDF generator
 ├── static/                          # Modern cinematic web UI assets (CSS, JS, icons)
-│   ├── index.html                   # Interactive Hollywood studio dark-mode dashboard
+│   ├── index.html                   # Interactive cinema studio dark-mode dashboard
 │   ├── style.css                    # Polished film production aesthetics
 │   └── app.js                       # Live upload, async analysis pipeline, filterable flag cards & PDF export
 ├── sample_media/                    # Bundled test footage stills, set photos, and sample script excerpts
@@ -87,7 +87,7 @@ CineClearAi/
 
 ---
 
-### 5. Hollywood-Grade E&O PDF Binder Generator
+### 5. Production-Grade E&O PDF Binder Generator
 #### [NEW] [app/report_generator.py](file:///c:/Users/adamm_000/Desktop/CineClearAi/app/report_generator.py)
 - Professional ReportLab PDF generator creating an official **E&O Insurance Legal Clearance Binder**:
   - Executive Cover Page with project metadata and Underwriter sign-off block
@@ -108,7 +108,7 @@ CineClearAi/
   - Static file serving for web UI.
 
 #### [NEW] [static/index.html](file:///c:/Users/adamm_000/Desktop/CineClearAi/static/index.html), [static/style.css](file:///c:/Users/adamm_000/Desktop/CineClearAi/static/style.css), [static/app.js](file:///c:/Users/adamm_000/Desktop/CineClearAi/static/app.js)
-- Responsive, dark-themed Hollywood production dashboard:
+- Responsive, dark-themed cinema production dashboard:
   - Drag-and-drop file upload zone (Video, Image, Screenplay PDF)
   - Quick "Load Sample Media" buttons for instant 1-click demonstration
   - Real-time pipeline status animation

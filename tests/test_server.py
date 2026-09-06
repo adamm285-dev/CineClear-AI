@@ -142,7 +142,7 @@ async def test_audit_sample_photo():
             "/api/audit",
             headers=JUDGE_HEADERS,
             data={
-                "project_title": "Hollywood Test Studio",
+                "project_title": "Cinema Test Studio",
                 "sample_id": "sample-photo",
                 "media_type": "image"
             }
@@ -150,7 +150,7 @@ async def test_audit_sample_photo():
         assert response.status_code == 200
         report = response.json()
         assert "id" in report
-        assert report["project_title"] == "Hollywood Test Studio"
+        assert report["project_title"] == "Cinema Test Studio"
         assert report["total_flags"] >= 2
 
         # Test retrieving JSON

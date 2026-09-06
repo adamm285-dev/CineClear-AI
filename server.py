@@ -87,7 +87,7 @@ async def health_check():
 
 @app.get("/api/samples", response_model=List[SampleMediaItem])
 async def list_sample_media():
-    """Lists preloaded Hollywood sample media available for instant 1-click legal clearance audit."""
+    """Lists preloaded production sample media available for instant 1-click legal clearance audit."""
     return [
         SampleMediaItem(
             id="sample-photo",
@@ -233,7 +233,7 @@ async def audit_media_endpoint(
 ):
     """
     Submits a media file or sample asset for multimodal vision analysis & Parallel search legal grounding.
-    Public visitors can instantly audit bundled Hollywood sample assets.
+    Public visitors cannot run live audits without Judge VIP. Bundled production samples are available to evaluators.
     Custom footage uploads and sample audits require the Judge VIP Pass in production to protect Gemini/Parallel quota.
     """
     _require_judge_for_audit(access_key, authorization, x_judge_access)
@@ -382,7 +382,7 @@ def _pdf_file_response(report: ClearanceAuditReport) -> FileResponse:
 
 @app.get("/api/reports/{report_id}/pdf")
 async def download_report_pdf(report_id: str):
-    """Downloads the generated Hollywood-grade ReportLab E&O Clearance Binder PDF."""
+    """Downloads the generated production-grade ReportLab E&O evidence dossier PDF."""
     if report_id not in REPORTS_DB:
         raise HTTPException(status_code=404, detail="Audit report not found.")
     return _pdf_file_response(REPORTS_DB[report_id])
@@ -435,7 +435,7 @@ async def favicon():
 
 @app.get("/", response_class=HTMLResponse)
 async def serve_dashboard():
-    """Serves the CineClear AI interactive Hollywood dark-mode web dashboard."""
+    """Serves the CineClear AI interactive cinema dark-mode web dashboard."""
     index_file = STATIC_DIR / "index.html"
     if index_file.exists():
         return HTMLResponse(
@@ -448,7 +448,7 @@ async def serve_dashboard():
 if __name__ == "__main__":
     import uvicorn
     print("\n" + "=" * 65)
-    print("   🎬 CineClear AI // Hollywood Legal & E&O Clearance Suite")
+    print("   🎬 CineClear AI // Cinema Legal & E&O Clearance Suite")
     print("=" * 65)
     print(f"  💻 Local Development:  http://localhost:{settings.PORT}")
     print(f"  🌐 Live Cloud Run:     https://cineclear.pro")

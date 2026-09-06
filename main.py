@@ -12,7 +12,7 @@ from app.models import RiskLevel
 def print_banner():
     print("""
 ========================================================================
-   CINECLEAR AI // AGENTIC HOLLYWOOD LEGAL & E&O CLEARANCE SYSTEM       
+   CINECLEAR AI // AGENTIC CINEMA LEGAL & E&O CLEARANCE SYSTEM       
 ========================================================================
     """)
 
@@ -81,7 +81,7 @@ async def run_cli():
             print("------------------------------------------------------------------------")
 
         if report.pdf_report_path:
-            print(f"\n[+] Hollywood-Grade E&O PDF Binder Generated: {report.pdf_report_path}")
+            print(f"\n[+] Production-Grade E&O PDF Dossier Generated: {report.pdf_report_path}")
 
         if args.output_json:
             out_json = Path(args.output_json)

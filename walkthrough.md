@@ -2,7 +2,7 @@
 
 **CineClear AI** has been created in `C:\Users\adamm_000\Desktop\CineClearAi` for [https://github.com/adamm285-dev/CineClear-AI](https://github.com/adamm285-dev/CineClear-AI).
 
-It provides an end-to-end autonomous clearance and E&O (Errors & Omissions) insurance risk intelligence pipeline for Hollywood studios, indie filmmakers, and commercial productions.
+It provides an end-to-end autonomous clearance and E&O (Errors & Omissions) insurance risk intelligence pipeline for cinema studios, indie filmmakers, and commercial productions.
 
 ---
 
@@ -25,7 +25,7 @@ CineClearAi/
 │   ├── parallel_client.py           # Parallel Search API client with live search & mock engine
 │   ├── vision_agent.py              # Gemini Multimodal parser for video frames, set photos, and script PDFs
 │   ├── auditor.py                   # Multi-turn legal reasoning & Parallel verification loop
-│   └── report_generator.py          # ReportLab Hollywood E&O Clearance Binder PDF generator
+│   └── report_generator.py          # ReportLab cinema E&O Clearance Binder PDF generator
 ├── static/
 │   ├── index.html                   # Cinematic dark-mode studio dashboard
 │   ├── style.css                    # Polished film UI aesthetics & animations

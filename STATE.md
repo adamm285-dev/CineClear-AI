@@ -19,7 +19,7 @@
 | **Fair Use & Multi-Territory Engine**| `app/fair_use_analyzer.py` | 4-factor statutory scoring (17 U.S.C. § 107) and US/UK/EU/Canada jurisdictional compliance mapping. |
 | **AWCPA & Music Sync Analyzer**| `app/music_arch_analyzer.py` | Public panorama safe harbors (17 U.S.C. § 120(a)) vs restricted facades; ASCAP/BMI cue sheet compiler. |
 | **NLE Timeline Marker Exporter**| `app/edl_exporter.py` | Generates industry-standard CMX 3600 EDL files with color-coded locators for DaVinci Resolve & Premiere Pro. |
-| **ReportLab Engine** | `reportlab 5.0.1` | Hollywood-grade Errors & Omissions (E&O) PDF Binder generator with full statutory and cue sheet appendices. |
+| **ReportLab Engine** | `reportlab 5.0.1` | Production-grade Errors & Omissions (E&O) PDF dossier generator with full statutory and cue sheet appendices. |
 | **Desktop Launchers** | `CineClear AI.lnk`, `Launch-CineClear-AI.bat` | 1-click desktop shortcuts with automated browser launch. |
 
 ---

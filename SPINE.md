@@ -4,14 +4,14 @@ This document defines the **core philosophy, legal clearance invariants, statuto
 
 ---
 
-## 1. System Invariants & Hollywood Clearance Policy
+## 1. System Invariants & Cinema Clearance Policy
 
 1. **Zero Uncleared Liabilities in Distribution Cuts:**
    * Commercial feature films, episodic streaming series, and national broadcast spots cannot obtain Errors & Omissions (E&O) insurance coverage without affirmative legal clearance or documented statutory fair use defense for all on-screen and audible elements.
 2. **Never Rely on Un-Grounded Assumptions:**
    * Every detected brand, artwork, building, or audio cue MUST be grounded through **Parallel Web Search** against official government registers (USPTO, US Copyright Office, NANPA) or binding case law before assigning risk tiers.
 3. **Actionable Remediation over Abstract Warnings:**
-   * The system provides concrete, industry-standard Hollywood remediation deliverables via **Agent 3** (pre-filled Form-4A art releases, trademark placement agreements, timecoded VFX Greeking work orders, NANPA script substitutions, and PRO Music Cue Sheets).
+   * The system provides concrete, industry-standard cinema remediation deliverables via **Agent 3** (pre-filled Form-4A art releases, trademark placement agreements, timecoded VFX Greeking work orders, NANPA script substitutions, and PRO Music Cue Sheets).
 4. **Deterministic Risk Calibration Tiers:**
    * **`CRITICAL`**: Mandatory distribution block. Real working telephone numbers, defamatory brand portrayals in criminal schemes, or living person likeness violations.
    * **`HIGH`**: Action required prior to picture lock. Modern copyrighted visual art in sharp focus, uncleared commercial music, or restricted architectural facades.

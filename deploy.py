@@ -20,7 +20,7 @@ ROOT_DIR = Path(__file__).resolve().parent
 def print_banner():
     print("""
 ========================================================================
-       🎬 CINECLEAR AI // AGENTIC HOLLYWOOD LEGAL CLEARANCE
+       🎬 CINECLEAR AI // AGENTIC CINEMA LEGAL CLEARANCE
            Zero-Downtime Autonomous E&O Insurance Auditor
 ========================================================================
     """)

@@ -41,7 +41,7 @@ endpoints:
   - path: "/"
     method: "GET"
     handler: "server.serve_dashboard"
-    description: "Serves the interactive Hollywood studio dark-mode web dashboard."
+    description: "Serves the interactive cinema studio dark-mode web dashboard."
     auth_required: false
 
   - path: "/health"
@@ -53,7 +53,7 @@ endpoints:
   - path: "/api/samples"
     method: "GET"
     handler: "server.list_sample_media"
-    description: "Returns pre-loaded Hollywood test assets (set photos, screenplay PDF, scene text) for 1-click evaluation."
+    description: "Returns pre-loaded cinema test assets (set photos, screenplay PDF, scene text) for 1-click evaluation."
     auth_required: false
 
   - path: "/api/audit"
@@ -71,7 +71,7 @@ endpoints:
   - path: "/api/reports/{report_id}/pdf"
     method: "GET"
     handler: "server.download_report_pdf"
-    description: "Generates and streams Hollywood-grade ReportLab E&O Clearance Binder PDF."
+    description: "Generates and streams cinema-grade ReportLab E&O Clearance Binder PDF."
     auth_required: false
 
   - path: "/api/reports/{report_id}/edl"
@@ -172,7 +172,7 @@ agents_and_capabilities:
       - "NANPA 555-01XX Script Dialogue & ADR Substitutions"
 
   - id: "reportlab_binder_generator"
-    name: "ReportLab Hollywood E&O Clearance Binder Generator"
+    name: "ReportLab cinema E&O Clearance Binder Generator"
     module: "app.report_generator"
     handler: "generate_eo_clearance_binder"
     role: "Court-Ready PDF Compilation"

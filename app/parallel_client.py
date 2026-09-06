@@ -99,7 +99,7 @@ class ParallelSearchClient:
                         "excerpt": "Active registered trademark owned by Nike, Inc. for athletic apparel and footwear. Lanham Act 15 U.S.C. § 1114/1125 protects against unauthorized commercial film product placement implying endorsement."
                     },
                     {
-                        "title": "Hollywood Legal Clearance Guide: Athletic Apparel & Trademark Fair Use",
+                        "title": "Film Legal Clearance Guide: Athletic Apparel & Trademark Fair Use",
                         "url": "https://www.filmclearance.law/trademarks/apparel-guidelines",
                         "excerpt": "Incidental background wear without dialogue emphasis is generally defensible under de minimis, but primary character hero wardrobe featuring prominent logos requires trademark clearance or greeking/VFX paint-out."
                     }

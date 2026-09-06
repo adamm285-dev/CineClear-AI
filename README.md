@@ -32,7 +32,7 @@ Public guests can read the landing page. **Live audits (bundled samples and uplo
 
 Streaming networks (Netflix, Apple TV+, Prime Video, Disney+) legally mandate **Errors & Omissions (E&O) insurance** prior to worldwide distribution. A single missed background canvas, active telephone number, or hero wardrobe logo risks statutory copyright suits (**17 U.S.C. § 106**), trademark dilution (**15 U.S.C. § 1125**), privacy torts, or emergency $40k+ VFX paint-out reshoots.
 
-Traditional Hollywood legal clearance requires **3 to 4 weeks** of manual spreadsheet cross-referencing across thousands of frames. **CineClear AI** is a **paralegal research accelerator** for licensed production counsel: it compresses detection + public-registry grounding into a short live audit and produces an evidence-gathering dossier (PDF, Form-4A drafts, EDL markers) **for attorney / E&O broker review** — not a distribution certificate.
+Traditional cinema legal clearance requires **3 to 4 weeks** of manual spreadsheet cross-referencing across thousands of frames. **CineClear AI** is a **paralegal research accelerator** for licensed production counsel: it compresses detection + public-registry grounding into a short live audit and produces an evidence-gathering dossier (PDF, Form-4A drafts, EDL markers) **for attorney / E&O broker review** — not a distribution certificate.
 
 ---
 
@@ -40,7 +40,7 @@ Traditional Hollywood legal clearance requires **3 to 4 weeks** of manual spread
 
 Judges can inspect pre-compiled deliverables directly inside GitHub without running the application:
 
-- 📄 **[Sample Hollywood E&O Legal Clearance Binder (PDF)](examples/Sample_Hollywood_EO_Clearance_Binder.pdf)** — ReportLab evidence dossier with executive risk metrics, Fair Use scorecards, UPL decision-support notices, and **licensed counsel / E&O broker sign-off lines** (CineClear is the gatherer, not the certifier).
+- 📄 **[Sample Cinema E&O Legal Clearance Binder (PDF)](examples/Sample_Hollywood_EO_Clearance_Binder.pdf)** — ReportLab evidence dossier with executive risk metrics, Fair Use scorecards, UPL decision-support notices, and **licensed counsel / E&O broker sign-off lines** (CineClear is the gatherer, not the certifier).
 - 🎬 **[Sample DaVinci Resolve & Premiere Timeline Markers (CMX 3600 EDL)](examples/Sample_DaVinci_Resolve_Timeline.edl)** — Color-coded NLE timeline marker export (`Red = Critical`, `Orange = High`, `Yellow = Medium`, `Green = Low`).
 - ⚖️ **[Sample Form-4A Entertainment Artwork Release Agreement (PDF)](examples/Sample_Form_4A_Artwork_Release.pdf)** — Pre-populated copyright release contract under 17 U.S.C. § 106 & § 501 with State Bar UPL notices.
 
@@ -182,7 +182,7 @@ CineClear AI bridges the gap between production legal counsel and physical on-se
 ![Instant E&O Underwriter Sign-Off: 3 Weeks to 30 Seconds](docs/images/slide_07.png)
 
 - **Multi-Territory Scope:** Evaluates territorial risk across **United States (US)**, **United Kingdom (UK)**, **European Union (EU)**, and **Canada (CA)**.
-- **Court-Ready Legal Binder:** Generates a 4-appendix Hollywood E&O Clearance Binder with executive risk summaries, Fair Use scorecards, Form-4A artwork releases, VFX paint work orders, and Underwriter Signature Certification blocks.
+- **Counsel Evidence Dossier:** Generates a 4-appendix cinema E&O research binder with executive risk summaries, Fair Use scorecards, Form-4A artwork releases, VFX paint work orders, and licensed-counsel signature blocks.
 
 ---
 
@@ -392,7 +392,7 @@ CineClearAi/
 │   ├── music_arch_analyzer.py       # AWCPA architectural & PRO music cue sheet analyzer
 │   ├── remediation_agent.py         # Form-4A contracts, VFX work orders & script PII directives
 │   ├── edl_exporter.py              # CMX 3600 NLE Timeline marker exporter (DaVinci / Premiere)
-│   └── report_generator.py          # ReportLab Hollywood E&O Clearance Binder PDF generator
+│   └── report_generator.py          # ReportLab cinema E&O evidence dossier PDF generator
 ├── static/
 │   ├── index.html                   # Cinematic dark-mode studio dashboard
 │   ├── style.css                    # Visual bounding boxes & responsive grid styling

@@ -30,7 +30,7 @@ graph TD
     RemediationAgent --> ScriptFixes[📞 NANPA 555-01XX Script Substitutions]
     
     SecuritizedFlags --> ReportGenerator[📑 ReportLab E&O PDF Clearance Binder Generator]
-    SecuritizedFlags --> StudioDashboard[💻 Interactive Hollywood Dark-Mode Dashboard]
+    SecuritizedFlags --> StudioDashboard[💻 Interactive Cinema Dark-Mode Dashboard]
 ```
 
 ---
@@ -39,12 +39,12 @@ graph TD
 
 | Method | Endpoint | Handler Function | Purpose / Description |
 | :--- | :--- | :--- | :--- |
-| **GET** | `/` | `serve_dashboard` | Serves the interactive Hollywood studio dark-mode web dashboard. |
+| **GET** | `/` | `serve_dashboard` | Serves the interactive cinema studio dark-mode web dashboard. |
 | **GET** | `/health` | `health_check` | Service health status, active API key status, model configuration, and environment check. |
-| **GET** | `/api/samples` | `list_sample_media` | Returns pre-loaded Hollywood test assets (set photos, screenplay PDF, scene text) for instant 1-click evaluation. |
+| **GET** | `/api/samples` | `list_sample_media` | Returns pre-loaded cinema test assets (set photos, screenplay PDF, scene text) for instant 1-click evaluation. |
 | **POST** | `/api/audit` | `audit_media_endpoint` | Primary analysis endpoint. Ingests uploaded footage, set photo, or sample ID; executes multimodal vision and Parallel search grounding; returns `ClearanceAuditReport`. |
 | **GET** | `/api/reports/{report_id}` | `get_report_json` | Retrieves cached JSON audit report containing all itemized flags, risk tallies, and search grounding metadata. |
-| **GET** | `/api/reports/{report_id}/pdf` | `download_report_pdf` | Serves the generated Hollywood-grade ReportLab E&O Clearance Binder PDF with headers, ledgers, and sign-off blocks. |
+| **GET** | `/api/reports/{report_id}/pdf` | `download_report_pdf` | Serves the generated cinema-grade ReportLab E&O Clearance Binder PDF with headers, ledgers, and sign-off blocks. |
 | **GET** | `/static/*` | StaticFiles Mount | Serves client CSS, JavaScript, and UI assets. |
 
 ---

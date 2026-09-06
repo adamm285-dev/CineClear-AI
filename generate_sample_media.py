@@ -86,7 +86,7 @@ def _write_sample_set_photo(jpg_path: Path) -> None:
 
 
 def ensure_sample_media(sample_dir: Optional[Path] = None, force: bool = False) -> Path:
-    """Creates bundled Hollywood sample assets if they are missing (e.g. PDFs gitignored)."""
+    """Creates bundled production sample assets if they are missing (e.g. PDFs gitignored)."""
     target = Path(sample_dir) if sample_dir is not None else SAMPLE_DIR
     target.mkdir(parents=True, exist_ok=True)
 

@@ -204,7 +204,7 @@ def test_rogers_v_grimaldi_artistic_relevance_assessment():
 def test_upl_disclaimer_invariant():
     """Tests the Unauthorized Practice of Law (UPL) statutory decision-support notice."""
     report = ClearanceAuditReport(
-        project_title="Hollywood Feature",
+        project_title="Cinema Feature",
         media_filename="scene_01.mp4"
     )
     assert report.legal_disclaimer == UPL_LEGAL_DISCLAIMER

@@ -40,7 +40,7 @@ def get_risk_color(risk: RiskLevel) -> colors.Color:
 
 def generate_eo_clearance_binder(report: ClearanceAuditReport, output_path: Optional[str] = None) -> str:
     """
-    Generates a Hollywood-grade Errors & Omissions (E&O) Legal Clearance Binder in PDF format.
+    Generates a production-grade Errors & Omissions (E&O) evidence-gathering dossier in PDF format.
     """
     if not output_path:
         filename = f"EO_Clearance_Binder_{report.project_title.replace(' ', '_')}_{report.id[:8]}.pdf"
