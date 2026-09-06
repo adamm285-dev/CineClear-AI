@@ -199,8 +199,8 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsView.classList.add('hidden');
         window.scrollTo({ top: processingView.offsetTop - 80, behavior: 'smooth' });
 
-        // Animate pipeline steps
-        animatePipelineSteps();
+        // Start realistic pipeline progress with active stage tracking
+        startPipelineProgress();
 
         try {
             const formData = new FormData();
@@ -229,6 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (!response.ok) {
+                if (pipelineProgressTimer) clearInterval(pipelineProgressTimer);
                 if (response.status === 401) {
                     processingView.classList.add('hidden');
                     judgeModal.style.display = 'flex';
@@ -241,47 +242,123 @@ document.addEventListener('DOMContentLoaded', () => {
 
             currentReport = await response.json();
             
-            // Finish pipeline and show results
-            setTimeout(() => {
+            // Finish pipeline dynamically when response arrives
+            completePipelineProgress(() => {
                 renderResults(currentReport);
                 processingView.classList.add('hidden');
                 resultsView.classList.remove('hidden');
                 window.scrollTo({ top: resultsView.offsetTop - 80, behavior: 'smooth' });
-            }, 1200);
+            });
 
         } catch (error) {
+            if (pipelineProgressTimer) clearInterval(pipelineProgressTimer);
             console.error('Audit failed:', error);
             alert(`Clearance Audit Error: ${error.message}`);
             processingView.classList.add('hidden');
         }
     });
 
-    // Pipeline Step Animation
-    function animatePipelineSteps() {
-        const steps = [
-            { id: 'step-1', label: 'Extracting visual keyframes & parsing script dialog...' },
-            { id: 'step-2', label: 'Grounded Parallel Search: querying USPTO & legal databases...' },
-            { id: 'step-3', label: 'Senior Counsel Critic Agent: enforcing statutory invariants...' },
-            { id: 'step-4', label: 'Generating VFX work orders, releases & E&O PDF binder...' }
+    // Realistic Multi-Stage Pipeline Progress Controller
+    let pipelineProgressTimer = null;
+
+    function startPipelineProgress() {
+        const stepItems = [
+            document.getElementById('step-1'),
+            document.getElementById('step-2'),
+            document.getElementById('step-3'),
+            document.getElementById('step-4')
+        ];
+        const stepLines = document.querySelectorAll('.step-line');
+        const progressBar = document.getElementById('pipeline-progress-bar');
+
+        // Reset all steps
+        stepItems.forEach((el, idx) => {
+            if (!el) return;
+            el.className = 'step-item';
+            const c = el.querySelector('.step-circle');
+            if (c) c.textContent = (idx + 1);
+        });
+        stepLines.forEach(l => l.classList.remove('completed'));
+        if (progressBar) progressBar.style.width = '8%';
+
+        // Start at Step 1 running
+        if (stepItems[0]) stepItems[0].className = 'step-item running';
+        if (processingStepLabel) {
+            processingStepLabel.textContent = 'Stage 1/4: Visual & Script Parsing — Sampling keyframes with Gemini 3.8 Vision...';
+        }
+
+        const stages = [
+            { step: 0, progress: 15, delay: 0, label: 'Stage 1/4: Forensic Extraction — Sampling keyframes with Gemini 3.8 Vision...' },
+            { step: 1, progress: 45, delay: 2200, label: 'Stage 2/4: Grounded Parallel Search — Querying USPTO & copyright registries...' },
+            { step: 2, progress: 75, delay: 4400, label: 'Stage 3/4: Senior Counsel Critic — Enforcing statutory invariants & Fair Use...' },
+            { step: 3, progress: 88, delay: 6200, label: 'Stage 4/4: Remediation Dispatcher — Assembling Form-4A releases & E&O PDF binder...' }
         ];
 
-        let currentStep = 0;
-        const interval = setInterval(() => {
-            if (currentStep < steps.length) {
-                // Update active state
-                document.querySelectorAll('.step-item').forEach((el, idx) => {
-                    if (idx <= currentStep) {
-                        el.classList.add('active');
-                    } else {
-                        el.classList.remove('active');
+        let stageIndex = 0;
+        const startTime = Date.now();
+
+        if (pipelineProgressTimer) clearInterval(pipelineProgressTimer);
+
+        pipelineProgressTimer = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            
+            for (let i = stages.length - 1; i >= 0; i--) {
+                if (elapsed >= stages[i].delay) {
+                    if (stageIndex < stages[i].step) {
+                        for (let j = 0; j < stages[i].step; j++) {
+                            if (stepItems[j]) {
+                                stepItems[j].className = 'step-item completed';
+                                const c = stepItems[j].querySelector('.step-circle');
+                                if (c) c.textContent = '✓';
+                            }
+                            if (stepLines[j]) stepLines[j].classList.add('completed');
+                        }
+                        if (stepItems[stages[i].step]) {
+                            stepItems[stages[i].step].className = 'step-item running';
+                        }
+                        if (processingStepLabel) {
+                            processingStepLabel.textContent = stages[i].label;
+                        }
+                        stageIndex = stages[i].step;
                     }
-                });
-                processingStepLabel.textContent = steps[currentStep].label;
-                currentStep++;
-            } else {
-                clearInterval(interval);
+                    if (progressBar) {
+                        const targetPct = Math.min(94, stages[i].progress + Math.floor((elapsed - stages[i].delay) / 300));
+                        progressBar.style.width = `${targetPct}%`;
+                    }
+                    break;
+                }
             }
-        }, 600);
+        }, 150);
+    }
+
+    function completePipelineProgress(callback) {
+        if (pipelineProgressTimer) {
+            clearInterval(pipelineProgressTimer);
+            pipelineProgressTimer = null;
+        }
+
+        const stepItems = [
+            document.getElementById('step-1'),
+            document.getElementById('step-2'),
+            document.getElementById('step-3'),
+            document.getElementById('step-4')
+        ];
+        const stepLines = document.querySelectorAll('.step-line');
+        const progressBar = document.getElementById('pipeline-progress-bar');
+
+        stepItems.forEach(el => {
+            if (!el) return;
+            el.className = 'step-item completed';
+            const c = el.querySelector('.step-circle');
+            if (c) c.textContent = '✓';
+        });
+        stepLines.forEach(l => l.classList.add('completed'));
+        if (progressBar) progressBar.style.width = '100%';
+        if (processingStepLabel) {
+            processingStepLabel.textContent = 'Clearance Audit Complete! Rendering Hollywood Studio Dossier...';
+        }
+
+        setTimeout(callback, 600);
     }
 
     // Render Results
@@ -660,17 +737,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Download PDF Binder
+    // Download PDF Binder (Top & Bottom)
     btnDownloadPdf.addEventListener('click', () => {
         if (!currentReport || !currentReport.id) return;
         window.open(`/api/reports/${currentReport.id}/pdf`, '_blank');
     });
 
-    // Export EDL Timeline Markers
+    const btnDownloadPdfBottom = document.getElementById('btn-download-pdf-bottom');
+    if (btnDownloadPdfBottom) {
+        btnDownloadPdfBottom.addEventListener('click', () => {
+            btnDownloadPdf.click();
+        });
+    }
+
+    // Export EDL Timeline Markers (Top & Bottom)
     if (btnExportEdl) {
         btnExportEdl.addEventListener('click', () => {
             if (!currentReport || !currentReport.id) return;
             window.open(`/api/reports/${currentReport.id}/edl`, '_blank');
+        });
+    }
+
+    const btnExportEdlBottom = document.getElementById('btn-export-edl-bottom');
+    if (btnExportEdlBottom) {
+        btnExportEdlBottom.addEventListener('click', () => {
+            if (btnExportEdl) btnExportEdl.click();
         });
     }
 

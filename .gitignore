@@ -11,6 +11,7 @@
 *.crt
 *.p12
 *.pfx
+*key*.txt
 credentials.json
 client_secret*.json
 service-account*.json

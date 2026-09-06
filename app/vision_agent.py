@@ -4,6 +4,7 @@ Extracts candidate legal liabilities from video frames, stills, and screenplay P
 via the Dynamic Model Cascade with fallback regex scanners.
 """
 
+import asyncio
 import json
 import logging
 import os
@@ -307,6 +308,8 @@ class VisionAgent:
                 sample_timestamps = sorted(list(set(sample_timestamps)))
 
                 unique_vid_id = uuid.uuid4().hex[:8]
+                frame_tasks_data = []
+
                 for ts in sample_timestamps[:4]:
                     frame_num = int(ts * fps)
                     cap.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
@@ -316,23 +319,31 @@ class VisionAgent:
                         if success:
                             temp_still = settings.UPLOAD_DIR / f"temp_frame_{unique_vid_id}_{int(ts)}.jpg"
                             temp_still.write_bytes(buf.tobytes())
-                            try:
-                                candidates = await self.analyze_image(str(temp_still))
-                                
-                                h = int(ts // 3600)
-                                m = int((ts % 3600) // 60)
-                                s = int(ts % 60)
-                                tc_str = f"{h:02d}:{m:02d}:{s:02d}"
-                                
-                                for c in candidates:
-                                    c.timestamp_or_page = tc_str
-                                all_candidates.extend(candidates)
-                            finally:
-                                try:
-                                    temp_still.unlink(missing_ok=True)
-                                except Exception:
-                                    pass
+                            frame_tasks_data.append((temp_still, ts))
+
                 cap.release()
+
+                async def _process_frame(temp_path: Path, ts: float) -> List[CandidateEntity]:
+                    try:
+                        candidates = await self.analyze_image(str(temp_path))
+                        h = int(ts // 3600)
+                        m = int((ts % 3600) // 60)
+                        s = int(ts % 60)
+                        tc_str = f"{h:02d}:{m:02d}:{s:02d}"
+                        for c in candidates:
+                            c.timestamp_or_page = tc_str
+                        return candidates
+                    finally:
+                        try:
+                            temp_path.unlink(missing_ok=True)
+                        except Exception:
+                            pass
+
+                if frame_tasks_data:
+                    results = await asyncio.gather(*[_process_frame(p, t) for p, t in frame_tasks_data])
+                    for r in results:
+                        all_candidates.extend(r)
+
                 if all_candidates:
                     return all_candidates
         except Exception as e:

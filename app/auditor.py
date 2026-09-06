@@ -4,6 +4,7 @@ Executes extraction, Parallel Search web grounding, Critic Agent reflection,
 and automated production remediation using the Dynamic Model Cascade.
 """
 
+import asyncio
 import json
 import logging
 import re
@@ -211,9 +212,8 @@ class CineClearAuditor:
 
         candidate_items = ExtractorHarness.deduplicate_entities(raw_candidates)
 
-        # 2. Parallel Search Grounding Loop
-        grounded_flags: List[ClearanceFlag] = []
-        for candidate in candidate_items:
+        # 2. Parallel Search Grounding Loop (Concurrent Async Execution)
+        async def _ground_candidate(candidate) -> ClearanceFlag:
             cat = candidate.get("category") if isinstance(candidate, dict) else candidate.category
             entity = candidate.get("detected_entity") if isinstance(candidate, dict) else candidate.detected_entity
             timecode = candidate.get("timestamp_or_page") if isinstance(candidate, dict) else candidate.timestamp_or_page
@@ -222,6 +222,7 @@ class CineClearAuditor:
             mitigation = candidate.get("mitigation_action") if isinstance(candidate, dict) else candidate.mitigation_action
             box_2d = candidate.get("box_2d") if isinstance(candidate, dict) else getattr(candidate, "box_2d", None)
 
+            # Concurrent Parallel search + Gemini synthesis
             verification = await self.verify_flag_with_parallel(
                 entity_name=entity,
                 category=cat,
@@ -263,23 +264,23 @@ class CineClearAuditor:
                     risk = RiskLevel.LOW
                     mitigation = arch_assessment.clearance_recommendation
 
-            grounded_flags.append(
-                ClearanceFlag(
-                    id=str(uuid.uuid4())[:8],
-                    timestamp_or_page=timecode,
-                    category=cat,
-                    detected_entity=entity,
-                    visual_description=vis_desc,
-                    risk_level=risk,
-                    verification=verification,
-                    mitigation_action=mitigation,
-                    box_2d=box_2d,
-                    fair_use_scorecard=scorecard,
-                    territory_matrix=territories,
-                    arch_assessment=arch_assessment,
-                    rogers_assessment=rogers_assessment
-                )
+            return ClearanceFlag(
+                id=str(uuid.uuid4())[:8],
+                timestamp_or_page=timecode,
+                category=cat,
+                detected_entity=entity,
+                visual_description=vis_desc,
+                risk_level=risk,
+                verification=verification,
+                mitigation_action=mitigation,
+                box_2d=box_2d,
+                fair_use_scorecard=scorecard,
+                territory_matrix=territories,
+                arch_assessment=arch_assessment,
+                rogers_assessment=rogers_assessment
             )
+
+        grounded_flags = await asyncio.gather(*[_ground_candidate(c) for c in candidate_items])
 
         # 3. Critic Agent Reflection (Agent 2)
         securitized_flags = await self.review_and_securitize_flags(grounded_flags)
