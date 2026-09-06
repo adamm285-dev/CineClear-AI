@@ -1,20 +1,27 @@
 # CineClear AI - Capability Wiring Index (wiring.yaml)
 # Machine-readable specification of system components, agents, endpoints, and ledgers.
 
-version: 1.0.0
-updated: "2026-09-01"
+version: 1.2.0
+updated: "2026-09-06"
 system:
-  name: "CineClear AI - Legal & E&O Clearance System"
+  name: "CineClear AI - Cinema Legal & E&O Research System"
+  public_url: "https://cineclear.pro"
+  judge_vip_url: "https://cineclear.pro?access=cineclear-judge-2026"
+  demo_video: "https://www.youtube.com/watch?v=PgOzgVUBNso"
   host_os: "Windows 10 / 11"
   runtime: "Python 3.13"
   framework: "FastAPI + Uvicorn"
   default_port: 8085
-  ai_brain: "Google Gemini 3.8 Flash (High-Quota 1,500 req/day Tier)"
+  production: "Google Cloud Run us-central1 (service cineclear-ai)"
+  ai_brain: "Google Gemini 3.8 Flash (preferred; cascade max 2 live tiers)"
   search_engine: "Parallel Semantic Search API (v1)"
-  pdf_engine: "ReportLab 5.0.1"
-  script_engine: "PyMuPDF (fitz) + pdfplumber"
+  pdf_engine: "ReportLab"
+  script_engine: "PyMuPDF (fitz)"
   video_engine: "OpenCV (cv2) + Pillow"
-  desktop_launcher: "CineClear AI.lnk & Launch-CineClear-AI.bat"
+  tos_version: "2026-09-06"
+  decision_support_only: true
+  judge_auth_required_for_audits: true
+  audit_rate_limit: "12 per hour per IP"
 
 statutory_and_clearance_framework:
   trademark_protection:
@@ -41,49 +48,91 @@ endpoints:
   - path: "/"
     method: "GET"
     handler: "server.serve_dashboard"
-    description: "Serves the interactive cinema studio dark-mode web dashboard."
+    description: "Cinema dark-mode dashboard. TOS gate + Judge VIP pill. Live SSE pipeline and partner API trace."
     auth_required: false
 
   - path: "/health"
     method: "GET"
     handler: "server.health_check"
-    description: "Health status, API key validation, model configuration, and environment state."
+    description: "Health, Gemini/Parallel configured flags, tos_version, decision_support_only."
+    auth_required: false
+
+  - path: "/terms"
+    method: "GET"
+    handler: "server.serve_terms"
+    description: "TOS / EULA: AS-IS, limitation of liability, indemnification, UPL, upload purge."
+    auth_required: false
+
+  - path: "/legal"
+    method: "GET"
+    handler: "server.serve_terms"
+    description: "Alias of /terms."
+    auth_required: false
+
+  - path: "/favicon.ico"
+    method: "GET"
+    handler: "server.favicon"
+    description: "Tab icon (ICO/PNG/SVG fallback)."
     auth_required: false
 
   - path: "/api/samples"
     method: "GET"
     handler: "server.list_sample_media"
-    description: "Returns pre-loaded cinema test assets (set photos, screenplay PDF, scene text) for 1-click evaluation."
+    description: "Bundled 4K still, PDF screenplay, TXT scene metadata."
+    auth_required: false
+
+  - path: "/api/auth/verify"
+    method: "GET"
+    handler: "server.verify_judge_auth"
+    description: "VIP_JUDGE vs PUBLIC_GUEST from X-Judge-Access, query access, or Authorization."
     auth_required: false
 
   - path: "/api/audit"
     method: "POST"
     handler: "server.audit_media_endpoint"
-    description: "Primary multimodal analysis endpoint. Ingests uploaded media, runs 3-agent triad, and compiles E&O dossier."
-    auth_required: false
+    description: "JSON 3-agent audit. Judge VIP required. Rate-limited. Purges uploads/ after."
+    auth_required: true
+
+  - path: "/api/audit/stream"
+    method: "POST"
+    handler: "server.audit_media_stream_endpoint"
+    description: "SSE audit used by the dashboard: stage + Gemini/Parallel log frames, then complete report."
+    auth_required: true
 
   - path: "/api/reports/{report_id}"
     method: "GET"
     handler: "server.get_report_json"
-    description: "Retrieves cached JSON clearance audit report containing flags, risk tallies, and remediation deliverables."
+    description: "In-memory report cache (same Cloud Run instance)."
     auth_required: false
 
   - path: "/api/reports/{report_id}/pdf"
     method: "GET"
     handler: "server.download_report_pdf"
-    description: "Generates and streams cinema-grade ReportLab E&O Clearance Binder PDF."
+    description: "PDF from cache; regenerates if file missing."
     auth_required: false
 
   - path: "/api/reports/{report_id}/edl"
     method: "GET"
     handler: "server.download_edl_markers"
-    description: "Exports timecoded clearance flags as CMX 3600 EDL for DaVinci Resolve and Adobe Premiere Pro."
+    description: "CMX 3600 EDL from cached report."
+    auth_required: false
+
+  - path: "/api/export/pdf"
+    method: "POST"
+    handler: "server.export_pdf_from_report"
+    description: "Rebuild PDF from client report JSON (works across Cloud Run replicas)."
+    auth_required: false
+
+  - path: "/api/export/edl"
+    method: "POST"
+    handler: "server.export_edl_from_report"
+    description: "Rebuild EDL from client report JSON."
     auth_required: false
 
   - path: "/static/*"
     method: "GET"
     handler: "StaticFiles Mount"
-    description: "Serves dark-mode studio frontend styling, icons, and asynchronous UI controller script."
+    description: "Frontend, legal.html, favicons. JS/CSS/HTML sent Cache-Control no-store."
     auth_required: false
 
 agents_and_capabilities:
@@ -92,12 +141,13 @@ agents_and_capabilities:
     module: "app.gemini_cascade"
     class: "GeminiCascadeClient"
     role: "Tiered AI Failover & Rate-Limit Shield"
-    ladder: ["gemini-3.6-flash", "gemini-2.5-flash", "gemini-2.5-pro", "gemini-1.5-flash"]
+    ladder: ["gemini-3.8-flash", "gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.6-flash", "gemini-flash-latest"]
+    max_live_tiers: 2
     status: "live"
     features:
-      - "Hierarchical multi-tier failover across Gemini model generations on 429 quota limits"
-      - "Seamless fallback to high-quota production tiers"
-      - "Graceful delegation to local deterministic rules on total cloud exhaustion"
+      - "Preferred model gemini-3.8-flash; at most two live cascade attempts per call"
+      - "Emits Hackathon Judge Trace logs (generateContent model + 200 OK / token counts)"
+      - "Local deterministic harness if all live tiers fail"
 
   - id: "extractor_harness"
     name: "Extractor & Ingest Harness"
@@ -115,7 +165,7 @@ agents_and_capabilities:
     module: "app.vision_agent"
     class: "VisionAgent"
     role: "Candidate Extraction"
-    model: "gemini-3.6-flash"
+    model: "gemini-3.8-flash"
     status: "live"
     features:
       - "Multi-engine screenplay parsing (PyMuPDF / pdfplumber)"
@@ -130,19 +180,20 @@ agents_and_capabilities:
     endpoint: "https://api.parallel.ai/v1/search"
     status: "live"
     features:
-      - "USPTO trademark registry cross-referencing"
-      - "US Copyright Office catalog validation"
-      - "Public domain pre-1929 verification"
-      - "NANPA fictional telephone number verification"
+      - "Live POST https://api.parallel.ai/v1/search with 8s timeout"
+      - "Judge Trace logs HTTP status, result count, top title/URL"
+      - "Statutory fallback corpus if live search unavailable"
+      - "NANPA / USPTO / copyright-oriented objectives"
 
   - id: "senior_counsel_critic"
     name: "Senior Counsel Critic Agent (Agent 2)"
     module: "app.auditor"
     class: "CineClearAuditor"
     role: "Multi-Turn Reflection & Securitization"
-    model: "gemini-3.6-flash"
+    model: "gemini-3.8-flash"
     status: "live"
     features:
+      - "Concurrent Parallel Search + Gemini synthesis (asyncio.as_completed)"
       - "Reconciles single-pass hallucinations and contradictions"
       - "Eliminates modern mark public domain misclassifications"
       - "Calibrates risk tiers (CRITICAL / HIGH / MEDIUM / LOW)"
@@ -172,16 +223,16 @@ agents_and_capabilities:
       - "NANPA 555-01XX Script Dialogue & ADR Substitutions"
 
   - id: "reportlab_binder_generator"
-    name: "ReportLab cinema E&O Clearance Binder Generator"
+    name: "ReportLab cinema E&O evidence dossier generator"
     module: "app.report_generator"
     handler: "generate_eo_clearance_binder"
-    role: "Court-Ready PDF Compilation"
+    role: "Counsel-review PDF (not a certificate)"
     status: "live"
     features:
-      - "Executive risk matrix and insurance risk summary"
-      - "Itemized clearance ledgers with timecodes and statutory citations"
-      - "Parallel Search chain-of-custody audit logs"
-      - "Underwriting endorsement and attorney sign-off blocks"
+      - "Executive risk matrix for licensed counsel triage"
+      - "UPL decision-support footer on every page"
+      - "Licensed production attorney / E&O broker sign-off (gatherer, not certifier)"
+      - "Parallel Search chain-of-custody citations"
 
   - id: "fair_use_analyzer"
     name: "4-Factor Statutory Fair Use & Multi-Territory Engine"
@@ -215,6 +266,19 @@ agents_and_capabilities:
       - "Generates industry-standard CMX 3600 Edit Decision Lists (EDL)"
       - "Converts timecodes to 24fps frames with 2-second locator windows"
       - "Color-coded DaVinci Resolve & Adobe Premiere Pro timeline marker comments"
+      - "Decision-support COMMENT header (not a clearance certificate)"
+
+  - id: "telemetry_sink"
+    name: "Hackathon Judge Partner API Trace"
+    module: "app.telemetry"
+    role: "SSE log frames for Gemini generateContent and Parallel POST /search"
+    status: "live"
+
+  - id: "upload_retention"
+    name: "Ephemeral upload purge"
+    module: "app.retention"
+    role: "Delete files under uploads/ after each audit; never delete sample_media"
+    status: "live"
 
   - id: "cli_batch_engine"
     name: "Batch Media Scanner & Terminal CLI"
@@ -263,8 +327,8 @@ ledgers_and_storage:
     format: "PDF Document Store (ReportLab)"
     role: "Permanent archive for compiled E&O Insurance Clearance Binders."
   - path: "uploads/"
-    format: "Media Asset Ingestion Cache"
-    role: "Temporary staging directory for uploaded screenplays, stills, and video keyframes."
+    format: "Ephemeral media cache"
+    role: "User uploads and temp video frames. Purged when the audit finishes."
   - path: "sample_media/"
     format: "Bundled Test Assets"
     role: "Production stills (sample_set_photo.jpg) and screenplays (sample_screenplay.pdf/.txt)."

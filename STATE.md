@@ -1,8 +1,9 @@
 # CineClear AI - Current System State & Operational Runbook (STATE.md)
 
-**Last Updated:** September 1, 2026  
-**Status:** 🟢 **FULLY OPERATIONAL & VERIFIED (24/24 TESTS PASSING)**  
-**Repository:** [https://github.com/adamm285-dev/CineClear-AI](https://github.com/adamm285-dev/CineClear-AI)
+**Last Updated:** September 6, 2026  
+**Status:** 🟢 **LIVE ON PRODUCTION** — cineclear.pro (Cloud Run `us-central1`)  
+**Repository:** [https://github.com/adamm285-dev/CineClear-AI](https://github.com/adamm285-dev/CineClear-AI)  
+**Demo video:** [https://www.youtube.com/watch?v=PgOzgVUBNso](https://www.youtube.com/watch?v=PgOzgVUBNso)
 
 ---
 
@@ -10,80 +11,79 @@
 
 | Parameter | Current Value | Notes |
 | :--- | :--- | :--- |
-| **FastAPI Web Server** | `http://0.0.0.0:8085` (`localhost:8085`) | Dedicated port to eliminate conflict with telephony/voice services (8000/8001). |
-| **Dynamic Model Cascade** | `GeminiCascadeClient` | 4-tier fallback: `gemini-3.6-flash` -> `gemini-2.5-flash` -> `gemini-2.5-pro` -> `gemini-1.5-flash` -> local rules. |
-| **Parallel Search API** | `https://api.parallel.ai/v1` | Live semantic objective web grounding (USPTO, Copyright, Public Domain, NANPA). |
-| **Agent 1 (Extractor & Grounder)** | `app/vision_agent.py` | Multimodal vision & screenplay parser with `ExtractorHarness` deduplication & normalized 0-1000 `box_2d` coordinate extraction. |
-| **Agent 2 (Senior Counsel Critic)**| `app/auditor.py` | Multi-turn reflection loop with `CriticHarness` public domain date invariant enforcement & risk normalization. |
-| **Agent 3 (Remediation Dispatcher)**| `app/remediation_agent.py` | Generates Form-4A releases, TM agreements, VFX work orders, script PII fixes & PRO Music Cue Sheets. |
-| **Fair Use & Multi-Territory Engine**| `app/fair_use_analyzer.py` | 4-factor statutory scoring (17 U.S.C. § 107) and US/UK/EU/Canada jurisdictional compliance mapping. |
-| **AWCPA & Music Sync Analyzer**| `app/music_arch_analyzer.py` | Public panorama safe harbors (17 U.S.C. § 120(a)) vs restricted facades; ASCAP/BMI cue sheet compiler. |
-| **NLE Timeline Marker Exporter**| `app/edl_exporter.py` | Generates industry-standard CMX 3600 EDL files with color-coded locators for DaVinci Resolve & Premiere Pro. |
-| **ReportLab Engine** | `reportlab 5.0.1` | Production-grade Errors & Omissions (E&O) PDF dossier generator with full statutory and cue sheet appendices. |
-| **Desktop Launchers** | `CineClear AI.lnk`, `Launch-CineClear-AI.bat` | 1-click desktop shortcuts with automated browser launch. |
+| **Public studio** | `https://cineclear.pro` | Custom domain on Cloud Run service `cineclear-ai`. |
+| **Judge VIP URL** | `https://cineclear.pro?access=cineclear-judge-2026` | One-click pass. No account. Header pill must read Judge VIP Active. |
+| **FastAPI** | `0.0.0.0:8085` | Local: `python server.py`. Production container `CMD python server.py`. |
+| **Gemini** | `gemini-3.8-flash` (preferred) | Cascade tries **2** live tiers then local harness. Ladder: 3.8-flash → 3.5-flash → 3.5-flash-lite → 3.6-flash → gemini-flash-latest. |
+| **Parallel Search** | `https://api.parallel.ai/v1/search` | Live objective search; statutory corpus fallback if HTTP non-200. |
+| **Audit transport** | `POST /api/audit/stream` (SSE) | Dashboard uses SSE. `POST /api/audit` remains JSON for CLI/tests. |
+| **Auth** | `REQUIRE_JUDGE_AUTH_FOR_UPLOADS=true` | **All** live audits (samples + uploads) require `X-Judge-Access` / `?access=`. |
+| **Quota shield** | 12 live audits / hour / IP | In-memory limiter on `/api/audit` and `/api/audit/stream`. |
+| **TOS** | `/terms` version `2026-09-06` | Un-skippable UI gate. Decision-support only. $0 LoL on free/hackathon tier. |
+| **Retention** | `app/retention.py` | User files under `uploads/` deleted when the audit finishes. Samples never deleted. |
+| **Telemetry** | `app/telemetry.py` | Judge trace console: live `generateContent` and Parallel POST lines. |
 
 ---
 
-## 2. Component Health & Latency Scoreboard
+## 2. Pipeline (what actually runs)
 
-| Pipeline Component | Target SLA | Current Benchmark | Status |
-| :--- | :--- | :--- | :--- |
-| **Sample Media Loader** | < 100 ms | **< 15 ms** | 🟢 Healthy |
-| **Screenplay Parsing (PyMuPDF)** | < 300 ms | **45 ms** | 🟢 Healthy |
-| **Keyframe Extraction (OpenCV)** | < 1,000 ms | **280 ms** | 🟢 Healthy |
-| **Extractor Harness Deduplication** | < 50 ms | **< 2 ms** | 🟢 Healthy |
-| **Parallel Search Grounding** | < 2,000 ms | **120 - 450 ms** | 🟢 Healthy |
-| **Senior Counsel Critic Reflection** | < 1,500 ms | **350 - 900 ms** | 🟢 Healthy |
-| **Fair Use & Multi-Territory Engine** | < 50 ms | **< 5 ms** | 🟢 Healthy |
-| **AWCPA & Music Sync Analyzer** | < 50 ms | **< 5 ms** | 🟢 Healthy |
-| **Agent 3 Remediation Dispatcher** | < 100 ms | **< 5 ms** | 🟢 Healthy |
-| **CMX 3600 EDL Marker Generator** | < 50 ms | **< 5 ms** | 🟢 Healthy |
-| **ReportLab PDF Binder Generation** | < 800 ms | **120 ms** | 🟢 Healthy |
-| **End-to-End Clearance Turnaround** | < 5,000 ms | **approx 1.2 - 3.1 s** | 🟢 Healthy |
+1. **Stage 1 — Extract** (`VisionAgent`): Gemini multimodal still / OpenCV keyframes (gathered) / PyMuPDF+Gemini script. `ExtractorHarness` dedupes.
+2. **Stage 2 — Ground** (`asyncio.as_completed`): each flag Parallel Search **then** Gemini synthesis, concurrent across flags.
+3. **Stage 3 — Critic** (`CineClearAuditor` + `CriticHarness`): statutory invariants (no modern TM as public domain; phones → CRITICAL).
+4. **Stage 4 — Dispatch**: Form-4A drafts, VFX orders, NANPA fixes, cue sheet, ReportLab **evidence dossier** (counsel sign-off, not a certificate).
+
+UI progress balls follow these four stages via SSE. Exports POST the completed JSON to `/api/export/pdf` and `/api/export/edl` so Cloud Run instance affinity is not required.
 
 ---
 
-## 3. Engineering Accomplishments & Architecture Evolution
+## 3. Component Notes (honest)
 
-1. **Dynamic Model Cascade Engine (`app/gemini_cascade.py`):**
-   * Multi-tier failover ladder safeguarding against 429 quota exhaustion before falling back to local deterministic harnesses.
-2. **Dual Harness Architecture (`app/harness.py`):**
-   * `ExtractorHarness`: Entity deduplication across recurring video keyframes and screenplay scenes; universal candidate normalization.
-   * `CriticHarness`: Hard statutory invariants preventing modern marks from hallucinating into public domain status; strictly clamps real phone numbers to `CRITICAL`.
-3. **Interactive Visual Bounding Boxes & NLE Timeline Marker Export (`app/edl_exporter.py`):**
-   * Normalized 0–1000 2D bounding boxes rendered as interactive SVG overlays in the web UI with card hover pulsing.
-   * CMX 3600 EDL export with 24fps SMPTE locators for direct import into DaVinci Resolve and Adobe Premiere Pro.
-4. **4-Factor Statutory Fair Use & Multi-Territory Jurisdictional Engine (`app/fair_use_analyzer.py`):**
-   * Computes statutory 4-factor scoring under 17 U.S.C. § 107 and evaluates global distribution compliance across US, UK (CDPA 1988), EU (InfoSoc), and Canada (Copyright Act § 30.7).
-5. **AWCPA Architectural Work Validator & ASCAP/BMI Music Cue Sheets (`app/music_arch_analyzer.py`):**
-   * Evaluates public panorama safe harbors under 17 U.S.C. § 120(a) and detects restricted architectural facades (e.g. nighttime Eiffel Tower, Hollywood Sign).
-   * Generates standardized ASCAP/BMI/SESAC cue sheets for audio tracks.
-6. **24/24 Automated Regression Tests Passing:**
-   * 100% test coverage across cascade failovers, dual harness invariants, critic reflection, remediation dispatcher, EDL export, fair use, architecture, and FastAPI endpoints.
+| Component | Status | Reality vs old SLA |
+| :--- | :--- | :--- |
+| Sample PDF/JPG/TXT ensure | 🟢 | `ensure_sample_media()` on startup and sample audit (PDF was gitignored historically). |
+| Live Gemini extract | 🟢 | Wall clock often **8–25s** per extract, not 1–3s. |
+| Parallel + Gemini per flag | 🟢 | Concurrent; 8s Parallel timeout; 8s Gemini timeout; 2 cascade tiers. |
+| SSE progress + judge trace | 🟢 | Padded `text/event-stream` so Chrome/Cloud Run flush. |
+| PDF / EDL export | 🟢 | Client blob download from report JSON. |
+| Favicon | 🟢 | `/favicon.ico` + `static/favicon.svg`. |
+
+Do **not** quote “sub-5-second E2E” in judge materials. Live partner APIs dominate latency.
 
 ---
 
-## 4. Operational Maintenance Runbook
+## 4. Security & UPL (current)
 
-### Starting the Studio Web Interface
-* **From Desktop:** Double-click **`CineClear AI.lnk`** or run **`Launch-CineClear-AI.bat`**.
-* **From PowerShell:**
-  ```powershell
-  cd C:\Users\adamm_000\Desktop\CineClearAi
-  python server.py
-  ```
-  Navigate to **`http://localhost:8085`**.
+* Language: **decision-support / counsel-review dossier**. Never “cleared for distribution.”
+* PDF page chrome + `/terms` + results banner match that boundary. Sign-off is **licensed production attorney / E&O broker**.
+* Random visitors: landing page only. Audits **401** without VIP pass (JS no longer auto-injects the key).
+* Judge pass is public in the README (evaluators need it). Rate limit is the quota backstop.
 
-### Running Automated Test Suite
+---
+
+## 5. Runbook
+
+### Local
 ```powershell
-python -m pytest tests/ -v
+cd C:\Users\adamm_000\Desktop\CineClearAi
+python server.py
+# http://localhost:8085?access=cineclear-judge-2026
 ```
 
-### Running CLI Batch Audits
+### Tests
 ```powershell
-# Instant demo audit on bundled set photo
-python main.py --demo
-
-# Audit a screenplay PDF
-python main.py --file sample_media/sample_screenplay.pdf --title "Midnight Drive"
+python -m pytest tests/ -q
 ```
+Modules: `test_auditor`, `test_cascade`, `test_edl_exporter`, `test_fair_use`, `test_harness`, `test_models`, `test_music_arch`, `test_parallel_client`, `test_remediation`, `test_retention`, `test_server`.
+
+### Production deploy
+```powershell
+.\deploy_cloudrun.ps1
+```
+Sets `ENVIRONMENT=production`, `REQUIRE_JUDGE_AUTH_FOR_UPLOADS=true`, `JUDGE_ACCESS_KEY=cineclear-judge-2026`, plus Gemini/Parallel keys from `.env`.
+
+### Judge evaluate path
+1. [https://cineclear.pro?access=cineclear-judge-2026](https://cineclear.pro?access=cineclear-judge-2026)  
+2. Accept TOS.  
+3. 4K STILL (then PDF SCRIPT / TXT).  
+4. Confirm GEMINI + PARALLEL lines in the judge trace.  
+5. Export PDF + EDL.

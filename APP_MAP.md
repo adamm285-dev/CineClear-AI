@@ -1,6 +1,8 @@
 # CineClear AI - Application Architecture Map (APP_MAP.md)
 
-This document provides the definitive architectural map and component directory of the **CineClear AI Legal & E&O Clearance System**.
+Definitive architectural map of the **CineClear AI cinema legal & E&O research system** (decision-support for licensed production counsel — not a clearance certificate).
+
+**Last aligned:** September 6, 2026
 
 ---
 
@@ -8,192 +10,99 @@ This document provides the definitive architectural map and component directory 
 
 ```mermaid
 graph TD
-    Media[🎬 Input Production Media: Video / Stills / Script PDF] --> ExtractorHarness[🛡️ Role 1: Extractor Harness]
-    
-    ExtractorHarness -->|Deduplicate & Sanitize| VisionAgent[👁️ Agent 1: Gemini Multimodal Vision & PyMuPDF Scanner]
-    VisionAgent --> CandidateFlags[⚠️ Candidate Clearance Liabilities]
-    
-    CandidateFlags --> ParallelClient[🌐 Parallel Search Grounding Client]
-    ParallelClient -->|Query: https://api.parallel.ai/v1/search| ParallelAPI[🔍 Parallel Semantic Search API]
-    ParallelAPI --> RealWorldData[📚 Real-World Ground Truth: USPTO, Copyright Office, NANPA]
-    RealWorldData --> GroundedFlags[⚖️ Grounded Legal Flags]
-    
-    GroundedFlags --> CriticHarness[🛡️ Role 2: Critic & Securitization Harness]
-    CriticHarness --> CriticAgent[🧑‍⚖️ Agent 2: Senior Counsel Critic Reflection Pass]
-    CriticAgent -->|Enforce Invariants & Reconcile Contradictions| SecuritizedFlags[🎯 Securitized Clearance Flags]
-    
-    SecuritizedFlags --> RemediationAgent[⚡ Agent 3: Autonomous Remediation & Dispatcher]
-    
-    RemediationAgent --> Form4A[📄 Pre-Filled Form-4A Art Releases]
-    RemediationAgent --> TMReleases[🏷️ Trademark Placement Agreements]
-    RemediationAgent --> VFXOrders[🎨 Timecoded VFX Paint / Greeking Work Orders]
-    RemediationAgent --> ScriptFixes[📞 NANPA 555-01XX Script Substitutions]
-    
-    SecuritizedFlags --> ReportGenerator[📑 ReportLab E&O PDF Clearance Binder Generator]
-    SecuritizedFlags --> StudioDashboard[💻 Interactive Cinema Dark-Mode Dashboard]
+    Judge[⚖️ Judge VIP ?access= or X-Judge-Access] --> Gate[Auth + 12/hr IP rate limit]
+    TOS[TOS clickwrap /terms] --> Gate
+    Media[🎬 Production media or bundled sample] --> Gate
+    Gate --> Stream[POST /api/audit/stream SSE]
+    Stream --> ExtractorHarness[🛡️ ExtractorHarness]
+    ExtractorHarness --> VisionAgent[👁️ Agent 1: Gemini 3.8 Vision / PyMuPDF]
+    VisionAgent --> Candidates[Candidate flags]
+    Candidates --> ParallelFanout[asyncio.as_completed grounding]
+    ParallelFanout --> ParallelAPI[🔍 POST api.parallel.ai/v1/search]
+    ParallelFanout --> GeminiSynth[Gemini synthesis per flag]
+    ParallelAPI --> Grounded[Grounded flags]
+    GeminiSynth --> Grounded
+    Grounded --> Critic[🧑‍⚖️ Agent 2 + CriticHarness]
+    Critic --> Agent3[⚡ Agent 3 Remediation]
+    Agent3 --> PDF[📑 ReportLab evidence dossier]
+    Agent3 --> EDL[🎬 CMX 3600 EDL]
+    Stream --> Trace[Live Partner API Trace UI]
+    Trace --> GeminiSynth
+    Trace --> ParallelAPI
 ```
 
 ---
 
 ## 2. API Endpoint Directory
 
-| Method | Endpoint | Handler Function | Purpose / Description |
-| :--- | :--- | :--- | :--- |
-| **GET** | `/` | `serve_dashboard` | Serves the interactive cinema studio dark-mode web dashboard. |
-| **GET** | `/health` | `health_check` | Service health status, active API key status, model configuration, and environment check. |
-| **GET** | `/api/samples` | `list_sample_media` | Returns pre-loaded cinema test assets (set photos, screenplay PDF, scene text) for instant 1-click evaluation. |
-| **POST** | `/api/audit` | `audit_media_endpoint` | Primary analysis endpoint. Ingests uploaded footage, set photo, or sample ID; executes multimodal vision and Parallel search grounding; returns `ClearanceAuditReport`. |
-| **GET** | `/api/reports/{report_id}` | `get_report_json` | Retrieves cached JSON audit report containing all itemized flags, risk tallies, and search grounding metadata. |
-| **GET** | `/api/reports/{report_id}/pdf` | `download_report_pdf` | Serves the generated cinema-grade ReportLab E&O Clearance Binder PDF with headers, ledgers, and sign-off blocks. |
-| **GET** | `/static/*` | StaticFiles Mount | Serves client CSS, JavaScript, and UI assets. |
+| Method | Endpoint | Handler | Auth | Purpose |
+| :--- | :--- | :--- | :--- | :--- |
+| **GET** | `/` | `serve_dashboard` | Public | Cinema dark-mode dashboard (`Cache-Control: no-store` on HTML/JS/CSS). |
+| **GET** | `/health` | `health_check` | Public | Keys configured, model, `tos_version`, `decision_support_only`. |
+| **GET** | `/terms` `/legal` | `serve_terms` | Public | TOS / EULA (AS-IS, LoL, indemnification, UPL). |
+| **GET** | `/favicon.ico` | `favicon` | Public | Tab icon. |
+| **GET** | `/api/samples` | `list_sample_media` | Public | Metadata for 4K still, PDF script, TXT scene. |
+| **GET** | `/api/auth/verify` | `verify_judge_auth` | Optional header/query | `VIP_JUDGE` vs `PUBLIC_GUEST`. |
+| **POST** | `/api/audit` | `audit_media_endpoint` | **Judge VIP** | JSON audit (tests/CLI). Purges `uploads/` after. |
+| **POST** | `/api/audit/stream` | `audit_media_stream_endpoint` | **Judge VIP** | SSE: `stage`, `log` (Gemini/Parallel), `complete`. |
+| **GET** | `/api/reports/{id}` | `get_report_json` | Public* | In-memory report cache (single instance). |
+| **GET** | `/api/reports/{id}/pdf` | `download_report_pdf` | Public* | Regenerates PDF if missing on disk. |
+| **GET** | `/api/reports/{id}/edl` | `download_edl_markers` | Public* | CMX 3600 from cached report. |
+| **POST** | `/api/export/pdf` | `export_pdf_from_report` | Public* | Rebuild PDF from **client report JSON** (Cloud Run safe). |
+| **POST** | `/api/export/edl` | `export_edl_from_report` | Public* | Rebuild EDL from client report JSON. |
+| **GET** | `/static/*` | StaticFiles | Public | `index.html`, `app.js`, `style.css`, favicons, `legal.html`. |
+| **GET** | `/sample_media/*` | StaticFiles | Public | Bundled still/PDF/TXT (not confidential). |
+
+\*Report GET/export do not re-call Gemini. Live partner spend is only on `/api/audit*`.
+
+Judge header: `X-Judge-Access: cineclear-judge-2026` or query `?access=` (dashboard). Production env: `REQUIRE_JUDGE_AUTH_FOR_UPLOADS=true` applies to **samples and uploads**.
 
 ---
 
-## 3. Data Model & Schema Definitions
+## 3. Data Model (`app/models.py`)
 
-### Legal Clearance & Remediation Schemas (`app/models.py`)
+Core types: `RiskLevel`, `ClearanceCategory`, `ParallelVerification`, `ClearanceFlag` (plus `box_2d`, `fair_use_scorecard`, `territory_matrix`, `arch_assessment`, `rogers_assessment`), `RemediationPackage`, `ClearanceAuditReport` (`legal_disclaimer` defaults to `UPL_LEGAL_DISCLAIMER`).
 
-```python
-class RiskLevel(str, Enum):
-    LOW = "LOW"            # Fair use / de minimis / public domain
-    MEDIUM = "MEDIUM"      # Incidental mark / ambiguous rights / verify release
-    HIGH = "HIGH"          # Explicit trademark, uncleared music, modern art
-    CRITICAL = "CRITICAL"  # Defamatory placement, living person likeness risk, real PII
-
-class ClearanceCategory(str, Enum):
-    TRADEMARK_LOGO = "TRADEMARK_LOGO"
-    COPYRIGHTED_ART = "COPYRIGHTED_ART"
-    ARCHITECTURAL_RIGHTS = "ARCHITECTURAL_RIGHTS"
-    MUSIC_AUDIO = "MUSIC_AUDIO"
-    NAME_DEFAMATION = "NAME_DEFAMATION"
-    PHONE_PII = "PHONE_PII"
-
-class ParallelVerification(BaseModel):
-    search_objective: str
-    sources_checked: List[str]
-    is_public_domain: bool = False
-    active_trademark_found: bool = False
-    rights_holder_identified: Optional[str] = None
-    statutory_context: str
-
-class ClearanceFlag(BaseModel):
-    id: str
-    timestamp_or_page: str
-    category: ClearanceCategory
-    detected_entity: str
-    visual_description: str
-    risk_level: RiskLevel
-    verification: ParallelVerification
-    mitigation_action: str
-
-class VFXWorkOrder(BaseModel):
-    timestamp_or_page: str
-    target_entity: str
-    action_type: str
-    tracking_notes: str
-    priority: str
-
-class LegalReleaseAgreement(BaseModel):
-    form_type: str
-    licensor_entity: str
-    property_description: str
-    governing_statute: str
-    agreement_text: str
-
-class ScriptFixDirective(BaseModel):
-    page_number: str
-    original_text: str
-    recommended_replacement: str
-    rationale: str
-
-class RemediationPackage(BaseModel):
-    vfx_work_orders: List[VFXWorkOrder] = Field(default_factory=list)
-    legal_releases: List[LegalReleaseAgreement] = Field(default_factory=list)
-    script_fixes: List[ScriptFixDirective] = Field(default_factory=list)
-
-class ClearanceAuditReport(BaseModel):
-    id: str
-    project_title: str
-    media_filename: str
-    media_type: str
-    total_flags: int
-    critical_count: int
-    high_count: int
-    medium_count: int
-    low_count: int
-    flags: List[ClearanceFlag]
-    generated_at: str
-    remediation_package: Optional[RemediationPackage] = None
-    pdf_report_path: Optional[str] = None
-```
+`TOS_VERSION = "2026-09-06"`. UPL text states decision-support only, AS-IS, not a clearance or insurance certificate.
 
 ---
 
-## 4. Storage & Persistence Mapping
+## 4. Storage & Module Map
 
 ```text
-C:\Users\adamm_000\Desktop\CineClearAi\
-├── .env.example                     # Environment template (Gemini & Parallel keys, server port)
-├── .env                             # Local environment configuration
-├── .gitignore                       # Standard Python / artifact ignore rules
-├── requirements.txt                 # Project dependencies
-├── README.md                        # Primary documentation & build guide
-├── STATE.md                         # Operational state, component health & runbook
-├── APP_MAP.md                       # Application architectural map & schemas
-├── SPINE.md                         # Core system invariants & clearance lifecycles
-├── generate_sample_media.py         # Test asset generator for stills and screenplays
-├── main.py                          # Terminal CLI & batch analysis engine
-├── server.py                        # FastAPI web server (port 8085)
-├── run.bat                          # Local one-click server & browser launcher
+CineClearAi/
+├── server.py                 # FastAPI: auth, SSE, export, TOS, favicon, rate limit
+├── main.py                   # CLI batch auditor
+├── generate_sample_media.py  # ensure_sample_media() for still/PDF/TXT
+├── deploy_cloudrun.ps1       # Production Cloud Run
+├── static/index.html|app.js|style.css|legal.html|favicon.*
 ├── app/
-│   ├── __init__.py
-│   ├── config.py                    # Pydantic Settings & environment manager
-│   ├── models.py                    # Pydantic legal clearance & remediation schemas
-│   ├── harness.py                   # ExtractorHarness & CriticHarness boundaries
-│   ├── gemini_cascade.py            # Dynamic Model Cascade Ladder & failover manager
-│   ├── edl_exporter.py              # CMX 3600 NLE Timeline Marker & EDL Exporter
-│   ├── fair_use_analyzer.py         # 4-Factor Fair Use (17 U.S.C. § 107) & Multi-Territory Engine
-│   ├── music_arch_analyzer.py       # Music Sync (17 U.S.C. § 114) & AWCPA Architectural Validator (§ 120)
-│   ├── parallel_client.py           # Parallel Search API client with live search & mock engine
-│   ├── vision_agent.py              # Agent 1: Gemini Multimodal visual & audio parser
-│   ├── auditor.py                   # Agent 2: Multi-turn reasoning & Senior Counsel Critic loop
-│   ├── remediation_agent.py         # Agent 3: Departmental Remediation & Dispatcher
-│   └── report_generator.py          # ReportLab PDF E&O Clearance Binder generator
-├── static/
-│   ├── index.html                   # Cinematic dark-mode studio dashboard with SVG BBox overlay
-│   ├── style.css                    # Production styling & risk color variables
-│   └── app.js                       # Interactive UI controller & remediation package renderer
-├── sample_media/
-│   ├── sample_set_photo.jpg         # Sample production still (wardrobe logos, set art)
-│   ├── sample_screenplay.pdf        # Screenplay PDF with PII/phone & brand mentions
-│   └── sample_screenplay.txt        # Screenplay scene text
-├── uploads/                         # Temporary storage for uploaded footage & scripts
-├── reports/                         # Generated E&O Insurance PDF Clearance Binders
-└── tests/                           # Automated test suite
-    ├── __init__.py
-    ├── test_models.py               # Schema & validation tests
-    ├── test_harness.py              # Dual harness eval suite
-    ├── test_cascade.py              # Dynamic Model Cascade failover tests
-    ├── test_edl_exporter.py         # CMX 3600 NLE timeline marker export tests
-    ├── test_fair_use.py             # 4-Factor Fair Use & multi-territory tests
-    ├── test_music_arch.py           # AWCPA architectural safe harbor & music cue sheet tests
-    ├── test_parallel_client.py      # Parallel search client tests
-    ├── test_auditor.py              # Clearance audit & critic reflection tests
-    ├── test_remediation.py          # Agent 3 remediation dispatcher tests
-    └── test_server.py               # FastAPI endpoint tests
+│   ├── config.py             # Gemini 3.8, Parallel, JUDGE_ACCESS_KEY, auth flag
+│   ├── models.py             # Schemas + UPL + TOS_VERSION
+│   ├── telemetry.py          # ContextVar sink → SSE `log` events
+│   ├── retention.py          # Purge uploads/ only
+│   ├── gemini_cascade.py     # 2-tier live failover + judge logs
+│   ├── parallel_client.py    # Live POST /search + judge logs
+│   ├── vision_agent.py       # Agent 1
+│   ├── auditor.py            # Orchestration + concurrent grounding
+│   ├── harness.py            # ExtractorHarness / CriticHarness
+│   ├── fair_use_analyzer.py
+│   ├── music_arch_analyzer.py
+│   ├── remediation_agent.py  # Agent 3
+│   ├── report_generator.py   # Evidence dossier PDF
+│   └── edl_exporter.py       # CMX 3600 + decision-support comments
+├── sample_media/             # Bundled judge assets (PDF regenerated if missing)
+├── uploads/                  # Ephemeral; purged after audit
+├── reports/                  # Generated PDFs (gitignore)
+└── tests/                    # 11 modules including test_retention, stream, TOS
 ```
 
 ---
 
-## 5. Security, Grounding & Legal Defense Architecture
+## 5. Security, Grounding & Legal Defense
 
-1. **Grounded Legal Chain of Custody:**
-   * Every clearance flag maintains an immutable `ParallelVerification` payload recording the exact search objective query, sources examined, rights holder identified, and statutory context.
-2. **Statutory Safe Harbor Verification:**
-   * Automatically cross-references architectural landmarks against **17 U.S.C. § 120(a)** (AWCPA) to avoid unnecessary licensing costs for public buildings.
-   * Enforces **NANPA 555-0100 through 555-0199** reservation range to eliminate civil privacy liability.
-3. **Dual Harness Boundaries & De-biasing:**
-   * `ExtractorHarness` protects API budgets from duplicate recurring video keyframe queries.
-   * `CriticHarness` prevents modern corporate marks from hallucinating into public domain status.
-4. **Court-Ready E&O Binder Deliverables:**
-   * PDF output adheres to entertainment insurance underwriting specifications, including clear executive summaries, risk matrices, itemized ledgers, and attorney/underwriter signature certification blocks.
+1. **Partner chain of custody:** Each flag stores Parallel `search_objective`, source URLs, holder, statute. Judge UI prints live HTTP to Gemini `generateContent` and `api.parallel.ai/v1/search`.
+2. **Quota:** Judge VIP required; 12 audits/hour/IP; cascade depth 2; uploads deleted after run.
+3. **Harnesses:** Extractor dedupe; Critic blocks modern TM as public domain; phones CRITICAL.
+4. **UPL:** Dashboard, PDF footers, EDL comments, and `/terms` say counsel-review dossier — licensed attorney/broker sign-off is the only legally operative act.
+5. **Exports:** Prefer `POST /api/export/*` with the report body so a second Cloud Run replica can still download.

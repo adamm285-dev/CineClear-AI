@@ -22,15 +22,17 @@ This document defines the **core philosophy, legal clearance invariants, statuto
 
 ## 2. The 3-Agent Autonomous Triad & Dynamic Cascade
 
+Live audits stream four UI stages over SSE (`POST /api/audit/stream`). Grounding fans out with `asyncio.as_completed` (Parallel Search + Gemini synthesis per flag). Production requires Judge VIP + TOS acceptance.
+
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────┐
 │                           CINECLEAR 3-AGENT ORCHESTRATION                               │
 ├────────────────────────────┬─────────────────────────────┬──────────────────────────────┤
 │ AGENT 1: EXTRACTOR         │ AGENT 2: CRITIC COUNSEL     │ AGENT 3: REMEDIATION         │
 ├────────────────────────────┼─────────────────────────────┼──────────────────────────────┤
-│ • Multimodal vision/audio  │ • Multi-turn reflection     │ • Form-4A Art Releases       │
+│ • Gemini 3.8 vision/script │ • Multi-turn reflection     │ • Form-4A Art Releases       │
 │ • PyMuPDF script parsing   │ • Public domain check       │ • Trademark agreements       │
-│ • Parallel Search Ground   │ • Reconcile anomalies       │ • VFX Greeking orders        │
+│ • OpenCV keyframes (async) │ • Reconcile anomalies       │ • VFX Greeking orders        │
 │ • 2D Bounding Boxes [0-1k] │ • Risk tier calibration     │ • NANPA 555-01XX fixes       │
 │ • ExtractorHarness dedupe  │ • CriticHarness invariants  │ • ASCAP/BMI Music Cue Sheets │
 └────────────────────────────┴─────────────────────────────┴──────────────────────────────┘
@@ -40,12 +42,12 @@ This document defines the **core philosophy, legal clearance invariants, statuto
      ┌─────────────────────────┐                     ┌─────────────────────────┐
      │ DYNAMIC MODEL CASCADE   │                     │ STATUTORY ENGINES       │
      ├─────────────────────────┤                     ├─────────────────────────┤
-     │ 1. gemini-3.6-flash     │                     │ • 4-Factor Fair Use     │
-     │ 2. gemini-2.5-flash     │                     │   (17 U.S.C. § 107)     │
-     │ 3. gemini-2.5-pro       │                     │ • Multi-Territory (EU/  │
-     │ 4. gemini-1.5-flash     │                     │   UK/CA/US)             │
-     │ 5. Local Deterministic  │                     │ • AWCPA § 120(a) Safe   │
-     │    Regex / Rule Harness │                     │   Harbor & Restricted TM│
+     │ 1. gemini-3.8-flash     │                     │ • 4-Factor Fair Use     │
+     │ 2. gemini-3.5-flash     │                     │   (17 U.S.C. § 107)     │
+     │ (max 2 live tiers)      │                     │ • Multi-Territory (EU/  │
+     │ then 3.5-flash-lite,    │                     │   UK/CA/US)             │
+     │ 3.6-flash, flash-latest │                     │ • AWCPA § 120(a) Safe   │
+     │ then local regex harness│                     │   Harbor & Restricted TM│
      └─────────────────────────┘                     └─────────────────────────┘
 ```
 
@@ -135,9 +137,19 @@ This document defines the **core philosophy, legal clearance invariants, statuto
 
 ---
 
-## 5. E&O Underwriting Certification & Deliverables
+## 5. Deliverables & Decision-Support Boundary (UPL)
 
-Every generated CineClear AI report provides:
-1. **Interactive Web Dashboard & SVG Bounding Boxes:** Dynamic spatial inspection and card hover pulsing.
-2. **NLE Timeline Marker Export (.EDL):** CMX 3600 edit decision list with color-coded locators for DaVinci Resolve and Premiere Pro.
-3. **Court-Ready ReportLab PDF E&O Binder:** Complete risk matrix, itemized ledgers, deep-dive dossiers, Fair Use scorecards, territory matrices, AWCPA certifications, ASCAP/BMI cue sheets, and legal counsel/underwriter certification signature blocks.
+CineClear AI is a **paralegal research accelerator**. Outputs are evidence-gathering dossiers for licensed production counsel / E&O brokers. They are **not** legal advice, **not** a distribution clearance, and **not** an insurance certificate.
+
+Every completed audit provides:
+1. **Interactive dashboard & SVG bounding boxes** plus a **Live Partner API Trace** (Gemini `generateContent` and Parallel `POST /v1/search` as they fire).
+2. **NLE timeline markers (.EDL):** CMX 3600 with color-coded locators and a decision-support comment header.
+3. **ReportLab E&O evidence dossier (PDF):** Risk matrix, ledgers, Fair Use scorecards, territory matrices, AWCPA notes, cue sheets, UPL footer on every page, and **licensed production attorney / E&O broker sign-off lines** (CineClear is the gatherer, not the certifier).
+4. **Terms of Service** (`/terms`, TOS version 2026-09-06): AS-IS, limitation of liability ($0 on free/hackathon tier), indemnification, upload purge.
+
+## 6. Access, Quota, and Retention Invariants
+
+1. **Judge VIP** (`cineclear-judge-2026` via `?access=` or `X-Judge-Access`) is required for **all** live Gemini/Parallel audits, including bundled samples.
+2. **Rate limit:** 12 live audits per hour per client IP.
+3. **Zero retention of user uploads:** files under `uploads/` are deleted when the audit finishes. Bundled `sample_media/` is never deleted.
+4. **Public guests** may view the landing page; live audit POSTs return 401 without the pass.
