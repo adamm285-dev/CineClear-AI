@@ -3,6 +3,7 @@ import re
 import httpx
 from typing import Dict, Any, List, Optional
 from app.config import settings
+from app.telemetry import emit_engine_log
 
 logger = logging.getLogger("cineclear.parallel")
 
@@ -34,12 +35,16 @@ class ParallelSearchClient:
                     "objective": objective,
                     "search_queries": search_queries[:1]
                 }
+                endpoint = f"{self.base_url}/search"
+                short_obj = (objective[:120] + "…") if len(objective) > 120 else objective
+                await emit_engine_log("PARALLEL", f"POST {endpoint}  objective=\"{short_obj}\"")
                 async with httpx.AsyncClient(timeout=8.0) as client:
                     response = await client.post(
-                        f"{self.base_url}/search",
+                        endpoint,
                         headers=self.headers,
                         json=payload
                     )
+                    await emit_engine_log("PARALLEL", f"HTTP {response.status_code}  {endpoint}")
                     if response.status_code == 200:
                         try:
                             data = response.json()
@@ -53,6 +58,14 @@ class ParallelSearchClient:
                                 elif "excerpt" in r and "excerpts" not in r:
                                     r["excerpts"] = [r["excerpt"]]
                             if data.get("results"):
+                                hits = data.get("results") or []
+                                first = hits[0] if hits else {}
+                                title = first.get("title") or "untitled"
+                                url = first.get("url") or ""
+                                await emit_engine_log(
+                                    "PARALLEL",
+                                    f"LIVE search OK  results={len(hits)}  top=\"{title[:80]}\"  {url}"
+                                )
                                 return data
                     else:
                         logger.warning(
@@ -62,6 +75,10 @@ class ParallelSearchClient:
                 logger.warning(f"Parallel Search API connection failed: {e}. Using fallback legal grounding.")
 
         # Resilient legal search grounding database
+        await emit_engine_log(
+            "PARALLEL",
+            "Live Parallel Search unavailable this call — statutory fallback corpus used"
+        )
         return self._mock_legal_search(objective)
 
     def _mock_legal_search(self, objective: str) -> Dict[str, Any]:

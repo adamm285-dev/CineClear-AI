@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import List, Optional, Union
 
 from app.config import settings
+from app.telemetry import emit_engine_log, reset_telemetry_sink, set_telemetry_sink
 from app.gemini_cascade import GeminiCascadeClient, parse_json_safe
 from app.harness import CriticHarness, ExtractorHarness
 from app.models import (
@@ -215,6 +216,31 @@ class CineClearAuditor:
             result = on_progress(payload)
             if asyncio.iscoroutine(result):
                 await result
+
+        token = set_telemetry_sink(on_progress)
+        try:
+            return await self._audit_media_inner(
+                file_path=file_path,
+                project_title=project_title,
+                media_type=media_type,
+                is_video=is_video,
+                emit=emit,
+            )
+        finally:
+            reset_telemetry_sink(token)
+
+    async def _audit_media_inner(
+        self,
+        file_path: str,
+        project_title: str,
+        media_type: str,
+        is_video: bool,
+        emit,
+    ) -> ClearanceAuditReport:
+        await emit_engine_log(
+            "ENGINE",
+            f"Hackathon Judge Trace armed  gemini_model={settings.GEMINI_MODEL}  parallel={settings.PARALLEL_BASE_URL}/search"
+        )
 
         # 1. Forensic Extraction (Agent 1) & Deduplication Harness
         await emit(1, "running", "Stage 1/4: Forensic extraction — Gemini vision / script parse...", 12)

@@ -288,6 +288,31 @@ document.addEventListener('DOMContentLoaded', () => {
         if (processingStepLabel) {
             processingStepLabel.textContent = 'Connecting to clearance engine...';
         }
+        const consoleEl = document.getElementById('judge-console');
+        if (consoleEl) {
+            consoleEl.innerHTML = '';
+            appendJudgeLog({
+                source: 'ENGINE',
+                message: 'Waiting for live Gemini generateContent + Parallel Search frames…'
+            });
+        }
+    }
+
+    function appendJudgeLog(evt) {
+        const consoleEl = document.getElementById('judge-console');
+        if (!consoleEl) return;
+        const now = new Date();
+        const ts = now.toISOString().slice(11, 23);
+        const source = (evt.source || 'ENGINE').toUpperCase();
+        const line = document.createElement('div');
+        line.className = 'judge-log-line';
+        line.innerHTML = `<span class="judge-log-time">${ts}</span><span class="judge-log-source ${source}">${source}</span><span class="judge-log-msg"></span>`;
+        line.querySelector('.judge-log-msg').textContent = evt.message || '';
+        consoleEl.appendChild(line);
+        while (consoleEl.children.length > 80) {
+            consoleEl.removeChild(consoleEl.firstChild);
+        }
+        consoleEl.scrollTop = consoleEl.scrollHeight;
     }
 
     function applyEngineStage(evt) {
@@ -356,6 +381,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 if (evt.type === 'stage') {
                     applyEngineStage(evt);
+                } else if (evt.type === 'log') {
+                    appendJudgeLog(evt);
                 } else if (evt.type === 'complete' && evt.report) {
                     report = evt.report;
                 } else if (evt.type === 'error') {

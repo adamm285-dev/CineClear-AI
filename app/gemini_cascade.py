@@ -12,6 +12,7 @@ from google.genai import types
 from google.genai.errors import APIError
 
 from app.config import settings
+from app.telemetry import emit_engine_log
 
 import re
 
@@ -99,6 +100,7 @@ class GeminiCascadeClient:
         """Dispatches prompt to models down the ladder until success or complete exhaustion."""
         if not self.client:
             logger.info("[Cascade] No live Gemini API client initialized. Operating in local mode.")
+            await emit_engine_log("GEMINI", "Client not initialized — cannot call Google generateContent")
             return None
 
         execution_order = self._build_execution_order(preferred_model)
@@ -115,6 +117,10 @@ class GeminiCascadeClient:
         for model_name in execution_order[:2]:
             try:
                 logger.info(f"[Cascade] Dispatching payload to model tier: {model_name}")
+                await emit_engine_log(
+                    "GEMINI",
+                    f"POST generativelanguage.googleapis.com  models.generateContent  model={model_name}"
+                )
                 response = await asyncio.wait_for(
                     asyncio.to_thread(
                         self.client.models.generate_content,
@@ -126,6 +132,17 @@ class GeminiCascadeClient:
                 )
                 if response and response.text:
                     logger.info(f"[Cascade] Execution successful on tier: {model_name}")
+                    usage = getattr(response, "usage_metadata", None)
+                    token_note = ""
+                    if usage is not None:
+                        in_tok = getattr(usage, "prompt_token_count", None) or getattr(usage, "prompt_tokens", None)
+                        out_tok = getattr(usage, "candidates_token_count", None) or getattr(usage, "candidates_tokens", None)
+                        if in_tok is not None or out_tok is not None:
+                            token_note = f"  tokens_in={in_tok or 0} tokens_out={out_tok or 0}"
+                    await emit_engine_log(
+                        "GEMINI",
+                        f"200 OK  model={model_name}  chars={len(response.text)}{token_note}"
+                    )
                     return response.text
             except asyncio.TimeoutError:
                 logger.warning(f"[Cascade] Tier {model_name} timed out (>8s). Cascading down...")

@@ -7,7 +7,7 @@
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
     <link rel="apple-touch-icon" href="/static/favicon.png">
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/style.css?v=20260906d">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -200,6 +200,15 @@
                     <span class="step-label">E&amp;O Binder Generation</span>
                 </div>
             </div>
+
+            <div class="judge-trace" id="judge-trace">
+                <div class="judge-trace-header">
+                    <span class="judge-trace-badge">FOR GOOGLE GEMINI &amp; PARALLEL SEARCH JUDGES</span>
+                    <h4>Live Partner API Trace</h4>
+                    <p>Unedited engine I/O — <code>models.generateContent</code> and <code>POST api.parallel.ai/v1/search</code> as they fire.</p>
+                </div>
+                <div class="judge-console" id="judge-console" aria-live="polite"></div>
+            </div>
         </div>
 
         <!-- Results View (Hidden initially) -->
@@ -390,6 +399,6 @@
         </div>
     </footer>
 
-    <script src="/static/app.js?v=20260906c"></script>
+    <script src="/static/app.js?v=20260906d"></script>
 </body>
 </html>
