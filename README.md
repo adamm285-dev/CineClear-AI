@@ -20,7 +20,7 @@ Live Gemini 3.8 and Parallel Search audits are **gated**. Random visitors cannot
 4. Watch the four live engine stages and the **Live Partner API Trace** under the bar — you should see `GEMINI models.generateContent` and `POST api.parallel.ai/v1/search`.
 5. Export the **E&O dossier PDF** and **CMX 3600 EDL**.
 
-📺 **Video walkthrough:** [Parallel Web-Grounded Gemini Agent Build Guide](https://www.youtube.com/watch?v=6BG12veBOII)
+📺 **Video walkthrough:** [Parallel Web-Grounded Gemini Agent Build Guide](https://www.youtube.com/watch?v=PgOzgVUBNso)
 
 Public guests can read the landing page. **Live audits (bundled samples and uploads) return 401 without that pass.** Production also rate-limits to **12 live jobs per hour per IP**.
 
