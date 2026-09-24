@@ -1,0 +1,446 @@
+{
+  "id": "e7a53b90-65af-4b89-8a20-edffcb8e0003",
+  "project_title": "Hero Living Room (Production Set Still)",
+  "media_filename": "sample_set_photo.jpg",
+  "media_type": "image",
+  "total_flags": 4,
+  "critical_count": 0,
+  "high_count": 2,
+  "medium_count": 2,
+  "low_count": 0,
+  "flags": [
+    {
+      "id": "aaeb26f8",
+      "timestamp_or_page": "00:00:01",
+      "category": "TRADEMARK_LOGO",
+      "detected_entity": "Starbucks Siren Cup",
+      "visual_description": "White paper coffee cup with green emblem on desk.",
+      "risk_level": "MEDIUM",
+      "verification": {
+        "search_objective": "Verify trademark status, copyright expiration, and commercial filming release requirements for entity 'Starbucks Siren Cup' (TRADEMARK_LOGO) in context: White paper coffee cup with green emblem on desk..",
+        "sources_checked": [
+          "https://www.historyoasis.com/post/siren-starbucks-mascot-logo",
+          "https://darkskiesfilm.com/do-you-need-permission-to-film-a-commercial-logo/",
+          "https://uspto.report/TM/75976499",
+          "https://uspto.report/TM/98137935",
+          "https://thelogocreative.co.uk/wp-content/uploads/Starbucks-WPS-Logo-Guidelines-5-20-16.pdf",
+          "https://uspto.report/TM/75362654",
+          "https://tsdr.uspto.gov/",
+          "https://www.uspto.gov/trademarks/search",
+          "https://ttabvue.uspto.gov/ttabvue/ttabvue-85792872-EXA-21.pdf",
+          "https://about.starbucks.com/history/the-evolution-of-our-logo/"
+        ],
+        "is_public_domain": false,
+        "active_trademark_found": true,
+        "rights_holder_identified": "Starbucks Corporation",
+        "statutory_context": "Statutory analysis conducted via Parallel Search grounding for Starbucks Siren Cup. Governed under Lanham Act 15 U.S.C. § 1125 / 17 U.S.C. § 106."
+      },
+      "mitigation_action": "Verify incidental de minimis use; obtain placement release or turn logo away from camera.",
+      "box_2d": [
+        440,
+        430,
+        680,
+        560
+      ],
+      "fair_use_scorecard": {
+        "purpose_and_character": {
+          "factor_name": "Purpose & Character (17 U.S.C. § 107(1))",
+          "score": 3,
+          "rationale": "Incidental background context in commercial media; intermediate transformative value."
+        },
+        "nature_of_work": {
+          "factor_name": "Nature of Work (17 U.S.C. § 107(2))",
+          "score": 3,
+          "rationale": "Commercial mark and trade dress evaluated under nominative fair use doctrine rather than core expressive copyright."
+        },
+        "amount_and_substantiality": {
+          "factor_name": "Amount & Substantiality (17 U.S.C. § 107(3))",
+          "score": 3,
+          "rationale": "Partial, out-of-focus, or contextual visual inclusion supports a de minimis defense argument."
+        },
+        "market_harm": {
+          "factor_name": "Market Impact (17 U.S.C. § 107(4))",
+          "score": 4,
+          "rationale": "Depiction does not create a competing commercial product or substitute for brand's core business."
+        },
+        "composite_score": 3.25,
+        "defense_rating": "MODERATE DEFENSE (E&O UNDERWRITER SCRUTINY REQUIRED)"
+      },
+      "territory_matrix": [
+        {
+          "territory": "United States",
+          "clearance_status": "NOMINATIVE FAIR USE / PRODUCT PLACEMENT",
+          "governing_statute": "Lanham Act 15 U.S.C. § 1114 / § 1125",
+          "jurisdictional_notes": "Nominative fair use permits incidental depiction unless false endorsement, tarnishment, or dilution is demonstrated."
+        },
+        {
+          "territory": "United Kingdom",
+          "clearance_status": "HONEST PRACTICES DEFENSE",
+          "governing_statute": "Trade Marks Act 1994 § 11(2)",
+          "jurisdictional_notes": "Depiction permitted provided use complies with honest commercial practices and does not take unfair advantage of distinctive character."
+        },
+        {
+          "territory": "European Union",
+          "clearance_status": "EU TRADE MARK REGULATION (EUTMR)",
+          "governing_statute": "Regulation (EU) 2017/1001 Art 14",
+          "jurisdictional_notes": "Strict enforcement against dilution for marks with high reputation across EU member states; greeking recommended for hero props."
+        },
+        {
+          "territory": "Canada",
+          "clearance_status": "TRADEMARKS ACT COMPLIANT",
+          "governing_statute": "Trademarks Act (R.S.C. 1985, c. T-13) § 22",
+          "jurisdictional_notes": "Depiction actionable only if it depreciates the value of the goodwill attached to the trademark."
+        }
+      ],
+      "arch_assessment": null,
+      "rogers_assessment": {
+        "is_expressive_work": true,
+        "artistic_relevance_passed": true,
+        "explicitly_misleading": false,
+        "rogers_protection_applies": true,
+        "statutory_rationale": "Under Rogers v. Grimaldi, the depiction of 'Starbucks Siren Cup' possesses artistic relevance to the creative work and does not explicitly mislead as to sponsorship or content source. First Amendment protection shields expressive contextual use against Lanham Act claims."
+      }
+    },
+    {
+      "id": "5f47df7e",
+      "timestamp_or_page": "00:00:01",
+      "category": "COPYRIGHTED_ART",
+      "detected_entity": "Modern Abstract Oil Canvas",
+      "visual_description": "Large orange canvas mounted on the upper-left wall/background set area.",
+      "risk_level": "HIGH",
+      "verification": {
+        "search_objective": "Verify trademark status, copyright expiration, and commercial filming release requirements for entity 'Modern Abstract Oil Canvas' (COPYRIGHTED_ART) in context: Large orange canvas mounted on the upper-left wall/background set area..",
+        "sources_checked": [
+          "https://fairuse.stanford.edu/overview/releases/when/",
+          "https://www.e-verify.gov/",
+          "https://www.trademarkia.com/owners/orange-canvas-inc",
+          "https://publicrecords.copyright.gov/",
+          "https://www.uspto.gov/trademarks/search",
+          "https://www.copyright.gov/public-records/",
+          "https://picryl.com/topics/abstract+art",
+          "https://largeartcanvas.com/products/oil-paintings-for-sale-by-artist-modern-art-artists-l541",
+          "https://www.nga.gov/artworks/free-images-and-open-access",
+          "https://publicrecords.copyright.gov/advanced-search"
+        ],
+        "is_public_domain": false,
+        "active_trademark_found": false,
+        "rights_holder_identified": "Modern Abstract Oil Canvas Rights Holder",
+        "statutory_context": "Statutory analysis conducted via Parallel Search grounding for Modern Abstract Oil Canvas. Governed under Lanham Act 15 U.S.C. § 1125 / 17 U.S.C. § 106."
+      },
+      "mitigation_action": "Obtain signed Form-4A Artwork Release from the artist or replace with cleared stock art.",
+      "box_2d": [
+        80,
+        60,
+        420,
+        360
+      ],
+      "fair_use_scorecard": {
+        "purpose_and_character": {
+          "factor_name": "Purpose & Character (17 U.S.C. § 107(1))",
+          "score": 3,
+          "rationale": "Incidental background context in commercial media; intermediate transformative value."
+        },
+        "nature_of_work": {
+          "factor_name": "Nature of Work (17 U.S.C. § 107(2))",
+          "score": 1,
+          "rationale": "Original expressive visual fine art receives the highest tier of statutory copyright protection."
+        },
+        "amount_and_substantiality": {
+          "factor_name": "Amount & Substantiality (17 U.S.C. § 107(3))",
+          "score": 3,
+          "rationale": "Partial, out-of-focus, or contextual visual inclusion supports a de minimis defense argument."
+        },
+        "market_harm": {
+          "factor_name": "Market Impact (17 U.S.C. § 107(4))",
+          "score": 2,
+          "rationale": "Unlicensed depiction impacts the customary licensing market for movie/set artwork display."
+        },
+        "composite_score": 2.25,
+        "defense_rating": "HIGH LITIGATION RISK (NO STATUTORY SAFE HARBOR)"
+      },
+      "territory_matrix": [
+        {
+          "territory": "United States",
+          "clearance_status": "EXPLICIT RELEASE REQUIRED",
+          "governing_statute": "17 U.S.C. § 106 & § 501",
+          "jurisdictional_notes": "US copyright law provides no blanket incidental inclusion exemption for fine art on film sets (Form-4A required)."
+        },
+        {
+          "territory": "United Kingdom",
+          "clearance_status": "INCIDENTAL SAFE HARBOR",
+          "governing_statute": "CDPA 1988 § 31",
+          "jurisdictional_notes": "Section 31 of Copyright, Designs and Patents Act provides broad statutory safe harbor for incidental inclusion of artistic works in film."
+        },
+        {
+          "territory": "European Union",
+          "clearance_status": "MEMBER STATE SPECIFIC",
+          "governing_statute": "EU InfoSoc Directive Art 5(3)(i)",
+          "jurisdictional_notes": "Incidental inclusion exceptions vary across EU member states; theatrical distribution requires pan-European clearance."
+        },
+        {
+          "territory": "Canada",
+          "clearance_status": "INCIDENTAL INCLUSION EXEMPTION",
+          "governing_statute": "Copyright Act (R.S.C. c. C-42) § 30.7",
+          "jurisdictional_notes": "Section 30.7 explicitly permits incidental and non-deliberate inclusion of visual artwork in media recordings."
+        }
+      ],
+      "arch_assessment": null,
+      "rogers_assessment": null
+    },
+    {
+      "id": "be68ebea",
+      "timestamp_or_page": "00:00:01",
+      "category": "TRADEMARK_LOGO",
+      "detected_entity": "Nike 'Swoosh' Logo",
+      "visual_description": "Hero actor wardrobe hoodie with prominent chest logo.",
+      "risk_level": "HIGH",
+      "verification": {
+        "search_objective": "Verify trademark status, copyright expiration, and commercial filming release requirements for entity 'Nike 'Swoosh' Logo' (TRADEMARK_LOGO) in context: Hero actor wardrobe hoodie with prominent chest logo..",
+        "sources_checked": [
+          "https://uspto.report/TM/75977266",
+          "https://uspto.report/TM/74584302",
+          "https://trademarks.justia.com/759/77/swoosh-75977266.html",
+          "https://uspto.report/TM/97677156",
+          "https://www.upcounsel.com/nike-trademarks",
+          "https://www.trademarkia.com/hero-79975426",
+          "https://uspto.report/TM/97096366",
+          "https://www.uspto.gov/trademarks/search",
+          "https://www.trademarkia.com/nike-98029846",
+          "https://uspto.report/TM/99123084"
+        ],
+        "is_public_domain": false,
+        "active_trademark_found": true,
+        "rights_holder_identified": "Nike, Inc.",
+        "statutory_context": "Statutory analysis conducted via Parallel Search grounding for Nike 'Swoosh' Logo. Governed under Lanham Act 15 U.S.C. § 1125 / 17 U.S.C. § 106."
+      },
+      "mitigation_action": "Obtain signed wardrobe product placement release or Greek logo in VFX.",
+      "box_2d": [
+        310,
+        610,
+        780,
+        940
+      ],
+      "fair_use_scorecard": {
+        "purpose_and_character": {
+          "factor_name": "Purpose & Character (17 U.S.C. § 107(1))",
+          "score": 2,
+          "rationale": "Commercial production context with prominent prop/wardrobe focus; commercial exploitation weighs against fair use."
+        },
+        "nature_of_work": {
+          "factor_name": "Nature of Work (17 U.S.C. § 107(2))",
+          "score": 3,
+          "rationale": "Commercial mark and trade dress evaluated under nominative fair use doctrine rather than core expressive copyright."
+        },
+        "amount_and_substantiality": {
+          "factor_name": "Amount & Substantiality (17 U.S.C. § 107(3))",
+          "score": 1,
+          "rationale": "Substantial, recognizable display of the whole asset in primary focal plane."
+        },
+        "market_harm": {
+          "factor_name": "Market Impact (17 U.S.C. § 107(4))",
+          "score": 4,
+          "rationale": "Depiction does not create a competing commercial product or substitute for brand's core business."
+        },
+        "composite_score": 2.5,
+        "defense_rating": "MODERATE DEFENSE (E&O UNDERWRITER SCRUTINY REQUIRED)"
+      },
+      "territory_matrix": [
+        {
+          "territory": "United States",
+          "clearance_status": "NOMINATIVE FAIR USE / PRODUCT PLACEMENT",
+          "governing_statute": "Lanham Act 15 U.S.C. § 1114 / § 1125",
+          "jurisdictional_notes": "Nominative fair use permits incidental depiction unless false endorsement, tarnishment, or dilution is demonstrated."
+        },
+        {
+          "territory": "United Kingdom",
+          "clearance_status": "HONEST PRACTICES DEFENSE",
+          "governing_statute": "Trade Marks Act 1994 § 11(2)",
+          "jurisdictional_notes": "Depiction permitted provided use complies with honest commercial practices and does not take unfair advantage of distinctive character."
+        },
+        {
+          "territory": "European Union",
+          "clearance_status": "EU TRADE MARK REGULATION (EUTMR)",
+          "governing_statute": "Regulation (EU) 2017/1001 Art 14",
+          "jurisdictional_notes": "Strict enforcement against dilution for marks with high reputation across EU member states; greeking recommended for hero props."
+        },
+        {
+          "territory": "Canada",
+          "clearance_status": "TRADEMARKS ACT COMPLIANT",
+          "governing_statute": "Trademarks Act (R.S.C. 1985, c. T-13) § 22",
+          "jurisdictional_notes": "Depiction actionable only if it depreciates the value of the goodwill attached to the trademark."
+        }
+      ],
+      "arch_assessment": null,
+      "rogers_assessment": {
+        "is_expressive_work": true,
+        "artistic_relevance_passed": true,
+        "explicitly_misleading": false,
+        "rogers_protection_applies": true,
+        "statutory_rationale": "Under Rogers v. Grimaldi, the depiction of 'Nike 'Swoosh' Logo' possesses artistic relevance to the creative work and does not explicitly mislead as to sponsorship or content source. First Amendment protection shields expressive contextual use against Lanham Act claims."
+      }
+    },
+    {
+      "id": "86b03c1d",
+      "timestamp_or_page": "00:00:01",
+      "category": "TRADEMARK_LOGO",
+      "detected_entity": "Apple MacBook Pro",
+      "visual_description": "Slate laptop prop placed prominently on foreground workspace.",
+      "risk_level": "MEDIUM",
+      "verification": {
+        "search_objective": "Verify trademark status, copyright expiration, and commercial filming release requirements for entity 'Apple MacBook Pro' (TRADEMARK_LOGO) in context: Slate laptop prop placed prominently on foreground workspace..",
+        "sources_checked": [
+          "https://support.apple.com/guide/macbook-pro/copyright-and-trademarks-apd7721c83d4/mac",
+          "https://www.apple.com/legal/intellectual-property/guidelinesfor3rdparties.html",
+          "https://discussions.apple.com/thread/251475571",
+          "https://www.apple.com/legal/intellectual-property/trademark/appletmlist.html",
+          "https://cdsassets.apple.com/live/6GJYWVAV/information/ma1765_macbook_pro_late2016_info.pdf",
+          "https://support.apple.com/guide/deployment/copyright-and-trademarks-dep4bb05f9fe18/web",
+          "https://support.apple.com/guide/macbook-air/copyright-and-trademarks-apd7721c83d4/mac",
+          "https://tsdr.uspto.gov/",
+          "https://www.apple.com/la/legal/intellectual-property/guidelinesfor3rdparties.html",
+          "https://www.uspto.gov/"
+        ],
+        "is_public_domain": false,
+        "active_trademark_found": true,
+        "rights_holder_identified": "Apple Inc.",
+        "statutory_context": "Statutory analysis conducted via Parallel Search grounding for Apple MacBook Pro. Governed under Lanham Act 15 U.S.C. § 1125 / 17 U.S.C. § 106."
+      },
+      "mitigation_action": "Verify incidental de minimis use; obtain written release or Greek logo in VFX.",
+      "box_2d": [
+        560,
+        80,
+        840,
+        410
+      ],
+      "fair_use_scorecard": {
+        "purpose_and_character": {
+          "factor_name": "Purpose & Character (17 U.S.C. § 107(1))",
+          "score": 2,
+          "rationale": "Commercial production context with prominent prop/wardrobe focus; commercial exploitation weighs against fair use."
+        },
+        "nature_of_work": {
+          "factor_name": "Nature of Work (17 U.S.C. § 107(2))",
+          "score": 3,
+          "rationale": "Commercial mark and trade dress evaluated under nominative fair use doctrine rather than core expressive copyright."
+        },
+        "amount_and_substantiality": {
+          "factor_name": "Amount & Substantiality (17 U.S.C. § 107(3))",
+          "score": 1,
+          "rationale": "Substantial, recognizable display of the whole asset in primary focal plane."
+        },
+        "market_harm": {
+          "factor_name": "Market Impact (17 U.S.C. § 107(4))",
+          "score": 4,
+          "rationale": "Depiction does not create a competing commercial product or substitute for brand's core business."
+        },
+        "composite_score": 2.5,
+        "defense_rating": "MODERATE DEFENSE (E&O UNDERWRITER SCRUTINY REQUIRED)"
+      },
+      "territory_matrix": [
+        {
+          "territory": "United States",
+          "clearance_status": "NOMINATIVE FAIR USE / PRODUCT PLACEMENT",
+          "governing_statute": "Lanham Act 15 U.S.C. § 1114 / § 1125",
+          "jurisdictional_notes": "Nominative fair use permits incidental depiction unless false endorsement, tarnishment, or dilution is demonstrated."
+        },
+        {
+          "territory": "United Kingdom",
+          "clearance_status": "HONEST PRACTICES DEFENSE",
+          "governing_statute": "Trade Marks Act 1994 § 11(2)",
+          "jurisdictional_notes": "Depiction permitted provided use complies with honest commercial practices and does not take unfair advantage of distinctive character."
+        },
+        {
+          "territory": "European Union",
+          "clearance_status": "EU TRADE MARK REGULATION (EUTMR)",
+          "governing_statute": "Regulation (EU) 2017/1001 Art 14",
+          "jurisdictional_notes": "Strict enforcement against dilution for marks with high reputation across EU member states; greeking recommended for hero props."
+        },
+        {
+          "territory": "Canada",
+          "clearance_status": "TRADEMARKS ACT COMPLIANT",
+          "governing_statute": "Trademarks Act (R.S.C. 1985, c. T-13) § 22",
+          "jurisdictional_notes": "Depiction actionable only if it depreciates the value of the goodwill attached to the trademark."
+        }
+      ],
+      "arch_assessment": null,
+      "rogers_assessment": {
+        "is_expressive_work": true,
+        "artistic_relevance_passed": true,
+        "explicitly_misleading": false,
+        "rogers_protection_applies": true,
+        "statutory_rationale": "Under Rogers v. Grimaldi, the depiction of 'Apple MacBook Pro' possesses artistic relevance to the creative work and does not explicitly mislead as to sponsorship or content source. First Amendment protection shields expressive contextual use against Lanham Act claims."
+      }
+    }
+  ],
+  "generated_at": "2026-09-24 19:14:17 UTC",
+  "remediation_package": {
+    "vfx_work_orders": [
+      {
+        "timestamp_or_page": "00:00:01",
+        "target_entity": "Starbucks Siren Cup",
+        "action_type": "2D Greeking / Logo Obscure",
+        "tracking_notes": "Track Starbucks Siren Cup on White paper coffee cup with green emblem on desk.. Apply de-brand matte or 35% Gaussian Blur.",
+        "priority": "MEDIUM"
+      },
+      {
+        "timestamp_or_page": "00:00:01",
+        "target_entity": "Modern Abstract Oil Canvas",
+        "action_type": "Digital Paint / Replacement Art Insertion",
+        "tracking_notes": "Planar track Large orange canvas mounted on the upper-left wall/background set area.. Replace with cleared stock asset if Form-4A is unexecuted.",
+        "priority": "HIGH"
+      },
+      {
+        "timestamp_or_page": "00:00:01",
+        "target_entity": "Nike 'Swoosh' Logo",
+        "action_type": "2D Greeking / Logo Obscure",
+        "tracking_notes": "Track Nike 'Swoosh' Logo on Hero actor wardrobe hoodie with prominent chest logo.. Apply de-brand matte or 35% Gaussian Blur.",
+        "priority": "HIGH"
+      },
+      {
+        "timestamp_or_page": "00:00:01",
+        "target_entity": "Apple MacBook Pro",
+        "action_type": "2D Greeking / Logo Obscure",
+        "tracking_notes": "Track Apple MacBook Pro on Slate laptop prop placed prominently on foreground workspace.. Apply de-brand matte or 35% Gaussian Blur.",
+        "priority": "MEDIUM"
+      }
+    ],
+    "legal_releases": [
+      {
+        "form_type": "Trademark Product Placement Release",
+        "licensor_entity": "Starbucks Corporation",
+        "property_description": "Starbucks Siren Cup",
+        "governing_statute": "Lanham Act (15 U.S.C. § 1114 / § 1125)",
+        "agreement_text": "TRADEMARK PRODUCT PLACEMENT & RELEASE AGREEMENT\nPRODUCTION TITLE: Hero Living Room (Production Set Still)\nDATE: 2026-09-24\n\n1. MARKS & PRODUCTS COVERED:\n   - REGISTERED MARK / TRADE DRESS: Starbucks Siren Cup\n   - TRADEMARK OWNER: Starbucks Corporation\n\n2. USAGE AUTHORIZATION:\n   Trademark Owner grants Producer authorization to depict the designated trademark and product \n   in the Production in a non-disparaging, nominative or contextual manner, fulfilling E&O \n   clearance standards under the Lanham Act (15 U.S.C. § 1125).\n\nAGREED & ACCEPTED:\nBrand Representative: _____________________ Date: ______________\nProducer Representative: __________________ Date: ______________\n\nNOTICE: Decision-support analysis compiled for production counsel review. Does not constitute formal legal counsel or create an attorney-client relationship pursuant to State Bar regulations.\n",
+        "legal_disclaimer": "NOTICE — DECISION-SUPPORT ONLY: CineClear AI is a paralegal research and workflow accelerator for licensed production counsel and E&O brokers. This dossier organizes automated heuristics, multimodal detections, and public-registry search results on an AS-IS / AS-AVAILABLE basis. It is not legal advice, not a legal opinion, not an insurance certificate, and not a clearance, distribution, or underwriting approval. It does not create an attorney-client relationship. No output may be represented as 'cleared for distribution' or as a guarantee that any work is free of copyright, trademark, privacy, or E&O risk. Final legal sign-off must be made by a licensed production attorney and/or E&O broker. Use of this software is subject to the Terms of Service at /terms (version 2026-09-06)."
+      },
+      {
+        "form_type": "Form-4A Artwork Release",
+        "licensor_entity": "Modern Abstract Oil Canvas Rights Holder",
+        "property_description": "Modern Abstract Oil Canvas (Large orange canvas mounted on the upper-left wall/background set area.)",
+        "governing_statute": "17 U.S.C. § 106 / 17 U.S.C. § 501",
+        "agreement_text": "ENTERTAINMENT ARTWORK RELEASE AGREEMENT (FORM-4A)\nPRODUCTION TITLE: Hero Living Room (Production Set Still)\nDATE: 2026-09-24\n\n1. PARTIES:\n   - PRODUCER: Production Company & Assigns\n   - LICENSOR / ARTIST: Modern Abstract Oil Canvas Rights Holder\n   - ARTWORK TITLE / DESCRIPTION: Modern Abstract Oil Canvas - Large orange canvas mounted on the upper-left wall/background set area.\n\n2. GRANT OF RIGHTS:\n   Licensor hereby grants to Producer the non-exclusive, worldwide, perpetual right and license \n   to photograph, record, display, and reproduce the Artwork in connection with the Production, \n   its distribution, advertising, and promotion in all media now known or hereafter devised, \n   mitigating statutory liability under 17 U.S.C. § 106 and § 501.\n\n3. REPRESENTATIONS & WARRANTIES:\n   Licensor represents that they are the sole creator and copyright owner of the Artwork with full \n   authority to execute this release.\n\n4. CONSIDERATION: Standard industry screen credit and/or agreed production consideration.\n\nAGREED & ACCEPTED:\nLicensor Signature: _______________________ Date: ______________\nProducer Representative: __________________ Date: ______________\n\nNOTICE: Decision-support analysis compiled for production counsel review. Does not constitute formal legal counsel or create an attorney-client relationship pursuant to State Bar regulations.\n",
+        "legal_disclaimer": "NOTICE — DECISION-SUPPORT ONLY: CineClear AI is a paralegal research and workflow accelerator for licensed production counsel and E&O brokers. This dossier organizes automated heuristics, multimodal detections, and public-registry search results on an AS-IS / AS-AVAILABLE basis. It is not legal advice, not a legal opinion, not an insurance certificate, and not a clearance, distribution, or underwriting approval. It does not create an attorney-client relationship. No output may be represented as 'cleared for distribution' or as a guarantee that any work is free of copyright, trademark, privacy, or E&O risk. Final legal sign-off must be made by a licensed production attorney and/or E&O broker. Use of this software is subject to the Terms of Service at /terms (version 2026-09-06)."
+      },
+      {
+        "form_type": "Trademark Product Placement Release",
+        "licensor_entity": "Nike, Inc.",
+        "property_description": "Nike 'Swoosh' Logo",
+        "governing_statute": "Lanham Act (15 U.S.C. § 1114 / § 1125)",
+        "agreement_text": "TRADEMARK PRODUCT PLACEMENT & RELEASE AGREEMENT\nPRODUCTION TITLE: Hero Living Room (Production Set Still)\nDATE: 2026-09-24\n\n1. MARKS & PRODUCTS COVERED:\n   - REGISTERED MARK / TRADE DRESS: Nike 'Swoosh' Logo\n   - TRADEMARK OWNER: Nike, Inc.\n\n2. USAGE AUTHORIZATION:\n   Trademark Owner grants Producer authorization to depict the designated trademark and product \n   in the Production in a non-disparaging, nominative or contextual manner, fulfilling E&O \n   clearance standards under the Lanham Act (15 U.S.C. § 1125).\n\nAGREED & ACCEPTED:\nBrand Representative: _____________________ Date: ______________\nProducer Representative: __________________ Date: ______________\n\nNOTICE: Decision-support analysis compiled for production counsel review. Does not constitute formal legal counsel or create an attorney-client relationship pursuant to State Bar regulations.\n",
+        "legal_disclaimer": "NOTICE — DECISION-SUPPORT ONLY: CineClear AI is a paralegal research and workflow accelerator for licensed production counsel and E&O brokers. This dossier organizes automated heuristics, multimodal detections, and public-registry search results on an AS-IS / AS-AVAILABLE basis. It is not legal advice, not a legal opinion, not an insurance certificate, and not a clearance, distribution, or underwriting approval. It does not create an attorney-client relationship. No output may be represented as 'cleared for distribution' or as a guarantee that any work is free of copyright, trademark, privacy, or E&O risk. Final legal sign-off must be made by a licensed production attorney and/or E&O broker. Use of this software is subject to the Terms of Service at /terms (version 2026-09-06)."
+      },
+      {
+        "form_type": "Trademark Product Placement Release",
+        "licensor_entity": "Apple Inc.",
+        "property_description": "Apple MacBook Pro",
+        "governing_statute": "Lanham Act (15 U.S.C. § 1114 / § 1125)",
+        "agreement_text": "TRADEMARK PRODUCT PLACEMENT & RELEASE AGREEMENT\nPRODUCTION TITLE: Hero Living Room (Production Set Still)\nDATE: 2026-09-24\n\n1. MARKS & PRODUCTS COVERED:\n   - REGISTERED MARK / TRADE DRESS: Apple MacBook Pro\n   - TRADEMARK OWNER: Apple Inc.\n\n2. USAGE AUTHORIZATION:\n   Trademark Owner grants Producer authorization to depict the designated trademark and product \n   in the Production in a non-disparaging, nominative or contextual manner, fulfilling E&O \n   clearance standards under the Lanham Act (15 U.S.C. § 1125).\n\nAGREED & ACCEPTED:\nBrand Representative: _____________________ Date: ______________\nProducer Representative: __________________ Date: ______________\n\nNOTICE: Decision-support analysis compiled for production counsel review. Does not constitute formal legal counsel or create an attorney-client relationship pursuant to State Bar regulations.\n",
+        "legal_disclaimer": "NOTICE — DECISION-SUPPORT ONLY: CineClear AI is a paralegal research and workflow accelerator for licensed production counsel and E&O brokers. This dossier organizes automated heuristics, multimodal detections, and public-registry search results on an AS-IS / AS-AVAILABLE basis. It is not legal advice, not a legal opinion, not an insurance certificate, and not a clearance, distribution, or underwriting approval. It does not create an attorney-client relationship. No output may be represented as 'cleared for distribution' or as a guarantee that any work is free of copyright, trademark, privacy, or E&O risk. Final legal sign-off must be made by a licensed production attorney and/or E&O broker. Use of this software is subject to the Terms of Service at /terms (version 2026-09-06)."
+      }
+    ],
+    "script_fixes": [],
+    "music_cue_sheet": null
+  },
+  "pdf_report_path": "C:\\Users\\adamm_000\\Desktop\\CineClearAi\\reports\\EO_Clearance_Binder_Hero_Living_Room_(Production_Set_Still)_e7a53b90.pdf",
+  "legal_disclaimer": "NOTICE — DECISION-SUPPORT ONLY: CineClear AI is a paralegal research and workflow accelerator for licensed production counsel and E&O brokers. This dossier organizes automated heuristics, multimodal detections, and public-registry search results on an AS-IS / AS-AVAILABLE basis. It is not legal advice, not a legal opinion, not an insurance certificate, and not a clearance, distribution, or underwriting approval. It does not create an attorney-client relationship. No output may be represented as 'cleared for distribution' or as a guarantee that any work is free of copyright, trademark, privacy, or E&O risk. Final legal sign-off must be made by a licensed production attorney and/or E&O broker. Use of this software is subject to the Terms of Service at /terms (version 2026-09-06)."
+}

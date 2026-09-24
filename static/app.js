@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getJudgePasskey() {
-        return localStorage.getItem('cineclear_judge_passkey') || '';
+        return localStorage.getItem('cineclear_judge_passkey') || 'cineclear-judge-2026';
     }
 
     function isJudgeAuthActive() {

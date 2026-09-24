@@ -37,6 +37,12 @@ gcloud run deploy cineclear-ai `
   --platform managed `
   --allow-unauthenticated `
   --port 8085 `
+  --min-instances 0 `
+  --max-instances 1 `
+  --concurrency 80 `
+  --cpu 1 `
+  --memory 1Gi `
+  --timeout 300 `
   --set-env-vars $envVars
 
 if ($LASTEXITCODE -eq 0) {

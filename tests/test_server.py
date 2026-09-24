@@ -245,19 +245,13 @@ async def test_protected_upload_requires_judge_key_when_configured():
         settings.REQUIRE_JUDGE_AUTH_FOR_UPLOADS = True
         transport = ASGITransport(app=app)
         async with AsyncClient(transport=transport, base_url="http://test") as client:
-            # 1. Sample audit without VIP pass is blocked (protects Gemini/Parallel quota)
+            # 1. Zero-burn sample audit succeeds without VIP pass (0 quota burned, seamless for judges)
             res_sample_unauth = await client.post(
                 "/api/audit",
                 data={"project_title": "Public Sample", "sample_id": "sample-photo"}
             )
-            assert res_sample_unauth.status_code == 401
-
-            res_sample = await client.post(
-                "/api/audit",
-                headers={"X-Judge-Access": settings.JUDGE_ACCESS_KEY},
-                data={"project_title": "Public Sample", "sample_id": "sample-photo"}
-            )
-            assert res_sample.status_code == 200
+            assert res_sample_unauth.status_code == 200
+            assert len(res_sample_unauth.json()["flags"]) >= 1
 
             # 2. Custom upload without auth fails with 401
             res_unauth = await client.post(

@@ -244,7 +244,7 @@ Edit `.env` (optional):
 ```ini
 # Google Gemini API
 GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-3.5-flash
+GEMINI_MODEL=gemini-3.8-flash
 
 # Parallel Search API (Web Grounding)
 PARALLEL_API_KEY=your_parallel_api_key_here

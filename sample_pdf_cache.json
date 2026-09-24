@@ -1,0 +1,202 @@
+{
+  "id": "fb1084c6-39ff-4bb9-819c-637f47621b21",
+  "project_title": "Feature Screenplay Excerpt (PDF)",
+  "media_filename": "sample_screenplay.pdf",
+  "media_type": "script",
+  "total_flags": 2,
+  "critical_count": 1,
+  "high_count": 1,
+  "medium_count": 0,
+  "low_count": 0,
+  "flags": [
+    {
+      "id": "2842af55",
+      "timestamp_or_page": "Page 1",
+      "category": "TRADEMARK_LOGO",
+      "detected_entity": "Nike 'Swoosh' Logo",
+      "visual_description": "Prominent Nike Swoosh on protagonist black hoodie.",
+      "risk_level": "HIGH",
+      "verification": {
+        "search_objective": "Verify trademark status, copyright expiration, and commercial filming release requirements for entity 'Nike 'Swoosh' Logo' (TRADEMARK_LOGO) in context: Prominent Nike Swoosh on protagonist black hoodie..",
+        "sources_checked": [
+          "https://uspto.report/TM/75977266",
+          "https://www.uspto.gov/trademarks/search",
+          "https://uspto.report/TM/74584302",
+          "https://trademarks.justia.com/759/77/swoosh-75977266.html",
+          "https://www.moviemaker.com/using-brand-names-in-a-film-aditya-ezhuthachan/",
+          "https://www.trademarkelite.com/trademark/trademark-detail/75977266/SWOOSH",
+          "https://trademarks.justia.com/733/02/nike-73302504.html",
+          "https://uspto.report/TM/97677156",
+          "https://www.trademarkia.com/swoosh-73308697",
+          "https://www.trademarkia.com/news/fashion/nike-logo-trademark-legal-use"
+        ],
+        "is_public_domain": false,
+        "active_trademark_found": true,
+        "rights_holder_identified": "Nike, Inc.",
+        "statutory_context": "Statutory analysis conducted via Parallel Search grounding for Nike 'Swoosh' Logo. Governed under Lanham Act 15 U.S.C. § 1125 / 17 U.S.C. § 106."
+      },
+      "mitigation_action": "Obtain signed wardrobe product placement release or Greek logo in VFX.",
+      "box_2d": null,
+      "fair_use_scorecard": {
+        "purpose_and_character": {
+          "factor_name": "Purpose & Character (17 U.S.C. § 107(1))",
+          "score": 2,
+          "rationale": "Commercial production context with prominent prop/wardrobe focus; commercial exploitation weighs against fair use."
+        },
+        "nature_of_work": {
+          "factor_name": "Nature of Work (17 U.S.C. § 107(2))",
+          "score": 3,
+          "rationale": "Commercial mark and trade dress evaluated under nominative fair use doctrine rather than core expressive copyright."
+        },
+        "amount_and_substantiality": {
+          "factor_name": "Amount & Substantiality (17 U.S.C. § 107(3))",
+          "score": 1,
+          "rationale": "Substantial, recognizable display of the whole asset in primary focal plane."
+        },
+        "market_harm": {
+          "factor_name": "Market Impact (17 U.S.C. § 107(4))",
+          "score": 4,
+          "rationale": "Depiction does not create a competing commercial product or substitute for brand's core business."
+        },
+        "composite_score": 2.5,
+        "defense_rating": "MODERATE DEFENSE (E&O UNDERWRITER SCRUTINY REQUIRED)"
+      },
+      "territory_matrix": [
+        {
+          "territory": "United States",
+          "clearance_status": "NOMINATIVE FAIR USE / PRODUCT PLACEMENT",
+          "governing_statute": "Lanham Act 15 U.S.C. § 1114 / § 1125",
+          "jurisdictional_notes": "Nominative fair use permits incidental depiction unless false endorsement, tarnishment, or dilution is demonstrated."
+        },
+        {
+          "territory": "United Kingdom",
+          "clearance_status": "HONEST PRACTICES DEFENSE",
+          "governing_statute": "Trade Marks Act 1994 § 11(2)",
+          "jurisdictional_notes": "Depiction permitted provided use complies with honest commercial practices and does not take unfair advantage of distinctive character."
+        },
+        {
+          "territory": "European Union",
+          "clearance_status": "EU TRADE MARK REGULATION (EUTMR)",
+          "governing_statute": "Regulation (EU) 2017/1001 Art 14",
+          "jurisdictional_notes": "Strict enforcement against dilution for marks with high reputation across EU member states; greeking recommended for hero props."
+        },
+        {
+          "territory": "Canada",
+          "clearance_status": "TRADEMARKS ACT COMPLIANT",
+          "governing_statute": "Trademarks Act (R.S.C. 1985, c. T-13) § 22",
+          "jurisdictional_notes": "Depiction actionable only if it depreciates the value of the goodwill attached to the trademark."
+        }
+      ],
+      "arch_assessment": null,
+      "rogers_assessment": {
+        "is_expressive_work": true,
+        "artistic_relevance_passed": true,
+        "explicitly_misleading": false,
+        "rogers_protection_applies": true,
+        "statutory_rationale": "Under Rogers v. Grimaldi, the depiction of 'Nike 'Swoosh' Logo' possesses artistic relevance to the creative work and does not explicitly mislead as to sponsorship or content source. First Amendment protection shields expressive contextual use against Lanham Act claims."
+      }
+    },
+    {
+      "id": "b4d08509",
+      "timestamp_or_page": "Page 1",
+      "category": "PHONE_PII",
+      "detected_entity": "Real Phone Number: (212) 555-8392",
+      "visual_description": "Character writes private phone number (212) 555-8392 on notepad.",
+      "risk_level": "CRITICAL",
+      "verification": {
+        "search_objective": "Verify trademark status, copyright expiration, and commercial filming release requirements for entity 'Real Phone Number: (212) 555-8392' (PHONE_PII) in context: Character writes private phone number (212) 555-8392 on notepad..",
+        "sources_checked": [
+          "https://voipcalling.com/blog-post/why-movies-use-555/",
+          "https://thoolie.com/2026/05/13/film-location-agreement-template/",
+          "https://en.wikipedia.org/wiki/Fictitious_telephone_number",
+          "https://clearlyip.com/2025/05/07/why-movies-use-555-the-truth-behind-fictional-phone-numbers/",
+          "https://14ip.com/en/blog/why-movies-use-555-the-truth-behind-fictional-phone-numbers/",
+          "https://14ip.com/us/blog/why-movies-use-555-the-truth-behind-fictional-phone-numbers/",
+          "https://www.ecfr.gov/current/title-47/chapter-I/subchapter-B/part-64/subpart-L/",
+          "https://www.trademarkia.com/the-following-restricted-preview-has-been-approved-for-appropriate-audiences-by-the-motion-picture-association-of-america-inc-the-film-advertised-has-been-rated-r-restricted-87786519",
+          "https://search.sunbiz.org/Inquiry/CorporationSearch/ConvertTiffToPDF?documentNumber=T21000000670&storagePath=COR%5C2021%5C0708%5C68852938.Tif",
+          "https://en.wikipedia.org/wiki/555_%28North_American_Numbering_Plan%29"
+        ],
+        "is_public_domain": false,
+        "active_trademark_found": false,
+        "rights_holder_identified": "North American Numbering Plan Administration (NANPA)",
+        "statutory_context": "Statutory analysis conducted via Parallel Search grounding for Real Phone Number: (212) 555-8392. Governed under Lanham Act 15 U.S.C. § 1125 / 17 U.S.C. § 106."
+      },
+      "mitigation_action": "MANDATORY FIX: Replace with fictitious NANPA reserved number in 555-0100 to 555-0199 range.",
+      "box_2d": null,
+      "fair_use_scorecard": {
+        "purpose_and_character": {
+          "factor_name": "Purpose & Character (17 U.S.C. § 107(1))",
+          "score": 3,
+          "rationale": "Incidental background context in commercial media; intermediate transformative value."
+        },
+        "nature_of_work": {
+          "factor_name": "Nature of Work (17 U.S.C. § 107(2))",
+          "score": 2,
+          "rationale": "Expressive commercial asset with active statutory protections."
+        },
+        "amount_and_substantiality": {
+          "factor_name": "Amount & Substantiality (17 U.S.C. § 107(3))",
+          "score": 1,
+          "rationale": "Substantial, recognizable display of the whole asset in primary focal plane."
+        },
+        "market_harm": {
+          "factor_name": "Market Impact (17 U.S.C. § 107(4))",
+          "score": 2,
+          "rationale": "Potential exposure to customary licensing and clearance market harm."
+        },
+        "composite_score": 2.0,
+        "defense_rating": "HIGH LITIGATION RISK (NO STATUTORY SAFE HARBOR)"
+      },
+      "territory_matrix": [
+        {
+          "territory": "United States",
+          "clearance_status": "STATUTORY COMPLIANCE MANDATE",
+          "governing_statute": "FCC / NANPA Regulations & Restatement (Second) of Torts",
+          "jurisdictional_notes": "Strict privacy and telecommunications safe-harbor standards require 555-01XX range."
+        },
+        {
+          "territory": "United Kingdom & EU",
+          "clearance_status": "GDPR & OFCOM COMPLIANCE",
+          "governing_statute": "UK GDPR / EU GDPR Art 6 & OFCOM Drama Code",
+          "jurisdictional_notes": "Displaying unallocated living individual contact information triggers statutory personal data liability."
+        }
+      ],
+      "arch_assessment": null,
+      "rogers_assessment": null
+    }
+  ],
+  "generated_at": "2026-09-24 19:14:23 UTC",
+  "remediation_package": {
+    "vfx_work_orders": [
+      {
+        "timestamp_or_page": "Page 1",
+        "target_entity": "Nike 'Swoosh' Logo",
+        "action_type": "2D Greeking / Logo Obscure",
+        "tracking_notes": "Track Nike 'Swoosh' Logo on Prominent Nike Swoosh on protagonist black hoodie.. Apply de-brand matte or 35% Gaussian Blur.",
+        "priority": "HIGH"
+      }
+    ],
+    "legal_releases": [
+      {
+        "form_type": "Trademark Product Placement Release",
+        "licensor_entity": "Nike, Inc.",
+        "property_description": "Nike 'Swoosh' Logo",
+        "governing_statute": "Lanham Act (15 U.S.C. § 1114 / § 1125)",
+        "agreement_text": "TRADEMARK PRODUCT PLACEMENT & RELEASE AGREEMENT\nPRODUCTION TITLE: Feature Screenplay Excerpt (PDF)\nDATE: 2026-09-24\n\n1. MARKS & PRODUCTS COVERED:\n   - REGISTERED MARK / TRADE DRESS: Nike 'Swoosh' Logo\n   - TRADEMARK OWNER: Nike, Inc.\n\n2. USAGE AUTHORIZATION:\n   Trademark Owner grants Producer authorization to depict the designated trademark and product \n   in the Production in a non-disparaging, nominative or contextual manner, fulfilling E&O \n   clearance standards under the Lanham Act (15 U.S.C. § 1125).\n\nAGREED & ACCEPTED:\nBrand Representative: _____________________ Date: ______________\nProducer Representative: __________________ Date: ______________\n\nNOTICE: Decision-support analysis compiled for production counsel review. Does not constitute formal legal counsel or create an attorney-client relationship pursuant to State Bar regulations.\n",
+        "legal_disclaimer": "NOTICE — DECISION-SUPPORT ONLY: CineClear AI is a paralegal research and workflow accelerator for licensed production counsel and E&O brokers. This dossier organizes automated heuristics, multimodal detections, and public-registry search results on an AS-IS / AS-AVAILABLE basis. It is not legal advice, not a legal opinion, not an insurance certificate, and not a clearance, distribution, or underwriting approval. It does not create an attorney-client relationship. No output may be represented as 'cleared for distribution' or as a guarantee that any work is free of copyright, trademark, privacy, or E&O risk. Final legal sign-off must be made by a licensed production attorney and/or E&O broker. Use of this software is subject to the Terms of Service at /terms (version 2026-09-06)."
+      }
+    ],
+    "script_fixes": [
+      {
+        "page_number": "Page 1",
+        "original_text": "Real Phone Number: (212) 555-8392",
+        "recommended_replacement": "212-555-0149 (NANPA Fictitious Range)",
+        "rationale": "Replaces active public switched telephone network number with FCC/NANPA safe theatrical range (555-0100 to 555-0199)."
+      }
+    ],
+    "music_cue_sheet": null
+  },
+  "pdf_report_path": "C:\\Users\\adamm_000\\Desktop\\CineClearAi\\reports\\EO_Clearance_Binder_Feature_Screenplay_Excerpt_(PDF)_fb1084c6.pdf",
+  "legal_disclaimer": "NOTICE — DECISION-SUPPORT ONLY: CineClear AI is a paralegal research and workflow accelerator for licensed production counsel and E&O brokers. This dossier organizes automated heuristics, multimodal detections, and public-registry search results on an AS-IS / AS-AVAILABLE basis. It is not legal advice, not a legal opinion, not an insurance certificate, and not a clearance, distribution, or underwriting approval. It does not create an attorney-client relationship. No output may be represented as 'cleared for distribution' or as a guarantee that any work is free of copyright, trademark, privacy, or E&O risk. Final legal sign-off must be made by a licensed production attorney and/or E&O broker. Use of this software is subject to the Terms of Service at /terms (version 2026-09-06)."
+}

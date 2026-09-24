@@ -1,0 +1,588 @@
+{
+  "id": "f9dae689-3ff9-418a-a974-a762bf37e3c4",
+  "project_title": "Screenplay Scene 1-3 (Text Format)",
+  "media_filename": "sample_screenplay.txt",
+  "media_type": "script",
+  "total_flags": 6,
+  "critical_count": 1,
+  "high_count": 3,
+  "medium_count": 2,
+  "low_count": 0,
+  "flags": [
+    {
+      "id": "d66a4fcb",
+      "timestamp_or_page": "Page 1",
+      "category": "TRADEMARK_LOGO",
+      "detected_entity": "Apple MacBook Pro",
+      "visual_description": "Screenplay explicitly references commercial brand 'Apple MacBook Pro'.",
+      "risk_level": "MEDIUM",
+      "verification": {
+        "search_objective": "Verify trademark status, copyright expiration, and commercial filming release requirements for entity 'Apple MacBook Pro' (TRADEMARK_LOGO) in context: Screenplay explicitly references commercial brand 'Apple MacBook Pro'..",
+        "sources_checked": [
+          "https://support.apple.com/guide/macbook-pro/copyright-and-trademarks-apd7721c83d4/mac",
+          "https://www.trademarkia.com/macbook-pro-85236152",
+          "https://www.uspto.gov/trademarks/search",
+          "https://trademarks.justia.com/852/36/macbook-85236152.html",
+          "https://www.bizapedia.com/trademarks/macbook-pro-85236152.html",
+          "https://www.apple.com/legal/intellectual-property/trademark/appletmlist.html",
+          "https://cdsassets.apple.com/live/6GJYWVAV/information/ma1765_macbook_pro_late2016_info.pdf",
+          "https://developer.apple.com/licensing-trademarks/files/mac_logo_license_agreement.pdf",
+          "https://trademarks.justia.com/850/36/n-85036990.html",
+          "https://www.apple.com/legal/intellectual-property/guidelinesfor3rdparties.html"
+        ],
+        "is_public_domain": false,
+        "active_trademark_found": true,
+        "rights_holder_identified": "Apple Inc.",
+        "statutory_context": "Statutory analysis conducted via Parallel Search grounding for Apple MacBook Pro. Governed under Lanham Act 15 U.S.C. § 1125 / 17 U.S.C. § 106."
+      },
+      "mitigation_action": "Obtain written product placement agreement or replace with generic prop descriptor.",
+      "box_2d": null,
+      "fair_use_scorecard": {
+        "purpose_and_character": {
+          "factor_name": "Purpose & Character (17 U.S.C. § 107(1))",
+          "score": 3,
+          "rationale": "Incidental background context in commercial media; intermediate transformative value."
+        },
+        "nature_of_work": {
+          "factor_name": "Nature of Work (17 U.S.C. § 107(2))",
+          "score": 3,
+          "rationale": "Commercial mark and trade dress evaluated under nominative fair use doctrine rather than core expressive copyright."
+        },
+        "amount_and_substantiality": {
+          "factor_name": "Amount & Substantiality (17 U.S.C. § 107(3))",
+          "score": 1,
+          "rationale": "Substantial, recognizable display of the whole asset in primary focal plane."
+        },
+        "market_harm": {
+          "factor_name": "Market Impact (17 U.S.C. § 107(4))",
+          "score": 4,
+          "rationale": "Depiction does not create a competing commercial product or substitute for brand's core business."
+        },
+        "composite_score": 2.75,
+        "defense_rating": "MODERATE DEFENSE (E&O UNDERWRITER SCRUTINY REQUIRED)"
+      },
+      "territory_matrix": [
+        {
+          "territory": "United States",
+          "clearance_status": "NOMINATIVE FAIR USE / PRODUCT PLACEMENT",
+          "governing_statute": "Lanham Act 15 U.S.C. § 1114 / § 1125",
+          "jurisdictional_notes": "Nominative fair use permits incidental depiction unless false endorsement, tarnishment, or dilution is demonstrated."
+        },
+        {
+          "territory": "United Kingdom",
+          "clearance_status": "HONEST PRACTICES DEFENSE",
+          "governing_statute": "Trade Marks Act 1994 § 11(2)",
+          "jurisdictional_notes": "Depiction permitted provided use complies with honest commercial practices and does not take unfair advantage of distinctive character."
+        },
+        {
+          "territory": "European Union",
+          "clearance_status": "EU TRADE MARK REGULATION (EUTMR)",
+          "governing_statute": "Regulation (EU) 2017/1001 Art 14",
+          "jurisdictional_notes": "Strict enforcement against dilution for marks with high reputation across EU member states; greeking recommended for hero props."
+        },
+        {
+          "territory": "Canada",
+          "clearance_status": "TRADEMARKS ACT COMPLIANT",
+          "governing_statute": "Trademarks Act (R.S.C. 1985, c. T-13) § 22",
+          "jurisdictional_notes": "Depiction actionable only if it depreciates the value of the goodwill attached to the trademark."
+        }
+      ],
+      "arch_assessment": null,
+      "rogers_assessment": {
+        "is_expressive_work": true,
+        "artistic_relevance_passed": true,
+        "explicitly_misleading": false,
+        "rogers_protection_applies": true,
+        "statutory_rationale": "Under Rogers v. Grimaldi, the depiction of 'Apple MacBook Pro' possesses artistic relevance to the creative work and does not explicitly mislead as to sponsorship or content source. First Amendment protection shields expressive contextual use against Lanham Act claims."
+      }
+    },
+    {
+      "id": "8d3c4f36",
+      "timestamp_or_page": "Page 3",
+      "category": "MUSIC_AUDIO",
+      "detected_entity": "Commercial Music: Immigrant Song",
+      "visual_description": "Soundtrack cue 'Immigrant Song' specified in script.",
+      "risk_level": "HIGH",
+      "verification": {
+        "search_objective": "Verify trademark status, copyright expiration, and commercial filming release requirements for entity 'Commercial Music: Immigrant Song' (MUSIC_AUDIO) in context: Soundtrack cue 'Immigrant Song' specified in script..",
+        "sources_checked": [
+          "https://www.songfacts.com/licensing/led-zeppelin/immigrant-song",
+          "https://www.uspto.gov/trademarks/search",
+          "https://en.wikipedia.org/wiki/Immigrant_Song",
+          "https://tsdr.uspto.gov/",
+          "https://blog.promise.legal/sync-licensing-musicians-guide/",
+          "https://www.musicgateway.com/blog/music-licensing/how-to-check-if-a-song-is-copyrighted-a-complete-guide",
+          "https://www.uspto.gov/",
+          "https://www.govinfo.gov/content/pkg/CFR-2025-title37-vol1/pdf/CFR-2025-title37-vol1-part385.pdf",
+          "https://blog.nexatunes.com/music-sync-rights-complete-guide/",
+          "https://filmcane.com/blog/music-sync-licensing-films-step-by-step"
+        ],
+        "is_public_domain": false,
+        "active_trademark_found": false,
+        "rights_holder_identified": "Commercial Music: Immigrant Song Rights Holder",
+        "statutory_context": "Statutory analysis conducted via Parallel Search grounding for Commercial Music: Immigrant Song. Governed under Lanham Act 15 U.S.C. § 1125 / 17 U.S.C. § 106."
+      },
+      "mitigation_action": "Execute Master Sync and Mechanical Publishing Licenses with copyright owners.",
+      "box_2d": null,
+      "fair_use_scorecard": {
+        "purpose_and_character": {
+          "factor_name": "Purpose & Character (17 U.S.C. § 107(1))",
+          "score": 3,
+          "rationale": "Incidental background context in commercial media; intermediate transformative value."
+        },
+        "nature_of_work": {
+          "factor_name": "Nature of Work (17 U.S.C. § 107(2))",
+          "score": 2,
+          "rationale": "Expressive commercial asset with active statutory protections."
+        },
+        "amount_and_substantiality": {
+          "factor_name": "Amount & Substantiality (17 U.S.C. § 107(3))",
+          "score": 1,
+          "rationale": "Substantial, recognizable display of the whole asset in primary focal plane."
+        },
+        "market_harm": {
+          "factor_name": "Market Impact (17 U.S.C. § 107(4))",
+          "score": 2,
+          "rationale": "Potential exposure to customary licensing and clearance market harm."
+        },
+        "composite_score": 2.0,
+        "defense_rating": "HIGH LITIGATION RISK (NO STATUTORY SAFE HARBOR)"
+      },
+      "territory_matrix": [
+        {
+          "territory": "United States",
+          "clearance_status": "STATUTORY COMPLIANCE MANDATE",
+          "governing_statute": "FCC / NANPA Regulations & Restatement (Second) of Torts",
+          "jurisdictional_notes": "Strict privacy and telecommunications safe-harbor standards require 555-01XX range."
+        },
+        {
+          "territory": "United Kingdom & EU",
+          "clearance_status": "GDPR & OFCOM COMPLIANCE",
+          "governing_statute": "UK GDPR / EU GDPR Art 6 & OFCOM Drama Code",
+          "jurisdictional_notes": "Displaying unallocated living individual contact information triggers statutory personal data liability."
+        }
+      ],
+      "arch_assessment": null,
+      "rogers_assessment": null
+    },
+    {
+      "id": "1b5cfdf6",
+      "timestamp_or_page": "Page 1",
+      "category": "TRADEMARK_LOGO",
+      "detected_entity": "Nike 'Swoosh'",
+      "visual_description": "Screenplay explicitly references commercial brand 'Nike 'Swoosh''.",
+      "risk_level": "HIGH",
+      "verification": {
+        "search_objective": "Verify trademark status, copyright expiration, and commercial filming release requirements for entity 'Nike 'Swoosh'' (TRADEMARK_LOGO) in context: Screenplay explicitly references commercial brand 'Nike 'Swoosh''..",
+        "sources_checked": [
+          "https://www.upcounsel.com/nike-trademarks",
+          "https://trademarks.justia.com/759/77/swoosh-75977266.html",
+          "https://uspto.report/TM/75977266",
+          "https://en.wikipedia.org/wiki/Swoosh",
+          "https://www.trademarkia.com/news/fashion/nike-logo-trademark-legal-use",
+          "https://darkskiesfilm.com/do-you-need-permission-to-film-a-commercial-logo/",
+          "https://uspto.report/TM/74584302",
+          "https://www.moviemaker.com/using-brand-names-in-a-film-aditya-ezhuthachan/",
+          "https://legalknowledgebase.com/is-the-nike-logo-free-to-use",
+          "https://www.bizapedia.com/trademarks/swoosh-50086134.html"
+        ],
+        "is_public_domain": false,
+        "active_trademark_found": true,
+        "rights_holder_identified": "Nike, Inc.",
+        "statutory_context": "Statutory analysis conducted via Parallel Search grounding for Nike 'Swoosh'. Governed under Lanham Act 15 U.S.C. § 1125 / 17 U.S.C. § 106."
+      },
+      "mitigation_action": "Obtain written product placement agreement or replace with generic prop descriptor.",
+      "box_2d": null,
+      "fair_use_scorecard": {
+        "purpose_and_character": {
+          "factor_name": "Purpose & Character (17 U.S.C. § 107(1))",
+          "score": 3,
+          "rationale": "Incidental background context in commercial media; intermediate transformative value."
+        },
+        "nature_of_work": {
+          "factor_name": "Nature of Work (17 U.S.C. § 107(2))",
+          "score": 3,
+          "rationale": "Commercial mark and trade dress evaluated under nominative fair use doctrine rather than core expressive copyright."
+        },
+        "amount_and_substantiality": {
+          "factor_name": "Amount & Substantiality (17 U.S.C. § 107(3))",
+          "score": 1,
+          "rationale": "Substantial, recognizable display of the whole asset in primary focal plane."
+        },
+        "market_harm": {
+          "factor_name": "Market Impact (17 U.S.C. § 107(4))",
+          "score": 4,
+          "rationale": "Depiction does not create a competing commercial product or substitute for brand's core business."
+        },
+        "composite_score": 2.75,
+        "defense_rating": "MODERATE DEFENSE (E&O UNDERWRITER SCRUTINY REQUIRED)"
+      },
+      "territory_matrix": [
+        {
+          "territory": "United States",
+          "clearance_status": "NOMINATIVE FAIR USE / PRODUCT PLACEMENT",
+          "governing_statute": "Lanham Act 15 U.S.C. § 1114 / § 1125",
+          "jurisdictional_notes": "Nominative fair use permits incidental depiction unless false endorsement, tarnishment, or dilution is demonstrated."
+        },
+        {
+          "territory": "United Kingdom",
+          "clearance_status": "HONEST PRACTICES DEFENSE",
+          "governing_statute": "Trade Marks Act 1994 § 11(2)",
+          "jurisdictional_notes": "Depiction permitted provided use complies with honest commercial practices and does not take unfair advantage of distinctive character."
+        },
+        {
+          "territory": "European Union",
+          "clearance_status": "EU TRADE MARK REGULATION (EUTMR)",
+          "governing_statute": "Regulation (EU) 2017/1001 Art 14",
+          "jurisdictional_notes": "Strict enforcement against dilution for marks with high reputation across EU member states; greeking recommended for hero props."
+        },
+        {
+          "territory": "Canada",
+          "clearance_status": "TRADEMARKS ACT COMPLIANT",
+          "governing_statute": "Trademarks Act (R.S.C. 1985, c. T-13) § 22",
+          "jurisdictional_notes": "Depiction actionable only if it depreciates the value of the goodwill attached to the trademark."
+        }
+      ],
+      "arch_assessment": null,
+      "rogers_assessment": {
+        "is_expressive_work": true,
+        "artistic_relevance_passed": true,
+        "explicitly_misleading": false,
+        "rogers_protection_applies": true,
+        "statutory_rationale": "Under Rogers v. Grimaldi, the depiction of 'Nike 'Swoosh'' possesses artistic relevance to the creative work and does not explicitly mislead as to sponsorship or content source. First Amendment protection shields expressive contextual use against Lanham Act claims."
+      }
+    },
+    {
+      "id": "dea5227a",
+      "timestamp_or_page": "Page 2",
+      "category": "COPYRIGHTED_ART",
+      "detected_entity": "Artwork: mural titled \"NEON CHAOS 2024\"",
+      "visual_description": "Featured set artwork in scene: mural titled \"NEON CHAOS 2024\"",
+      "risk_level": "HIGH",
+      "verification": {
+        "search_objective": "Verify trademark status, copyright expiration, and commercial filming release requirements for entity 'Artwork: mural titled \"NEON CHAOS 2024\"' (COPYRIGHTED_ART) in context: Featured set artwork in scene: mural titled \"NEON CHAOS 2024\".",
+        "sources_checked": [
+          "https://www.uspto.gov/trademarks/search",
+          "https://www.muralsandsigns.com/understanding-copyright-and-licensing-in-commercial-mural-artwork",
+          "https://trademarks.justia.com/994/50/neon-99450587.html",
+          "https://cms.aamd.org/sites/default/files/document/AAMD_Updated_Copyright_Guidelines2024.pdf",
+          "https://www.uspto.gov/",
+          "https://clarionalleymuralproject.org/murals/mural-faq-licensing-film-video-photography",
+          "https://tsdr.uspto.gov/",
+          "https://www.wrapbook.com/blog/artwork-release-form-when-why-you-need-it",
+          "https://publicrecords.copyright.gov/",
+          "https://www.trademarkia.com/mural-88889683"
+        ],
+        "is_public_domain": false,
+        "active_trademark_found": false,
+        "rights_holder_identified": "Artwork: mural titled \"NEON CHAOS 2024\" Rights Holder",
+        "statutory_context": "Statutory analysis conducted via Parallel Search grounding for Artwork: mural titled \"NEON CHAOS 2024\". Governed under Lanham Act 15 U.S.C. § 1125 / 17 U.S.C. § 106."
+      },
+      "mitigation_action": "Obtain signed Form-4A Artwork Release from the artist or replace with cleared stock art.",
+      "box_2d": null,
+      "fair_use_scorecard": {
+        "purpose_and_character": {
+          "factor_name": "Purpose & Character (17 U.S.C. § 107(1))",
+          "score": 3,
+          "rationale": "Incidental background context in commercial media; intermediate transformative value."
+        },
+        "nature_of_work": {
+          "factor_name": "Nature of Work (17 U.S.C. § 107(2))",
+          "score": 1,
+          "rationale": "Original expressive visual fine art receives the highest tier of statutory copyright protection."
+        },
+        "amount_and_substantiality": {
+          "factor_name": "Amount & Substantiality (17 U.S.C. § 107(3))",
+          "score": 1,
+          "rationale": "Substantial, recognizable display of the whole asset in primary focal plane."
+        },
+        "market_harm": {
+          "factor_name": "Market Impact (17 U.S.C. § 107(4))",
+          "score": 2,
+          "rationale": "Unlicensed depiction impacts the customary licensing market for movie/set artwork display."
+        },
+        "composite_score": 1.75,
+        "defense_rating": "HIGH LITIGATION RISK (NO STATUTORY SAFE HARBOR)"
+      },
+      "territory_matrix": [
+        {
+          "territory": "United States",
+          "clearance_status": "EXPLICIT RELEASE REQUIRED",
+          "governing_statute": "17 U.S.C. § 106 & § 501",
+          "jurisdictional_notes": "US copyright law provides no blanket incidental inclusion exemption for fine art on film sets (Form-4A required)."
+        },
+        {
+          "territory": "United Kingdom",
+          "clearance_status": "INCIDENTAL SAFE HARBOR",
+          "governing_statute": "CDPA 1988 § 31",
+          "jurisdictional_notes": "Section 31 of Copyright, Designs and Patents Act provides broad statutory safe harbor for incidental inclusion of artistic works in film."
+        },
+        {
+          "territory": "European Union",
+          "clearance_status": "MEMBER STATE SPECIFIC",
+          "governing_statute": "EU InfoSoc Directive Art 5(3)(i)",
+          "jurisdictional_notes": "Incidental inclusion exceptions vary across EU member states; theatrical distribution requires pan-European clearance."
+        },
+        {
+          "territory": "Canada",
+          "clearance_status": "INCIDENTAL INCLUSION EXEMPTION",
+          "governing_statute": "Copyright Act (R.S.C. c. C-42) § 30.7",
+          "jurisdictional_notes": "Section 30.7 explicitly permits incidental and non-deliberate inclusion of visual artwork in media recordings."
+        }
+      ],
+      "arch_assessment": null,
+      "rogers_assessment": null
+    },
+    {
+      "id": "0369191e",
+      "timestamp_or_page": "Page 1",
+      "category": "TRADEMARK_LOGO",
+      "detected_entity": "Starbucks Siren",
+      "visual_description": "Screenplay explicitly references commercial brand 'Starbucks Siren'.",
+      "risk_level": "MEDIUM",
+      "verification": {
+        "search_objective": "Verify trademark status, copyright expiration, and commercial filming release requirements for entity 'Starbucks Siren' (TRADEMARK_LOGO) in context: Screenplay explicitly references commercial brand 'Starbucks Siren'..",
+        "sources_checked": [
+          "https://news.bloomberglaw.com/ip-law/starbucks-coffee-retailer-settle-siren-logo-trademark-lawsuit",
+          "https://www.historyoasis.com/post/siren-starbucks-mascot-logo",
+          "https://uspto.report/TM/90062246",
+          "https://uspto.report/TM/97842829",
+          "https://news.bloomberglaw.com/ip-law/starbucks-feuds-with-coffee-company-over-siren-logo-trademark",
+          "https://trademarks.justia.com/735/40/starbucks-73540824.html",
+          "https://trademarks.justia.com/985/69/the-starbucks-98569434.html",
+          "https://trademarks.justia.com/743/48/starbucks-74348802.html",
+          "https://www.uspto.gov/",
+          "https://trademarks.justia.com/owners/starbucks-corporation-169439"
+        ],
+        "is_public_domain": false,
+        "active_trademark_found": true,
+        "rights_holder_identified": "Starbucks Corporation",
+        "statutory_context": "Statutory analysis conducted via Parallel Search grounding for Starbucks Siren. Governed under Lanham Act 15 U.S.C. § 1125 / 17 U.S.C. § 106."
+      },
+      "mitigation_action": "Obtain written product placement agreement or replace with generic prop descriptor.",
+      "box_2d": null,
+      "fair_use_scorecard": {
+        "purpose_and_character": {
+          "factor_name": "Purpose & Character (17 U.S.C. § 107(1))",
+          "score": 3,
+          "rationale": "Incidental background context in commercial media; intermediate transformative value."
+        },
+        "nature_of_work": {
+          "factor_name": "Nature of Work (17 U.S.C. § 107(2))",
+          "score": 3,
+          "rationale": "Commercial mark and trade dress evaluated under nominative fair use doctrine rather than core expressive copyright."
+        },
+        "amount_and_substantiality": {
+          "factor_name": "Amount & Substantiality (17 U.S.C. § 107(3))",
+          "score": 1,
+          "rationale": "Substantial, recognizable display of the whole asset in primary focal plane."
+        },
+        "market_harm": {
+          "factor_name": "Market Impact (17 U.S.C. § 107(4))",
+          "score": 4,
+          "rationale": "Depiction does not create a competing commercial product or substitute for brand's core business."
+        },
+        "composite_score": 2.75,
+        "defense_rating": "MODERATE DEFENSE (E&O UNDERWRITER SCRUTINY REQUIRED)"
+      },
+      "territory_matrix": [
+        {
+          "territory": "United States",
+          "clearance_status": "NOMINATIVE FAIR USE / PRODUCT PLACEMENT",
+          "governing_statute": "Lanham Act 15 U.S.C. § 1114 / § 1125",
+          "jurisdictional_notes": "Nominative fair use permits incidental depiction unless false endorsement, tarnishment, or dilution is demonstrated."
+        },
+        {
+          "territory": "United Kingdom",
+          "clearance_status": "HONEST PRACTICES DEFENSE",
+          "governing_statute": "Trade Marks Act 1994 § 11(2)",
+          "jurisdictional_notes": "Depiction permitted provided use complies with honest commercial practices and does not take unfair advantage of distinctive character."
+        },
+        {
+          "territory": "European Union",
+          "clearance_status": "EU TRADE MARK REGULATION (EUTMR)",
+          "governing_statute": "Regulation (EU) 2017/1001 Art 14",
+          "jurisdictional_notes": "Strict enforcement against dilution for marks with high reputation across EU member states; greeking recommended for hero props."
+        },
+        {
+          "territory": "Canada",
+          "clearance_status": "TRADEMARKS ACT COMPLIANT",
+          "governing_statute": "Trademarks Act (R.S.C. 1985, c. T-13) § 22",
+          "jurisdictional_notes": "Depiction actionable only if it depreciates the value of the goodwill attached to the trademark."
+        }
+      ],
+      "arch_assessment": null,
+      "rogers_assessment": {
+        "is_expressive_work": true,
+        "artistic_relevance_passed": true,
+        "explicitly_misleading": false,
+        "rogers_protection_applies": true,
+        "statutory_rationale": "Under Rogers v. Grimaldi, the depiction of 'Starbucks Siren' possesses artistic relevance to the creative work and does not explicitly mislead as to sponsorship or content source. First Amendment protection shields expressive contextual use against Lanham Act claims."
+      }
+    },
+    {
+      "id": "f5bb2c1f",
+      "timestamp_or_page": "Page 1",
+      "category": "PHONE_PII",
+      "detected_entity": "Real Phone Number: (212) 555-8392",
+      "visual_description": "Dialogue or action recites non-fictional telephone number '(212) 555-8392'.",
+      "risk_level": "CRITICAL",
+      "verification": {
+        "search_objective": "Verify trademark status, copyright expiration, and commercial filming release requirements for entity 'Real Phone Number: (212) 555-8392' (PHONE_PII) in context: Dialogue or action recites non-fictional telephone number '(212) 555-8392'..",
+        "sources_checked": [
+          "https://voipcalling.com/blog-post/why-movies-use-555/",
+          "https://en.wikipedia.org/wiki/Fictitious_telephone_number",
+          "https://filmmakergenius.com/academy/copyright-for-filmmakers/film-clearance",
+          "https://clearlyip.com/2025/05/07/why-movies-use-555-the-truth-behind-fictional-phone-numbers",
+          "https://trademarks.justia.com/858/85/nylon-85885426.html",
+          "https://14ip.com/us/blog/why-movies-use-555-the-truth-behind-fictional-phone-numbers/",
+          "https://tmng-al.uspto.gov/resting2/api/casedoc/cms/case/99388219/office-action/OfficeAction8233603.pdf",
+          "https://tvtropes.org/pmwiki/pmwiki.php/Main/FiveFiveFive",
+          "https://14ip.com/en/blog/why-movies-use-555-the-truth-behind-fictional-phone-numbers/",
+          "https://www.copyright.gov/"
+        ],
+        "is_public_domain": false,
+        "active_trademark_found": false,
+        "rights_holder_identified": "North American Numbering Plan Administration (NANPA)",
+        "statutory_context": "Statutory analysis conducted via Parallel Search grounding for Real Phone Number: (212) 555-8392. Governed under Lanham Act 15 U.S.C. § 1125 / 17 U.S.C. § 106."
+      },
+      "mitigation_action": "MANDATORY FIX: Replace with fictitious NANPA reserved number in 555-0100 to 555-0199 range.",
+      "box_2d": null,
+      "fair_use_scorecard": {
+        "purpose_and_character": {
+          "factor_name": "Purpose & Character (17 U.S.C. § 107(1))",
+          "score": 3,
+          "rationale": "Incidental background context in commercial media; intermediate transformative value."
+        },
+        "nature_of_work": {
+          "factor_name": "Nature of Work (17 U.S.C. § 107(2))",
+          "score": 2,
+          "rationale": "Expressive commercial asset with active statutory protections."
+        },
+        "amount_and_substantiality": {
+          "factor_name": "Amount & Substantiality (17 U.S.C. § 107(3))",
+          "score": 1,
+          "rationale": "Substantial, recognizable display of the whole asset in primary focal plane."
+        },
+        "market_harm": {
+          "factor_name": "Market Impact (17 U.S.C. § 107(4))",
+          "score": 2,
+          "rationale": "Potential exposure to customary licensing and clearance market harm."
+        },
+        "composite_score": 2.0,
+        "defense_rating": "HIGH LITIGATION RISK (NO STATUTORY SAFE HARBOR)"
+      },
+      "territory_matrix": [
+        {
+          "territory": "United States",
+          "clearance_status": "STATUTORY COMPLIANCE MANDATE",
+          "governing_statute": "FCC / NANPA Regulations & Restatement (Second) of Torts",
+          "jurisdictional_notes": "Strict privacy and telecommunications safe-harbor standards require 555-01XX range."
+        },
+        {
+          "territory": "United Kingdom & EU",
+          "clearance_status": "GDPR & OFCOM COMPLIANCE",
+          "governing_statute": "UK GDPR / EU GDPR Art 6 & OFCOM Drama Code",
+          "jurisdictional_notes": "Displaying unallocated living individual contact information triggers statutory personal data liability."
+        }
+      ],
+      "arch_assessment": null,
+      "rogers_assessment": null
+    }
+  ],
+  "generated_at": "2026-09-24 19:14:30 UTC",
+  "remediation_package": {
+    "vfx_work_orders": [
+      {
+        "timestamp_or_page": "Page 1",
+        "target_entity": "Apple MacBook Pro",
+        "action_type": "2D Greeking / Logo Obscure",
+        "tracking_notes": "Track Apple MacBook Pro on Screenplay explicitly references commercial brand 'Apple MacBook Pro'.. Apply de-brand matte or 35% Gaussian Blur.",
+        "priority": "MEDIUM"
+      },
+      {
+        "timestamp_or_page": "Page 1",
+        "target_entity": "Nike 'Swoosh'",
+        "action_type": "2D Greeking / Logo Obscure",
+        "tracking_notes": "Track Nike 'Swoosh' on Screenplay explicitly references commercial brand 'Nike 'Swoosh''.. Apply de-brand matte or 35% Gaussian Blur.",
+        "priority": "HIGH"
+      },
+      {
+        "timestamp_or_page": "Page 2",
+        "target_entity": "Artwork: mural titled \"NEON CHAOS 2024\"",
+        "action_type": "Digital Paint / Replacement Art Insertion",
+        "tracking_notes": "Planar track Featured set artwork in scene: mural titled \"NEON CHAOS 2024\". Replace with cleared stock asset if Form-4A is unexecuted.",
+        "priority": "HIGH"
+      },
+      {
+        "timestamp_or_page": "Page 1",
+        "target_entity": "Starbucks Siren",
+        "action_type": "2D Greeking / Logo Obscure",
+        "tracking_notes": "Track Starbucks Siren on Screenplay explicitly references commercial brand 'Starbucks Siren'.. Apply de-brand matte or 35% Gaussian Blur.",
+        "priority": "MEDIUM"
+      }
+    ],
+    "legal_releases": [
+      {
+        "form_type": "Trademark Product Placement Release",
+        "licensor_entity": "Apple Inc.",
+        "property_description": "Apple MacBook Pro",
+        "governing_statute": "Lanham Act (15 U.S.C. § 1114 / § 1125)",
+        "agreement_text": "TRADEMARK PRODUCT PLACEMENT & RELEASE AGREEMENT\nPRODUCTION TITLE: Screenplay Scene 1-3 (Text Format)\nDATE: 2026-09-24\n\n1. MARKS & PRODUCTS COVERED:\n   - REGISTERED MARK / TRADE DRESS: Apple MacBook Pro\n   - TRADEMARK OWNER: Apple Inc.\n\n2. USAGE AUTHORIZATION:\n   Trademark Owner grants Producer authorization to depict the designated trademark and product \n   in the Production in a non-disparaging, nominative or contextual manner, fulfilling E&O \n   clearance standards under the Lanham Act (15 U.S.C. § 1125).\n\nAGREED & ACCEPTED:\nBrand Representative: _____________________ Date: ______________\nProducer Representative: __________________ Date: ______________\n\nNOTICE: Decision-support analysis compiled for production counsel review. Does not constitute formal legal counsel or create an attorney-client relationship pursuant to State Bar regulations.\n",
+        "legal_disclaimer": "NOTICE — DECISION-SUPPORT ONLY: CineClear AI is a paralegal research and workflow accelerator for licensed production counsel and E&O brokers. This dossier organizes automated heuristics, multimodal detections, and public-registry search results on an AS-IS / AS-AVAILABLE basis. It is not legal advice, not a legal opinion, not an insurance certificate, and not a clearance, distribution, or underwriting approval. It does not create an attorney-client relationship. No output may be represented as 'cleared for distribution' or as a guarantee that any work is free of copyright, trademark, privacy, or E&O risk. Final legal sign-off must be made by a licensed production attorney and/or E&O broker. Use of this software is subject to the Terms of Service at /terms (version 2026-09-06)."
+      },
+      {
+        "form_type": "Trademark Product Placement Release",
+        "licensor_entity": "Nike, Inc.",
+        "property_description": "Nike 'Swoosh'",
+        "governing_statute": "Lanham Act (15 U.S.C. § 1114 / § 1125)",
+        "agreement_text": "TRADEMARK PRODUCT PLACEMENT & RELEASE AGREEMENT\nPRODUCTION TITLE: Screenplay Scene 1-3 (Text Format)\nDATE: 2026-09-24\n\n1. MARKS & PRODUCTS COVERED:\n   - REGISTERED MARK / TRADE DRESS: Nike 'Swoosh'\n   - TRADEMARK OWNER: Nike, Inc.\n\n2. USAGE AUTHORIZATION:\n   Trademark Owner grants Producer authorization to depict the designated trademark and product \n   in the Production in a non-disparaging, nominative or contextual manner, fulfilling E&O \n   clearance standards under the Lanham Act (15 U.S.C. § 1125).\n\nAGREED & ACCEPTED:\nBrand Representative: _____________________ Date: ______________\nProducer Representative: __________________ Date: ______________\n\nNOTICE: Decision-support analysis compiled for production counsel review. Does not constitute formal legal counsel or create an attorney-client relationship pursuant to State Bar regulations.\n",
+        "legal_disclaimer": "NOTICE — DECISION-SUPPORT ONLY: CineClear AI is a paralegal research and workflow accelerator for licensed production counsel and E&O brokers. This dossier organizes automated heuristics, multimodal detections, and public-registry search results on an AS-IS / AS-AVAILABLE basis. It is not legal advice, not a legal opinion, not an insurance certificate, and not a clearance, distribution, or underwriting approval. It does not create an attorney-client relationship. No output may be represented as 'cleared for distribution' or as a guarantee that any work is free of copyright, trademark, privacy, or E&O risk. Final legal sign-off must be made by a licensed production attorney and/or E&O broker. Use of this software is subject to the Terms of Service at /terms (version 2026-09-06)."
+      },
+      {
+        "form_type": "Form-4A Artwork Release",
+        "licensor_entity": "Artwork: mural titled \"NEON CHAOS 2024\" Rights Holder",
+        "property_description": "Artwork: mural titled \"NEON CHAOS 2024\" (Featured set artwork in scene: mural titled \"NEON CHAOS 2024\")",
+        "governing_statute": "17 U.S.C. § 106 / 17 U.S.C. § 501",
+        "agreement_text": "ENTERTAINMENT ARTWORK RELEASE AGREEMENT (FORM-4A)\nPRODUCTION TITLE: Screenplay Scene 1-3 (Text Format)\nDATE: 2026-09-24\n\n1. PARTIES:\n   - PRODUCER: Production Company & Assigns\n   - LICENSOR / ARTIST: Artwork: mural titled \"NEON CHAOS 2024\" Rights Holder\n   - ARTWORK TITLE / DESCRIPTION: Artwork: mural titled \"NEON CHAOS 2024\" - Featured set artwork in scene: mural titled \"NEON CHAOS 2024\"\n\n2. GRANT OF RIGHTS:\n   Licensor hereby grants to Producer the non-exclusive, worldwide, perpetual right and license \n   to photograph, record, display, and reproduce the Artwork in connection with the Production, \n   its distribution, advertising, and promotion in all media now known or hereafter devised, \n   mitigating statutory liability under 17 U.S.C. § 106 and § 501.\n\n3. REPRESENTATIONS & WARRANTIES:\n   Licensor represents that they are the sole creator and copyright owner of the Artwork with full \n   authority to execute this release.\n\n4. CONSIDERATION: Standard industry screen credit and/or agreed production consideration.\n\nAGREED & ACCEPTED:\nLicensor Signature: _______________________ Date: ______________\nProducer Representative: __________________ Date: ______________\n\nNOTICE: Decision-support analysis compiled for production counsel review. Does not constitute formal legal counsel or create an attorney-client relationship pursuant to State Bar regulations.\n",
+        "legal_disclaimer": "NOTICE — DECISION-SUPPORT ONLY: CineClear AI is a paralegal research and workflow accelerator for licensed production counsel and E&O brokers. This dossier organizes automated heuristics, multimodal detections, and public-registry search results on an AS-IS / AS-AVAILABLE basis. It is not legal advice, not a legal opinion, not an insurance certificate, and not a clearance, distribution, or underwriting approval. It does not create an attorney-client relationship. No output may be represented as 'cleared for distribution' or as a guarantee that any work is free of copyright, trademark, privacy, or E&O risk. Final legal sign-off must be made by a licensed production attorney and/or E&O broker. Use of this software is subject to the Terms of Service at /terms (version 2026-09-06)."
+      },
+      {
+        "form_type": "Trademark Product Placement Release",
+        "licensor_entity": "Starbucks Corporation",
+        "property_description": "Starbucks Siren",
+        "governing_statute": "Lanham Act (15 U.S.C. § 1114 / § 1125)",
+        "agreement_text": "TRADEMARK PRODUCT PLACEMENT & RELEASE AGREEMENT\nPRODUCTION TITLE: Screenplay Scene 1-3 (Text Format)\nDATE: 2026-09-24\n\n1. MARKS & PRODUCTS COVERED:\n   - REGISTERED MARK / TRADE DRESS: Starbucks Siren\n   - TRADEMARK OWNER: Starbucks Corporation\n\n2. USAGE AUTHORIZATION:\n   Trademark Owner grants Producer authorization to depict the designated trademark and product \n   in the Production in a non-disparaging, nominative or contextual manner, fulfilling E&O \n   clearance standards under the Lanham Act (15 U.S.C. § 1125).\n\nAGREED & ACCEPTED:\nBrand Representative: _____________________ Date: ______________\nProducer Representative: __________________ Date: ______________\n\nNOTICE: Decision-support analysis compiled for production counsel review. Does not constitute formal legal counsel or create an attorney-client relationship pursuant to State Bar regulations.\n",
+        "legal_disclaimer": "NOTICE — DECISION-SUPPORT ONLY: CineClear AI is a paralegal research and workflow accelerator for licensed production counsel and E&O brokers. This dossier organizes automated heuristics, multimodal detections, and public-registry search results on an AS-IS / AS-AVAILABLE basis. It is not legal advice, not a legal opinion, not an insurance certificate, and not a clearance, distribution, or underwriting approval. It does not create an attorney-client relationship. No output may be represented as 'cleared for distribution' or as a guarantee that any work is free of copyright, trademark, privacy, or E&O risk. Final legal sign-off must be made by a licensed production attorney and/or E&O broker. Use of this software is subject to the Terms of Service at /terms (version 2026-09-06)."
+      }
+    ],
+    "script_fixes": [
+      {
+        "page_number": "Page 1",
+        "original_text": "Real Phone Number: (212) 555-8392",
+        "recommended_replacement": "212-555-0149 (NANPA Fictitious Range)",
+        "rationale": "Replaces active public switched telephone network number with FCC/NANPA safe theatrical range (555-0100 to 555-0199)."
+      }
+    ],
+    "music_cue_sheet": {
+      "production_title": "Screenplay Scene 1-3 (Text Format)",
+      "cue_entries": [
+        {
+          "cue_number": "M-001",
+          "track_title": "Commercial Music: Immigrant Song",
+          "artist_performer": "Commercial Music: Immigrant Song Rights Holder",
+          "composer_author": "Commercial Music: Immigrant Song Rights Holder / Designated Writers",
+          "publisher_pro": "ASCAP (50%) / BMI (50%)",
+          "master_rights_holder": "Commercial Music: Immigrant Song Rights Holder Recordings LLC (17 U.S.C. § 114)",
+          "sync_publisher": "Commercial Music: Immigrant Song Rights Holder Music Publishing (17 U.S.C. § 106(4))",
+          "usage_type": "Source Music / Visual Background",
+          "duration": "00:00:30",
+          "clearance_status": "SYNC & MASTER LICENSES MANDATORY PRIOR TO BROADCAST"
+        }
+      ],
+      "pro_compliance_certified": true
+    }
+  },
+  "pdf_report_path": "C:\\Users\\adamm_000\\Desktop\\CineClearAi\\reports\\EO_Clearance_Binder_Screenplay_Scene_1-3_(Text_Format)_f9dae689.pdf",
+  "legal_disclaimer": "NOTICE — DECISION-SUPPORT ONLY: CineClear AI is a paralegal research and workflow accelerator for licensed production counsel and E&O brokers. This dossier organizes automated heuristics, multimodal detections, and public-registry search results on an AS-IS / AS-AVAILABLE basis. It is not legal advice, not a legal opinion, not an insurance certificate, and not a clearance, distribution, or underwriting approval. It does not create an attorney-client relationship. No output may be represented as 'cleared for distribution' or as a guarantee that any work is free of copyright, trademark, privacy, or E&O risk. Final legal sign-off must be made by a licensed production attorney and/or E&O broker. Use of this software is subject to the Terms of Service at /terms (version 2026-09-06)."
+}
